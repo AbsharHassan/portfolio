@@ -1,19 +1,17 @@
 import React from 'react'
-import { ReactComponent as ReactSVG } from '../assets/react-logo.svg'
-import { ReactComponent as NodeSVG } from '../assets/nodejs-logo.svg'
-import { ReactComponent as LaravelSVG } from '../assets/laravel-logo.svg'
-import { ReactComponent as ExpressSVG } from '../assets/expressjs-logo.svg'
-import { ReactComponent as MongoSVG } from '../assets/mongoDB-logo.svg'
-import { ReactComponent as MaterialSVG } from '../assets/materialUI-logo.svg'
-import { ReactComponent as VueSVG } from '../assets/vuejs-logo.svg'
-import { ReactComponent as MysqlSVG } from '../assets/mysql-logo.svg'
-import { ReactComponent as TailwindSVG } from '../assets/tailwindcss-logo.svg'
-import { ReactComponent as DockerSVG } from '../assets/docker-logo.svg'
-import { ReactComponent as AwsSVG } from '../assets/aws-logo.svg'
-import { ReactComponent as GcpSVG } from '../assets/gcp-logo.svg'
-import FrontendToolset from './FrontendToolset'
-import BackendToolset from './BackendToolset'
-import DevOpsToolset from './DevOpsToolset'
+import { ReactComponent as ReactSVG } from '../assets/tech/svg/react-logo.svg'
+import { ReactComponent as NodeSVG } from '../assets/tech/svg/nodejs-logo.svg'
+import { ReactComponent as LaravelSVG } from '../assets/tech/svg/laravel-logo.svg'
+import { ReactComponent as ExpressSVG } from '../assets/tech/svg/expressjs-logo.svg'
+import { ReactComponent as MongoSVG } from '../assets/tech/svg/mongoDB-logo.svg'
+import { ReactComponent as MaterialSVG } from '../assets/tech/svg/materialUI-logo.svg'
+import { ReactComponent as VueSVG } from '../assets/tech/svg/vuejs-logo.svg'
+import { ReactComponent as MysqlSVG } from '../assets/tech/svg/mysql-logo.svg'
+import { ReactComponent as TailwindSVG } from '../assets/tech/svg/tailwindcss-logo.svg'
+import { ReactComponent as DockerSVG } from '../assets/tech/svg/docker-logo.svg'
+import { ReactComponent as AwsSVG } from '../assets/tech/svg/aws-logo.svg'
+import { ReactComponent as GcpSVG } from '../assets/tech/svg/gcp-logo.svg'
+
 import GeneralToolset from './GeneralToolset'
 
 const CompleteToolset = () => {
@@ -24,7 +22,10 @@ const CompleteToolset = () => {
       description:
         'Complex and interactive dashboard with indepth Redux Toolkit and React Router usage.',
       logo: (
-        <ReactSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <ReactSVG
+          style={{ transform: 'translateZ(0px)' }}
+          className="absolute opacity-100 w-16 h-16 bottom-5 right-10 "
+        />
       ),
     },
     {
@@ -33,7 +34,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <VueSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <VueSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -42,7 +43,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <TailwindSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <TailwindSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -51,7 +52,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <MaterialSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <MaterialSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
   ]
@@ -63,7 +64,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <NodeSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <NodeSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -72,7 +73,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <ExpressSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <ExpressSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -81,7 +82,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <MongoSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <MongoSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -90,7 +91,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <LaravelSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <LaravelSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -99,7 +100,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <MysqlSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <MysqlSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
   ]
@@ -111,7 +112,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <DockerSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <DockerSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -120,7 +121,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <AwsSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <AwsSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
     {
@@ -129,7 +130,7 @@ const CompleteToolset = () => {
       description:
         'Railway scales apps to meet user demand, automagically, based on load.',
       logo: (
-        <GcpSVG className="absolute opacity-100 w-16 h-16 bottom-3 right-3 " />
+        <GcpSVG className="absolute opacity-100 w-16 h-16 bottom-5 right-10 " />
       ),
     },
   ]
@@ -137,7 +138,7 @@ const CompleteToolset = () => {
   return (
     <section
       id="toolset"
-      className="mx-auto py-12"
+      className="mx-auto py-12 "
     >
       {/* <h2 className="text-4xl font-bold mb-8">
         <code className="text-[#306ee8]">&lt;Toolset&gt;</code>
@@ -165,8 +166,8 @@ const CompleteToolset = () => {
       </div>
 
       {/* <FrontendToolset toolsArray={toolsArrayFE} /> */}
-
-      {/* <BackendToolset toolsArray={toolsArrayBE} />
+      {/* 
+      <BackendToolset toolsArray={toolsArrayBE} />
 
       <DevOpsToolset toolsArray={toolsArrayDO} /> */}
 

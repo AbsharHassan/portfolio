@@ -22,7 +22,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed; */
+
   background-color: #111018;
+
+  /* background-color: #000000; */
 }
 
 body::-webkit-scrollbar {
@@ -293,7 +296,7 @@ code {
 } */
 
 .frontend-heading {
-  color: #c261fe;
+  color: #c262fe;
   transition: transform 1s ease, filter 1s ease, opacity 1s ease;
   filter: blur(5px);
 }
@@ -307,19 +310,132 @@ code {
   filter: blur(0px);
 }
 
-.frontend-card {
+/* .frontend-card {
+  --step: 5%;
+  --bg-y: 62%;
+  --bg-x: 60%;
+  --m-x: 92%;
+  --m-y: 88%;
   box-shadow: rgba(194, 97, 254, 0.2) 0px 4px 24px 0px;
   transition: box-shadow 0.4s ease;
   border-color: #8643b088;
   filter: blur(0px);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+
+  background: repeating-linear-gradient(
+      0deg,
+      rgb(255, 119, 115) calc(var(--step) * 1),
+      rgba(255, 237, 95, 1) calc(var(--step) * 2),
+      rgba(168, 255, 95, 1) calc(var(--step) * 3),
+      rgba(131, 255, 247, 1) calc(var(--step) * 4),
+      rgba(120, 148, 255, 1) calc(var(--step) * 5),
+      rgb(216, 117, 255) calc(var(--step) * 6),
+      rgb(255, 119, 115) calc(var(--step) * 7)
+    )
+    0% var(--bg-y) / 200% 700%;
+
+  background: repeating-linear-gradient(
+      128deg,
+      #0e152e 0%,
+      hsl(180, 10%, 60%) 3.8%,
+      hsl(180, 10%, 60%) 4.5%,
+      hsl(180, 10%, 60%) 5.2%,
+      #0e152e 10%,
+      #0e152e 12%
+    )
+    var(--bg-x) var(--bg-y) / 300%;
+
+  background: radial-gradient(
+      farthest-corner circle at var(--m-x) var(--m-y),
+      rgba(255, 255, 255, 0.1) 12%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0.25) 120%
+    )
+    var(--bg-x) var(--bg-y) / 300%;
+
+  background: repeating-linear-gradient(
+        0deg,
+        rgb(255, 119, 115) calc(var(--step) * 1),
+        rgba(255, 237, 95, 1) calc(var(--step) * 2),
+        rgba(168, 255, 95, 1) calc(var(--step) * 3),
+        rgba(131, 255, 247, 1) calc(var(--step) * 4),
+        rgba(120, 148, 255, 1) calc(var(--step) * 5),
+        rgb(216, 117, 255) calc(var(--step) * 6),
+        rgb(255, 119, 115) calc(var(--step) * 7)
+      )
+      0% var(--bg-y) / 200% 700%,
+    repeating-linear-gradient(
+        128deg,
+        #0e152e 0%,
+        hsl(180, 10%, 60%) 3.8%,
+        hsl(180, 10%, 60%) 4.5%,
+        hsl(180, 10%, 60%) 5.2%,
+        #0e152e 10%,
+        #0e152e 12%
+      )
+      var(--bg-x) var(--bg-y) / 300%,
+    radial-gradient(
+        farthest-corner circle at var(--m-x) var(--m-y),
+        rgba(255, 255, 255, 0.1) 12%,
+        rgba(255, 255, 255, 0.15) 20%,
+        rgba(255, 255, 255, 0.25) 120%
+      )
+      var(--bg-x) var(--bg-y) / 300%;
+
+  background-blend-mode: hue, hue, hard-light, overlay;
+} */
+
+.frontend-card {
+  --step: 5%;
+  --bg-y: 62%;
+  --bg-x: 60%;
+  --m-x: 92%;
+  --m-y: 88%;
+  box-shadow: rgba(194, 97, 254, 0.2) 0px 4px 24px 0px;
+  transition: box-shadow 0.4s ease;
+  border-color: #8643b088;
+  filter: blur(0px);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.js-tilt-glare {
+  /* background-color: rgba(194, 97, 254, 0.1); */
+}
+
+.frontend-card > * {
+  /* transform: translateZ(50px); */
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px black;
 }
 
 .frontend-card:hover {
   box-shadow: rgba(194, 97, 254, 0.5) 0px 4px 24px 0px;
+  /* transform: scale(1.2); */
 }
 
 .frontend-card-heading {
   color: #ac55e0;
+}
+
+.frontend-canvas-gradient {
+  /* background: rgb(194, 97, 254); */
+  /* background: radial-gradient(
+    at top left,
+    rgba(194, 97, 254, 0.2) 0%,
+    rgba(194, 97, 254, 0) 60%
+  );
+  background-position: -100% 0; */
 }
 
 /* .frontend-tools::after {
@@ -680,4 +796,135 @@ code {
 
 .devops-card-heading {
   color: #00e0f4;
+}
+
+.card-text {
+  position: relative;
+}
+
+.card-text::before,
+.card-text::after {
+  content: attr(data-name);
+  color: #a1a0ab;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
+.card-text::before {
+  -webkit-clip-path: polygon(55% 0, 0 0, 0 100%, 35% 100%);
+  clip-path: polygon(55% 0, 0 0, 0 100%, 35% 100%);
+  /* background: red; */
+}
+
+.card-text::after {
+  -webkit-clip-path: polygon(55% 0, 100% 0, 100% 100%, 35% 100%);
+  clip-path: polygon(55% 0, 100% 0, 100% 100%, 35% 100%);
+  /* background: blue; */
+}
+
+.card-text.broken::before {
+  top: -3px;
+  left: -7px;
+  transform: rotate(-3deg);
+}
+
+.card-text.broken::after {
+  top: 3px;
+  left: 7px;
+  transform: rotate(3deg);
+}
+
+.text {
+  /* transition: transform 0.5s ease-out; */
+  position: relative;
+}
+
+.text.broken-rotating {
+  /* animation-name: break;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards; */
+
+  animation: break-rotating 0.2s linear infinite, break-flying 1s;
+
+  /* animation: rotate-and-translate 1s linear; */
+}
+
+.text.broken-flying {
+  /* animation-name: break;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards; */
+
+  animation: break-flying 1s;
+
+  /* animation: rotate-and-translate 1s linear; */
+}
+
+@keyframes rotate-and-translate {
+  0% {
+    transform: rotate(0) translateY(0);
+    opacity: 1;
+  }
+  25% {
+    transform: rotate(90deg) translateY(-50px);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(180deg) translateY(0);
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) translateY(5000px);
+    opacity: 0;
+  }
+}
+
+.word-rotating {
+  animation: break-rotating, 0.2s infinite;
+}
+
+@keyframes break-rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes break-flying {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(200px) translateX(20px);
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* @keyframes break {
+  0% {
+    transform: none;
+  }
+  50% {
+    transform: rotate(30deg) scale(1.2);
+  }
+  100% {
+    transform: translateX(100vw) rotate(90deg) scale(1.5);
+    opacity: 0;
+  }
+} */
+
+.dumb {
+  color: #7f4abb;
 }

@@ -1,11 +1,11 @@
-import Hero from './components/Hero'
 import CompleteToolset from './components/CompleteToolset'
 
 function App() {
   return (
     <>
-      <Hero />
-      <CompleteToolset />
+      <div className="pt-[600px]">
+        <CompleteToolset />
+      </div>
     </>
   )
 }

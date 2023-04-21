@@ -1,8 +1,15 @@
 import { useEffect, useState, useRef } from 'react'
+import gsap from 'gsap'
+import { CSSPlugin } from 'gsap'
 import VanillaTilt from 'vanilla-tilt'
 import Lightbar from './Lightbar'
+import ReactPNG2 from '../assets/tech/png/react-png-nobg.png'
+
+import ToolsetCard from './ToolsetCard'
 
 const GeneralToolset = ({ sectionTitle, toolsArray }) => {
+  gsap.registerPlugin(CSSPlugin)
+
   let sectionRef = useRef(null)
   let lightbarRef = useRef(null)
   let contentRef = useRef(null)
@@ -11,11 +18,17 @@ const GeneralToolset = ({ sectionTitle, toolsArray }) => {
   let triggerElRef = useRef(null)
 
   const [isElVisible, setIsElVisible] = useState(false)
+  const [isMouseOver, setIsMouseOver] = useState(false)
+  const [hoveredTool, setHoveredTool] = useState('')
 
   useEffect(() => {
     VanillaTilt.init(document.querySelectorAll(`.${sectionTitle}-card`), {
-      //   glare: true,
+      max: 10,
+      speed: 1000,
+      scale: 1.05,
+      reverse: true,
     })
+
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
@@ -36,34 +49,47 @@ const GeneralToolset = ({ sectionTitle, toolsArray }) => {
     headingBottomRef.current.classList.toggle('visible', isElVisible)
     // contentRef.current.classList.toggle('visible', isElVisible)
 
-    let intervalCounter
+    // let intervalCounter
+    // if (isElVisible) {
+    //   intervalCounter = 0
+    // } else {
+    //   intervalCounter = 100
+    // }
+    // const intervalId = setInterval(() => {
+    //   if (isElVisible) {
+    //     // console.log(intervalCounter)
+    //     intervalCounter++
+    //     triggerElRef.current.style.webkitMaskImage = `radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / ${
+    //       intervalCounter / 100 + 0.1
+    //     }))`
+    //   } else {
+    //     // console.log(intervalCounter)
+    //     intervalCounter--
+    //     triggerElRef.current.style.webkitMaskImage = `radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / ${
+    //       intervalCounter / 100 + 0.1
+    //     }))`
+    //   }
+    // }, 10)
+
+    // setTimeout(() => {
+    //   clearInterval(intervalId)
+    // }, 1000)
+
+    // return () => {
+    //   clearInterval(intervalId)
+    // }
     if (isElVisible) {
-      intervalCounter = 0
+      gsap.to(triggerElRef.current.style, {
+        WebkitMaskImage:
+          'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 1))',
+        duration: 1,
+      })
     } else {
-      intervalCounter = 100
-    }
-    const intervalId = setInterval(() => {
-      if (isElVisible) {
-        console.log(intervalCounter)
-        intervalCounter++
-        triggerElRef.current.style.webkitMaskImage = `radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / ${
-          intervalCounter / 100 + 0.1
-        }))`
-      } else {
-        console.log(intervalCounter)
-        intervalCounter--
-        triggerElRef.current.style.webkitMaskImage = `radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / ${
-          intervalCounter / 100 + 0.1
-        }))`
-      }
-    }, 10)
-
-    setTimeout(() => {
-      clearInterval(intervalId)
-    }, 1000)
-
-    return () => {
-      clearInterval(intervalId)
+      gsap.to(triggerElRef.current.style, {
+        WebkitMaskImage:
+          'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
+        duration: 1,
+      })
     }
   }, [isElVisible])
 
@@ -102,29 +128,13 @@ const GeneralToolset = ({ sectionTitle, toolsArray }) => {
           }}
         >
           {toolsArray.map((tool, index) => (
-            <div
-              className={`${sectionTitle}-card grid grid-cols-4 flex-grow max-w-[365px] h-[195px] rounded-xl border relative p-8 text-[#a1a0ab] bg-black/20 ${
-                sectionTitle === 'backend'
-                  ? `col-span-2 ${index === 3 && 'col-start-2'} ${
-                      index === 4 && 'col-start-4'
-                    }`
-                  : ''
-              } ${sectionTitle === 'frontend' && 'col-span-2'}`}
+            <ToolsetCard
               key={tool.id}
-            >
-              <div className="col-span-3">
-                <p
-                  className={`${sectionTitle}-card-heading text-xl font-semibold mb-4`}
-                >
-                  <code>
-                    &lt;{tool.title}
-                    <span className="text-lg"> /</span>&gt;
-                  </code>
-                </p>
-                <p className="text-sm font-medium">{tool.description}</p>
-              </div>
-              {tool.logo}
-            </div>
+              tool={tool}
+              index={index}
+              sectionTitle={sectionTitle}
+              png={ReactPNG2}
+            />
           ))}
         </div>
 
