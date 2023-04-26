@@ -35,6 +35,7 @@ function Text3D({ url, ...props }) {
 }
 
 export default function CardCanvas({
+  sectionTitle,
   colorTheme,
   title,
   description,
@@ -149,12 +150,13 @@ export default function CardCanvas({
           color={`${colorTheme}`}
         />
 
-        <Physics
-          gravity={[0, 0, -1000]}
-          defaultContactMaterial={{ restitution: 1 }}
-        >
-          {/* <Debug color="green"> */}
-          <BallPhysics3D
+        {isMouseInside && (
+          <Physics
+            gravity={[0, 0, -1000]}
+            defaultContactMaterial={{ restitution: 1 }}
+          >
+            {/* <Debug color="green"> */}
+            {/* <BallPhysics3D
             colorTheme={colorTheme}
             png={png}
             mousePosition={mousePosition}
@@ -170,9 +172,9 @@ export default function CardCanvas({
             mousePosition={mousePosition}
             isMouseInside={isMouseInside}
             ref={planeRef}
-          />
+          /> */}
 
-          {/* <Suspense>
+            {/* <Suspense>
             <Text3D
               url="/FiraCode-Bold.ttf"
               height={7}
@@ -190,22 +192,44 @@ export default function CardCanvas({
               />
             </Text3D>
           </Suspense> */}
-          {/* <Letter
+            {/* <Letter
             sphereRadius={sphereRadius}
             title="<React />"
           /> */}
-          {/* <Suspense
+            {/* <Suspense
               fallback={<Html className="text-white text-xl"> help meeee</Html>}
             > */}
-          <Title3D
-            // url="https://api.fontsource.org/v1/fonts/lora/latin-600-italic.ttf"
-            url="/FiraCode-Bold.ttf"
-            title={`<${title} />`}
-            colorTheme={colorTheme}
-          />
-          {/* </Suspense> */}
-          {/* </Debug> */}
-        </Physics>
+
+            <>
+              <BallPhysics3D
+                colorTheme={colorTheme}
+                png={png}
+                mousePosition={mousePosition}
+                isMouseInside={isMouseInside}
+                sphereRadius={sphereRadius}
+                planeRef={planeRef}
+                canvasRef={canvasRef}
+                handleVectorToDOM={handleVectorToDOM}
+              />
+              <StagePhysics3D
+                colorTheme={colorTheme}
+                sphereRadius={sphereRadius}
+                mousePosition={mousePosition}
+                isMouseInside={isMouseInside}
+                ref={planeRef}
+              />
+              <Title3D
+                // url="https://api.fontsource.org/v1/fonts/lora/latin-600-italic.ttf"
+                url="/FiraCode-Bold.ttf"
+                title={`<${title} />`}
+                colorTheme={colorTheme}
+              />
+            </>
+
+            {/* </Suspense> */}
+            {/* </Debug> */}
+          </Physics>
+        )}
       </Canvas>
       <div className="absolute inset-0 flex-grow w-[365px] h-[195px] rounded-xl text-transparent ">
         <div className="grid grid-cols-4 w-full h-full p-8 relative">
@@ -215,7 +239,18 @@ export default function CardCanvas({
           ></div>
           <div className={`col-span-3 pr-5`}>
             <p
-              className="text-black/0 blur-[1px] mt-5 pl-2.5 text-lg font-semibold opacity-0 transition-opacity duration-300"
+              className={`${sectionTitle}-card-heading text-xl font-semibold ${
+                isMouseInside ? 'opacity-0' : 'opacity-100'
+              }`}
+              //   style={{ transform: 'translateZ(500px)' }}
+            >
+              <code>
+                &lt;{title}
+                <span className="text-lg"> /</span>&gt;
+              </code>
+            </p>
+            <p
+              className="text-black/0 blur-[1px] mt-5 pl-2.5 text-lg font-semibold opacity-0 transition-opacity duration-300 w-0 h-0"
               ref={titleFakeShadowRef}
             >
               <code>&lt;{title} /&gt;</code>

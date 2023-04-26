@@ -45,10 +45,10 @@ const BallPhysics3D = ({
   useFrame(() => {
     const intersects = raycaster.intersectObject(planeRef.current)
 
-    if (intersects.length > 0) {
+    if (intersects.length > 0 && isMouseInside) {
       targetPoint = intersects[0].point.setZ(sphereRadius)
 
-      pointLightRef.current.position.set(targetPoint.x, targetPoint.y, 200)
+      pointLightRef.current?.position.set(targetPoint.x, targetPoint.y, 200)
 
       directionToTarget = [
         targetPoint.x - sphereRef.current.position.x,
@@ -73,30 +73,35 @@ const BallPhysics3D = ({
       //   }
       // }
 
-      if (isMouseInside && !movementBlocker) api.applyForce(force, [0, 0, 0])
+      if (isMouseInside && !movementBlocker) {
+        api?.applyForce(force, [0, 0, 0])
 
-      api.position.subscribe((positionVector) => {
-        sphereRef.current.position.set(
-          positionVector[0],
-          positionVector[1],
-          positionVector[2]
+        api?.position.subscribe((positionVector) => {
+          sphereRef.current?.position.set(
+            positionVector[0],
+            positionVector[1],
+            positionVector[2]
+          )
+        })
+
+        const sphereVecToDOM = new THREE.Vector3().copy(
+          sphereRef.current?.position.clone()
         )
-      })
 
-      const sphereVecToDOM = new THREE.Vector3().copy(
-        sphereRef.current.position.clone()
-      )
+        sphereVecToDOM.project(camera)
 
-      sphereVecToDOM.project(camera)
+        sphereVecToDOM.x = Math.round(
+          (0.5 + sphereVecToDOM.x / 2) *
+            (canvas.width / window.devicePixelRatio)
+        )
+        sphereVecToDOM.y = Math.round(
+          (0.5 - sphereVecToDOM.y / 2) *
+            (canvas.height / window.devicePixelRatio)
+        )
 
-      sphereVecToDOM.x = Math.round(
-        (0.5 + sphereVecToDOM.x / 2) * (canvas.width / window.devicePixelRatio)
-      )
-      sphereVecToDOM.y = Math.round(
-        (0.5 - sphereVecToDOM.y / 2) * (canvas.height / window.devicePixelRatio)
-      )
-
-      handleVectorToDOM(sphereVecToDOM)
+        handleVectorToDOM(sphereVecToDOM)
+        console.log('stuff happeming ')
+      }
     }
   })
 
@@ -133,12 +138,12 @@ const BallPhysics3D = ({
         duration: 0.5,
         onComplete: () => {
           setMovementBlocker(!isMouseInside)
-          api.position.set(
+          api?.position.set(
             initialPosition[0],
             initialPosition[1],
             initialPosition[2]
           )
-          api.rotation.set(
+          api?.rotation.set(
             initialRotation[0],
             initialRotation[1],
             initialRotation[2]

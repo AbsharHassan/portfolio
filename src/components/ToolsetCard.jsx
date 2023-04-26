@@ -38,6 +38,8 @@ const ToolsetCard = ({ sectionTitle, index, tool, png }) => {
       {/* {tool.title === 'React' && (
         <div className="text-white text-3xl col-span-4  relative">
           <CardCanvas
+            sectionTitle={sectionTitle}
+            colorTheme={colorTheme}
             png={png}
             title={tool.title}
             description={tool.description}
@@ -47,6 +49,7 @@ const ToolsetCard = ({ sectionTitle, index, tool, png }) => {
       )} */}
       <div className="text-white text-3xl col-span-4 relative">
         <CardCanvas
+          sectionTitle={sectionTitle}
           colorTheme={colorTheme}
           png={png}
           title={tool.title}
