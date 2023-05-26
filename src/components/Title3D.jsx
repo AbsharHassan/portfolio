@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Box, Text, SpotLight } from '@react-three/drei'
+import { Box, Text, SpotLight, Html } from '@react-three/drei'
 
 import { useBox } from '@react-three/cannon'
 import PhysicsBox from './PhysicsBox'
 
-const Title3D = ({ colorTheme, url, title }) => {
+const Title3D = ({
+  position,
+  sectionTitle,
+  colorTheme,
+  url,
+  title,
+  afterTitleRender,
+  isMouseInside,
+}) => {
   let dimX = 1
   let dimY = 18
   let dimZ = 10
@@ -14,6 +22,7 @@ const Title3D = ({ colorTheme, url, title }) => {
   const [isBoxReady, setIsBoxReady] = useState(false)
   const [boxDimensions, setBoxDimensions] = useState(null)
   const [boxPosition, setBoxPosition] = useState(null)
+  const [hasRendered, setHasRendered] = useState(false)
 
   let spotLightRef = useRef(null)
   let directionalLightRef = useRef(null)
@@ -31,17 +40,17 @@ const Title3D = ({ colorTheme, url, title }) => {
   //   },
   // }))
 
-  useEffect(() => {
-    // console.log(textRef.current)
-    const textBoundingBox = new THREE.Box3().setFromObject(textRef.current)
-    const lengthX = textBoundingBox.getSize(new THREE.Vector3()).x
-    console.log(lengthX)
-    // api.position.set(
-    //   textRef.current.position.x + dimX / 2,
-    //   textRef.current.position.y,
-    //   textRef.current.position.z
-    // )
-  }, [])
+  // useEffect(() => {
+  //   // console.log(textRef.current)
+  //   const textBoundingBox = new THREE.Box3().setFromObject(textRef.current)
+  //   const lengthX = textBoundingBox.getSize(new THREE.Vector3()).x
+  //   // console.log(lengthX)
+  //   // api.position.set(
+  //   //   textRef.current.position.x + dimX / 2,
+  //   //   textRef.current.position.y,
+  //   //   textRef.current.position.z
+  //   // )
+  // }, [])
 
   const viewport = useThree((state) => state.viewport)
   useFrame((state) => {
@@ -79,7 +88,21 @@ const Title3D = ({ colorTheme, url, title }) => {
       //   textRef.current.position.z
       // )
     }
+    // spotLightRef.current.target.position.lerp(
+    //   new THREE.Vector3().set(-91.5, -44, 0),
+    //   //   new THREE.Vector3().set(-91.5, 200, 0),
+    //   0.1
+    // )
+    // spotLightRef.current.target.updateMatrixWorld()
   })
+
+  useEffect(() => {
+    return () => {
+      console.log(textRef)
+    }
+  }, [])
+
+  // if (!isMouseInside) return null
 
   return (
     <>
@@ -153,12 +176,39 @@ const Title3D = ({ colorTheme, url, title }) => {
           position={boxPosition}
         />
       )}
+      {/* <SpotLight
+        castShadow
+        ref={spotLightRef}
+        penumbra={1}
+        distance={100}
+        angle={0.5235987755982988}
+        attenuation={0}
+        decay={2}
+        // anglePower={4}
+        intensity={50}
+        // color="#421773"
+        color="#fff"
+        // target={new THREE.Vector3(-91.5, 44, -height - height / 2)}
+        position={[position[0], -position[1] + 30, 50]}
+      /> */}
       <Text
+        onAfterRender={() => {
+          // console.log('rendered successfully')
+          // if (isMouseInside) {
+          //   afterTitleRender()
+          // }
+          setHasRendered(true)
+        }}
+        onUpdate={() => {
+          if (hasRendered) afterTitleRender()
+        }}
         ref={textRef}
-        fontSize={17.5}
+        // fontSize={18.5}
+        fontSize={10}
         lineHeight={-1}
-        letterSpacing={-0.01}
-        position={[-132, 44, -dimZ - dimZ / 2]}
+        letterSpacing={0.0025}
+        position={position}
+        // position={[-132, 44, 20]}
         // color="#7f4abb"
         color={`${colorTheme}`}
         //   color="#8151b9"
@@ -170,6 +220,36 @@ const Title3D = ({ colorTheme, url, title }) => {
       >
         {title}
       </Text>
+      {/* {isMouseInside && (
+        <Text
+          onAfterRender={() => {
+            // console.log('rendered successfully')
+            // if (isMouseInside) {
+            //   afterTitleRender()
+            // }
+            setHasRendered(true)
+          }}
+          onUpdate={() => {
+            if (hasRendered) afterTitleRender()
+          }}
+          ref={textRef}
+          fontSize={18}
+          lineHeight={-1}
+          letterSpacing={-0.01}
+          position={position}
+          // position={[-132, 44, 20]}
+          // color="#7f4abb"
+          color={`${colorTheme}`}
+          //   color="#8151b9"
+          //   color="#b047f1"
+          castShadow
+          font={url}
+          fillOpacity={1}
+          anchorX="left"
+        >
+          {title}
+        </Text>
+      )} */}
     </>
   )
 }

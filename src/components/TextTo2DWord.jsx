@@ -5,8 +5,9 @@ const TextTo2DWord = ({ word, sphereDomX, sphereDomY, isMouseInside }) => {
 
   useEffect(() => {
     if ((wordContainerRef.current, sphereDomX, sphereDomY)) {
-      if (isMouseInside) {
+      if (isMouseInside && sphereDomX !== null && sphereDomY !== null) {
         const containerRect = wordContainerRef.current.getBoundingClientRect()
+
         const isInside =
           sphereDomX > containerRect.left &&
           sphereDomX < containerRect.right &&

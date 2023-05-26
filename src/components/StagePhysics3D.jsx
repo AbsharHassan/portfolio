@@ -85,7 +85,7 @@ const StagePhysics3D = forwardRef(
           <meshStandardMaterial
             // color="#ffffff"/
             // color="#7f4abb"
-            color={`${colorTheme}`}
+            color={`${colorTheme.plane}`}
             transparent
             opacity={0}
           />

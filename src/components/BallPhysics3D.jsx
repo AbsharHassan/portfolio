@@ -7,20 +7,27 @@ import gsap from 'gsap'
 
 const BallPhysics3D = ({
   colorTheme,
+  sectionTitle,
   sphereRadius,
   png,
+  scale,
   isMouseInside,
   mousePosition,
   planeRef,
   canvasRef,
-  handleVectorToDOM,
+  convertVectorToDOM,
 }) => {
-  const initialPosition = [112.5, -42.5, 0]
+  // const initialPosition = [112.5, -42.5, 0]
+  const initialPosition = [107, -44.5, 0]
   const initialRotation = [0, -0.2, 0]
+  const [hasBallRendered, setHasBallRendered] = useState(false)
   const [movementBlocker, setMovementBlocker] = useState(true)
   let pointLightRef = useRef(null)
+  let plusYDecalRef = useRef(null)
 
+  //use useMemo for the decals i guess
   const [decal] = useTexture([png])
+  // console.log((decal.rotation = Math.PI / 2))
   const { camera } = useThree()
 
   const [sphereRef, api] = useSphere(() => ({
@@ -39,10 +46,11 @@ const BallPhysics3D = ({
 
   let targetPoint
   let directionToTarget
-  let forceMultiplier = 1000
+  let forceMultiplier = 750
   let force = []
 
   useFrame(() => {
+    // console.log(sphereRef.current)
     const intersects = raycaster.intersectObject(planeRef.current)
 
     if (intersects.length > 0 && isMouseInside) {
@@ -99,11 +107,63 @@ const BallPhysics3D = ({
             (canvas.height / window.devicePixelRatio)
         )
 
-        handleVectorToDOM(sphereVecToDOM)
-        console.log('stuff happeming ')
+        convertVectorToDOM(sphereVecToDOM.x, sphereVecToDOM.y)
       }
     }
   })
+
+  useEffect(() => {
+    return () => {
+      convertVectorToDOM(null, null)
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   gsap.killTweensOf(sphereRef.current)
+
+  //   if (isMouseInside && hasBallRendered) {
+
+  //     gsap.to(planeRef.current.material, {
+  //       opacity: sectionTitle === 'frontend' ? 0.35 : 0.1,
+  //       duration: 1,
+  //     })
+  //     gsap.from(sphereRef.current.scale, {
+  //       x: 0,
+  //       y: 0,
+  //       z: 0,
+  //       delay: 0.3,
+  //       duration: 1,
+  //       ease: 'bounce',
+  //       onComplete: () => {
+  //         setMovementBlocker(!isMouseInside)
+  //       },
+  //     })
+  //   } else {
+  //     gsap.to(planeRef.current.material, {
+  //       opacity: 0,
+  //       duration: 1,
+  //     })
+  //     gsap.to(sphereRef.current.scale, {
+  //       x: 0,
+  //       y: 0,
+  //       z: 0,
+  //       duration: 0.5,
+  //       onComplete: () => {
+  //         setMovementBlocker(!isMouseInside)
+  //         api?.position.set(
+  //           initialPosition[0],
+  //           initialPosition[1],
+  //           initialPosition[2]
+  //         )
+  //         api?.rotation.set(
+  //           initialRotation[0],
+  //           initialRotation[1],
+  //           initialRotation[2]
+  //         )
+  //       },
+  //     })
+  //   }
+  // }, [hasBallRendered])
 
   useEffect(() => {
     gsap.killTweensOf(sphereRef.current)
@@ -112,14 +172,14 @@ const BallPhysics3D = ({
     if (isMouseInside) {
       exitingAnimation?.kill()
       gsap.to(planeRef.current.material, {
-        opacity: 0.1,
+        opacity: sectionTitle === 'frontend' ? 0.35 : 0.1,
         duration: 1,
       })
       enteringAnimation = gsap.to(sphereRef.current.scale, {
         x: 1,
         y: 1,
         z: 1,
-        duration: 0.5,
+        duration: 1,
         ease: 'bounce',
         onComplete: () => {
           setMovementBlocker(!isMouseInside)
@@ -153,6 +213,54 @@ const BallPhysics3D = ({
     }
   }, [isMouseInside])
 
+  // useEffect(() => {
+  //   gsap.killTweensOf(sphereRef.current)
+  //   let enteringAnimation
+  //   let exitingAnimation
+  //   if (1) {
+  //     exitingAnimation?.kill()
+  //     gsap.to(planeRef.current.material, {
+  //       opacity: 0.3,
+  //       duration: 1,
+  //     })
+  //     enteringAnimation = gsap.to(sphereRef.current.scale, {
+  //       x: 1,
+  //       y: 1,
+  //       z: 1,
+  //       duration: 0.5,
+  //       ease: 'bounce',
+  //       onComplete: () => {
+  //         setMovementBlocker(!isMouseInside)
+  //       },
+  //     })
+  //   } else {
+  //     enteringAnimation?.kill()
+  //     gsap.to(planeRef.current.material, {
+  //       opacity: 0,
+  //       duration: 1,
+  //     })
+  //     exitingAnimation = gsap.to(sphereRef.current.scale, {
+  //       x: 0,
+  //       y: 0,
+  //       z: 0,
+  //       duration: 0.5,
+  //       onComplete: () => {
+  //         setMovementBlocker(!isMouseInside)
+  //         api?.position.set(
+  //           initialPosition[0],
+  //           initialPosition[1],
+  //           initialPosition[2]
+  //         )
+  //         api?.rotation.set(
+  //           initialRotation[0],
+  //           initialRotation[1],
+  //           initialRotation[2]
+  //         )
+  //       },
+  //     })
+  //   }
+  // }, [])
+
   return (
     <>
       <pointLight
@@ -161,7 +269,7 @@ const BallPhysics3D = ({
         position={[0, 0, 500]}
         intensity={0.6}
         // color="#c261fe"
-        color={`${colorTheme}`}
+        color={`${colorTheme.light}`}
       />
       <Sphere
         castShadow
@@ -169,51 +277,76 @@ const BallPhysics3D = ({
         position={[0, 0, 0]}
         scale={[0, 0, 0]}
         ref={sphereRef}
+        onAfterRender={() => {
+          setHasBallRendered(true)
+        }}
       >
         <meshStandardMaterial
-          color="#000"
-          roughness={1}
+          color={`${colorTheme.ball}`}
+          roughness={colorTheme.roughness}
           // transparent
           // opacity={1}
         />
         <Decal
           position={[0, 0, sphereRadius]}
           map={decal}
-          opacity={10}
-          scale={sphereRadius + 10}
+          // opacity={10}
+          scale={scale}
           flatShading
+          rotation={[0, 0, 0]}
         />
         <Decal
           position={[0, 0, -sphereRadius]}
           map={decal}
-          scale={sphereRadius + 10}
+          // scale={scale}
+          scale={scale}
           flatShading
+          rotation={[0, Math.PI, 0]}
+        />
+        {/* <Decal
+          position={[0, sphereRadius, 0]}
+          map={decal}
+          scale={scale}
+          flatShading
+          // ref={plusYDecalRef}
+          // rotation={[0, 0, 0]}
+        /> */}
+        {/* <Decal
+          position={[0, 0, -sphereRadius]}
+          map={decal}
+          scale={scale}
+          flatShading
+          rotation={[0, Math.PI, 0]}
         />
         <Decal
           position={[0, sphereRadius, 0]}
           map={decal}
-          scale={sphereRadius + 10}
+          scale={scale}
           flatShading
+          rotation={[0, 0, Math.PI]}
         />
         <Decal
           position={[0, -sphereRadius, 0]}
           map={decal}
           opacity={1.5}
-          scale={sphereRadius + 10}
+          scale={scale}
           flatShading
+          rotation={[0, 0, Math.PI]}
         />
         <Decal
           position={[sphereRadius, 0, 0]}
           map={decal}
-          scale={sphereRadius + 10}
+          scale={scale}
           flatShading
+          rotation={[0, 0, 0]}
         />
         <Decal
           position={[-sphereRadius, 0, 0]}
           map={decal}
-          scale={sphereRadius + 10}
+          scale={scale}
           flatShading
-        />
+          rotation={[0, 0, 0]}
+        /> */}
       </Sphere>
     </>
   )
