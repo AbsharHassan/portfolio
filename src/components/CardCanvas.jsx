@@ -204,7 +204,7 @@ export default function CardCanvas({
   // }, [isScreenSmall])
 
   return (
-    <div className="w-full h-full relative ">
+    <div className="w-full h-full relative">
       {!isScreenSmall && (
         <Canvas
           key={`${isScreenSmall}`}

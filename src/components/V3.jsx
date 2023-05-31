@@ -5,19 +5,35 @@ Command: npx gltfjsx@6.1.12 public/models/v3.glb
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 
 export default function V3(props) {
   const { nodes, materials } = useGLTF('./models/v3.glb')
+  let groupRef = useRef(null)
+
+  useFrame(() => {
+    if (groupRef?.current) {
+      groupRef.current.rotation.y = groupRef.current.rotation.y + 0.025
+      console.log(groupRef.current.rotation)
+    }
+  })
+
   return (
     <group
       {...props}
       dispose={null}
+      ref={groupRef}
     >
       <mesh
         geometry={nodes['outer-spiral'].geometry}
-        material={nodes['outer-spiral'].material}
+        // material={nodes['outer-spiral'].material}
         rotation={[Math.PI / 2, 0, 0]}
-      />
+      >
+        <meshStandardMaterial
+          color="red"
+          roughness={0.3}
+        />
+      </mesh>
     </group>
   )
 }

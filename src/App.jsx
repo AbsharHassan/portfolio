@@ -28,9 +28,13 @@ import { ReactComponent as Trademark23 } from './assets/trademark/A_with_leg_mis
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { Cylinder, OrbitControls, Plane, Sphere } from '@react-three/drei'
 import V3 from './components/V3'
+import V15 from './components/V15'
 import { Spiral } from './components/Spiral'
+import MovingSpotlight from './components/MovingSpotlight'
+import RectLightTest from './components/RectLightTest'
+import TestHero from './components/TestHero'
 
 function App() {
   let trademark23Ref = useRef(null)
@@ -79,20 +83,81 @@ function App() {
       {/* <Navbar />
       <Hero />
       <CompleteToolset /> */}
-      <div className="w-screen h-screen flex item-center justify-center">
-        <Canvas className="w-[90%] h-[90%] ">
-          <OrbitControls />
-          {/* <ambientLight intensity={10} /> */}
-          <pointLight
-            position={[0, 0, 10]}
-            intensity={0.5}
-          />
-          {/* <V3 position={[0, -2, 0]} /> */}
-          <Spiral position={[0, -3, 0]} />
+      {/* <div className="w-screen h-screen">
+        <MovingSpotlight />
+      </div> */}
+      {/* <div className="w-screen h-screen">
+        <Canvas
+          className="w-full h-full"
+          shadows
+        >
+          <RectLightTest />
         </Canvas>
-      </div>
+      </div> */}
+
+      {/* <div className="w-screen h-screen ">
+        <Canvas className="w-full h-full">
+          <ambientLight intensity={0.15} />
+          <pointLight
+            position={[0, 0, -3]}
+            color="purple"
+          />
+
+          <OrbitControls />
+          <Cylinder
+            position={[0, 0, -5]}
+            args={[0.25, 0.25, 2, 32]}
+            rotation={[0, 0, Math.PI / 2]}
+          >
+            <meshStandardMaterial />
+          </Cylinder>
+          <Plane
+            position={[0, -2, 0]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            args={[50, 50]}
+          >
+            <meshStandardMaterial />
+          </Plane>
+        </Canvas>
+      </div> */}
+
+      {/* <div className="w-screen h-screen relative"> */}
+      <Navbar />
+      <TestHero />
+      {/* <div className="w-full h-[1000px] bg-green-700/20"></div> */}
+      <CompleteToolset />
+      {/* </div> */}
     </>
   )
 }
 
 export default App
+
+// <div className="w-screen h-screen flex item-center justify-center">
+//   <Canvas
+//     className="w-[90%] h-[90%] "
+//     shadows
+//   >
+//     <OrbitControls enableZoom={false} />
+//     {/* <ambientLight intensity={10} /> */}
+//     <directionalLight
+//       position={[0, 30, 10]}
+//       intensity={1}
+//       castShadow
+//     />
+//     {/* <V3 position={[0, -2.5, 0]} /> */}
+//     <V15
+//       position={[0, -2.5, 0]}
+//       castShadow
+//     />
+//     <Plane
+//       args={[15, 10]}
+//       position={[0, -2.5, 0]}
+//       rotation={[-Math.PI / 2, 0, 0]}
+//       receiveShadow
+//     >
+//       <meshStandardMaterial color="#505050" />
+//     </Plane>
+//     {/* <Spiral position={[0, -3, 0]} /> */}
+//   </Canvas>
+// </div>

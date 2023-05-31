@@ -80,7 +80,7 @@ const Navbar = () => {
       />
       <header
         ref={navbarRef}
-        className="navbar sticky z-30 top-0 left-0 w-full  text-zinc-400  backdrop-blur-md "
+        className="navbar fixed z-30 top-0 left-0 w-full text-zinc-400  backdrop-blur-md "
       >
         <nav className="h-full px-12  flex justify-between items-center py-5">
           <div
