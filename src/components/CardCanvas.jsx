@@ -50,6 +50,7 @@ export default function CardCanvas({
   handleTitleRenderConfirm,
   handleVectorToDOM,
   isScreenSmall,
+  isMouseInside,
 }) {
   const sphereRadius = 25
   const titleTextPosition = [-127.5, 39, -10]
@@ -61,7 +62,7 @@ export default function CardCanvas({
   let titleFakeShadowRef = useRef(null)
   let iconLogoRef = useRef(null)
 
-  const [isMouseInside, setIsMouseInside] = useState(false)
+  // const [isMouseInside, setIsMouseInside] = useState(false)
   const [mousePosition, setMousePosition] = useState(new THREE.Vector3())
   const [hasTitleRendered, setHasTitleRendered] = useState(false)
   const [sphereDomX, setSphereDomX] = useState(null)
@@ -100,7 +101,7 @@ export default function CardCanvas({
 
   const onPointerEnter = () => {
     handlePointerEnter()
-    setIsMouseInside(true)
+    // setIsMouseInside(true)
     // htmlDivBackgroundRef.current.classList.add('opacity-100')
     // titleFakeShadowRef.current.classList.add('opacity-100')
     // if (isSectionLit) {
@@ -110,7 +111,7 @@ export default function CardCanvas({
   }
   const onPointerLeave = () => {
     handlePointerLeave()
-    setIsMouseInside(false)
+    // setIsMouseInside(false)
     // htmlDivBackgroundRef.current.classList.remove('opacity-100')
     // titleFakeShadowRef.current.classList.remove('opacity-100')
     // iconLogoRef.current.classList.remove('opacity-0')
@@ -200,12 +201,20 @@ export default function CardCanvas({
   }, [colorTheme])
 
   // useEffect(() => {
+  //   console.log(!isScreenSmall && isMouseInside && isSectionLit)
+  // }, [isScreenSmall, isMouseInside, isSectionLit])
+
+  useEffect(() => {
+    console.log(isMouseInside)
+  }, [isMouseInside])
+
+  // useEffect(() => {
 
   // }, [isScreenSmall])
 
   return (
     <div className="w-full h-full relative">
-      {!isScreenSmall && (
+      {!isScreenSmall && isMouseInside && isSectionLit && (
         <Canvas
           key={`${isScreenSmall}`}
           shadows
@@ -227,29 +236,29 @@ export default function CardCanvas({
           isMouseInside={isMouseInside}
         /> */}
 
-          {isMouseInside && isSectionLit && (
-            <>
-              <OrbitControls
-                enableRotate={false}
-                enableZoom={false}
-                enablePan={false}
-              />
-              {/* <ambientLight intensity={4} /> */}
-              <pointLight
-                castShadow
-                ref={pointLightRef}
-                position={[0, 0, 500]}
-                intensity={2}
-                // color="#7f4abb"
-                color={`${colorTheme.light}`}
-              />
+          {/* {isMouseInside && isSectionLit && ( */}
+          <>
+            <OrbitControls
+              enableRotate={false}
+              enableZoom={false}
+              enablePan={false}
+            />
+            {/* <ambientLight intensity={4} /> */}
+            <pointLight
+              castShadow
+              ref={pointLightRef}
+              position={[0, 0, 500]}
+              intensity={2}
+              // color="#7f4abb"
+              color={`${colorTheme.light}`}
+            />
 
-              <Physics
-                gravity={[0, 0, -10000]}
-                defaultContactMaterial={{ restitution: 1 }}
-              >
-                {/* <Debug color="green"> */}
-                {/* <BallPhysics3D
+            <Physics
+              gravity={[0, 0, -10000]}
+              defaultContactMaterial={{ restitution: 1 }}
+            >
+              {/* <Debug color="green"> */}
+              {/* <BallPhysics3D
             colorTheme={colorTheme}
             png={png}
             mousePosition={mousePosition}
@@ -267,7 +276,7 @@ export default function CardCanvas({
             ref={planeRef}
           /> */}
 
-                {/* <Suspense>
+              {/* <Suspense>
             <Text3D
               url="/FiraCode-Bold.ttf"
               height={7}
@@ -285,36 +294,36 @@ export default function CardCanvas({
               />
             </Text3D>
           </Suspense> */}
-                {/* <Letter
+              {/* <Letter
             sphereRadius={sphereRadius}
             title="<React />"
           /> */}
-                {/* <Suspense
+              {/* <Suspense
               fallback={<Html className="text-white text-xl"> help meeee</Html>}
             > */}
 
-                <>
-                  <BallPhysics3D
-                    colorTheme={colorTheme}
-                    png={png}
-                    scale={scale}
-                    mousePosition={mousePosition}
-                    isMouseInside={isMouseInside}
-                    sphereRadius={sphereRadius}
-                    planeRef={planeRef}
-                    canvasRef={canvasRef}
-                    convertVectorToDOM={convertVectorToDOM}
-                    sectionTitle={sectionTitle}
-                  />
-                  <StagePhysics3D
-                    colorTheme={colorTheme}
-                    sphereRadius={sphereRadius}
-                    mousePosition={mousePosition}
-                    isMouseInside={isMouseInside}
-                    ref={planeRef}
-                  />
+              <>
+                <BallPhysics3D
+                  colorTheme={colorTheme}
+                  png={png}
+                  scale={scale}
+                  mousePosition={mousePosition}
+                  isMouseInside={isMouseInside}
+                  sphereRadius={sphereRadius}
+                  planeRef={planeRef}
+                  canvasRef={canvasRef}
+                  convertVectorToDOM={convertVectorToDOM}
+                  sectionTitle={sectionTitle}
+                />
+                <StagePhysics3D
+                  colorTheme={colorTheme}
+                  sphereRadius={sphereRadius}
+                  mousePosition={mousePosition}
+                  isMouseInside={isMouseInside}
+                  ref={planeRef}
+                />
 
-                  {/* <Title3D
+                {/* <Title3D
                   position={titleTextPosition}
                   url="/CONSOLA.ttf"
                   title={`<${title} />`}
@@ -323,23 +332,23 @@ export default function CardCanvas({
                   afterTitleRender={handleTitleRenderConfirm}
                   isMouseInside={isMouseInside}
                 /> */}
-                  <TitleText3D
-                    position={titleTextPosition}
-                    url="/CONSOLA.ttf"
-                    title={`<${title} />`}
-                    colorTheme={colorTheme}
-                    sectionTitle={sectionTitle}
-                    afterTitleRender={getTitleRenderConfirm}
-                    isMouseInside={isMouseInside}
-                  />
-                  {/* </Suspense> */}
-                </>
-
+                <TitleText3D
+                  position={titleTextPosition}
+                  url="/CONSOLA.ttf"
+                  title={`<${title} />`}
+                  colorTheme={colorTheme}
+                  sectionTitle={sectionTitle}
+                  afterTitleRender={getTitleRenderConfirm}
+                  isMouseInside={isMouseInside}
+                />
                 {/* </Suspense> */}
-                {/* </Debug> */}
-              </Physics>
-            </>
-          )}
+              </>
+
+              {/* </Suspense> */}
+              {/* </Debug> */}
+            </Physics>
+          </>
+          {/* )} */}
         </Canvas>
       )}
       {/* <div className="absolute inset-0 flex-grow h-full w-full rounded-xl text-transparent">

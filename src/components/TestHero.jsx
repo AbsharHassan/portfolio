@@ -19,6 +19,7 @@ import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHel
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import HeroCanvas from './HeroCanvas'
+import AlternatingText from './AlternatingText'
 
 export default function TestHero() {
   const [isMouseInside, setIsMouseInside] = useState(false)
@@ -66,13 +67,33 @@ export default function TestHero() {
             </div>
           </>
         </h1>
-        <h2 className="text-xl mb-12 text-slate-400">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis,
-          ea. Placeat distinctio, ab expedita assumenda iusto excepturi. Vitae
-          perspiciatis minima quisquam maxime.
+        <h2 className="text-xl mb-12 text-slate-400 h-36">
+          Hi, my name is Abshar Hassan. I love using code to breath life into
+          great ideas. With resuability, efficiency and best practices in mind,
+          I strive to deliver production-grade code. I am your friendly
+          neighbourhood{' '}
+          <AlternatingText
+            singleWord="frontend developer"
+            wordsObjectArray={[
+              {
+                text: 'frontend developer',
+                classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                cursor: '#5a82f9',
+              },
+              {
+                text: 'backend developer',
+                classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
+                cursor: '#09a9b8',
+              },
+              {
+                text: 'fullstack developer',
+                classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                cursor: '#5a82f9',
+              },
+            ]}
+          />
         </h2>
         <button className="neon-button w-52 h-12 ">Call to Action</button>
-        {/* <div className="w-1 h-1 bg-red-800"></div> */}
       </div>
       <div className="w-full">
         <HeroCanvas

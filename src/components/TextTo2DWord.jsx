@@ -3,6 +3,10 @@ import { useEffect, useRef } from 'react'
 const TextTo2DWord = ({ word, sphereDomX, sphereDomY, isMouseInside }) => {
   let wordContainerRef = useRef(null)
 
+  // useEffect(() => {
+  //   console.log(isMouseInside)
+  // }, [isMouseInside])
+
   useEffect(() => {
     if ((wordContainerRef.current, sphereDomX, sphereDomY)) {
       if (isMouseInside && sphereDomX !== null && sphereDomY !== null) {

@@ -8,8 +8,8 @@ import { OrbitControls, useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-export default function V18({ handleModelBoundingBox, ...props }) {
-  const { nodes, materials } = useGLTF('./models/v18.glb')
+export default function V22({ handleModelBoundingBox, ...props }) {
+  const { nodes, materials } = useGLTF('./models/v22.glb')
   let groupRef = useRef(null)
 
   useFrame(() => {
@@ -50,4 +50,4 @@ export default function V18({ handleModelBoundingBox, ...props }) {
   )
 }
 
-useGLTF.preload('./models/v18.glb')
+useGLTF.preload('./models/v22.glb')

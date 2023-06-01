@@ -34,7 +34,6 @@ const ToolsetCard = ({
   }
 
   const handlePointerEnter = () => {
-    setIsMouseInside(true)
     htmlDivBackgroundRef.current.classList.add('opacity-100')
     if (isSectionLit) {
       iconLogoRef.current.classList.remove('opacity-100')
@@ -43,7 +42,6 @@ const ToolsetCard = ({
   }
 
   const handlePointerLeave = () => {
-    setIsMouseInside(false)
     htmlDivBackgroundRef.current.classList.remove('opacity-100')
     iconLogoRef.current.classList.remove('opacity-0')
     iconLogoRef.current.classList.add('opacity-100')
@@ -126,9 +124,11 @@ const ToolsetCard = ({
       key={tool.id}
       onMouseEnter={() => {
         setHoveredTool(tool.title)
+        setIsMouseInside(true)
       }}
       onMouseLeave={() => {
         setHoveredTool('')
+        setIsMouseInside(false)
       }}
     >
       <div className="w-full h-full">
@@ -148,6 +148,7 @@ const ToolsetCard = ({
           handleTitleRenderConfirm={handleTitleRenderConfirm}
           handleVectorToDOM={handleVectorToDOM}
           isScreenSmall={isScreenSmall}
+          isMouseInside={isMouseInside}
         />
       </div>
 

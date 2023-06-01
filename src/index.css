@@ -137,6 +137,26 @@ body {
   }
 }
 
+.blinking-cursor {
+}
+
+.blinking-cursor:after {
+  /* --cursor-color: #c261fe; */
+  content: '  _';
+  color: var(--cursor-color);
+  animation: blink 1s step-start infinite;
+}
+
+.testttt {
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .neon-button {
   font-family: 'Inter', sans-serif, 'Poppins', sans-serif, 'Commissioner',
     sans-serif, 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;

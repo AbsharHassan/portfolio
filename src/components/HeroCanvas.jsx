@@ -19,6 +19,7 @@ import V18 from './V18'
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import gsap from 'gsap'
+import V22 from './V22'
 
 const HeroCanvas = ({ isMouseInside, mousePosition }) => {
   return (
@@ -115,7 +116,7 @@ function Scene({ isMouseInside, mousePosition }) {
           position={[-2, 2, 6]}
           zoom={100}
         /> */}
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       {/* <Sphere
         args={[0.3, 64, 64]}
         position={[0, 0, 0]}
@@ -155,14 +156,17 @@ function Scene({ isMouseInside, mousePosition }) {
         // color="#7b53d3"
         // color="#b00c3f"
         color="#0c8cbf"
-        position={[3, 3, 2]}
+        // position={[3, 3, 2]}
+        position={[4, 1, 4]}
         mousePosition={mousePosition}
       />
       <MovingSpot
         // color="#7b53d3"
         color="#0c8cbf"
+        // color="#fff"
         // color="#b00c3f"
-        position={[2, 3, 0]}
+        // position={[2, 3, 0]}
+        position={[4, 3, 3]}
         mousePosition={mousePosition}
       />
       {/* <MovingSpot
@@ -192,6 +196,10 @@ function Scene({ isMouseInside, mousePosition }) {
         scale={0.5}
         handleModelBoundingBox={handleModelBoundingBox}
       />
+      {/* <V22
+        position={[2, -1.2, 2]}
+        scale={0.5}
+      /> */}
 
       <mesh
         receiveShadow
@@ -230,29 +238,44 @@ function MovingSpot({ vec = new Vector3(), mousePosition, ...props }) {
 
     // console.log((2 * -1.5) / viewport.height)
 
-    const targetX =
-      (((mousePosition.x + 1) / 2) * (0.6 - 0.01) + 0.01) * viewport.width
+    // const targetX =
+    //   (((mousePosition.x + 1) / 2) * (0.6 - 0.01) + 0.01) * viewport.width
+    // const targetY =
+    //   (((mousePosition.y + 1) * (-0.5 + 1)) / 2 - 1) * viewport.height
+
+    const targetX = ((mousePosition.x + 1) / 2) * 0.2 * viewport.width
+
     const targetY =
-      (((mousePosition.y + 1) * (-0.5 + 1)) / 2 - 1) * viewport.height
+      (((mousePosition.y + 1) * (-0.2 + 0.7)) / 2 - 0.7) * viewport.height
 
     const scaledX = (mousePosition.x * viewport.width) / 2
     const scaledY = (mousePosition.y * viewport.height) / 2
 
     light.current.target.position.lerp(
-      vec.set(targetX / 2, targetY / 2, 1.5),
+      vec.set(targetX / 2, targetY / 2, 1),
       0.1
     )
 
+    // light.current.target.position.lerp(
+    //   vec.set(
+    //     (mousePosition.x * viewport.width) / 2,
+    //     (mousePosition.y * viewport.height) / 2,
+    //     1
+    //   ),
+    //   0.1
+    // )
+    // console.log(mousePosition.x, mousePosition.y)
+
     if (scaledX > 0.6 && scaledX < 3.6 && scaledY > -3.1 && scaledY < -1.5) {
-      //   light.current.target.position.lerp(
-      //     vec.set(
-      //       (mousePosition.x * viewport.width) / 2,
-      //       (mousePosition.y * viewport.height) / 2,
-      //       1.5
-      //     ),
-      //     0.1
-      //   )
-      // console.log(mousePosition.x, mousePosition.y)
+      //     light.current.target.position.lerp(
+      //       vec.set(
+      //         (mousePosition.x * viewport.width) / 2,
+      //         (mousePosition.y * viewport.height) / 2,
+      //         1.5
+      //       ),
+      //       0.1
+      //     )
+      //   console.log(mousePosition.x, mousePosition.y)
     } else {
     }
 
@@ -264,9 +287,11 @@ function MovingSpot({ vec = new Vector3(), mousePosition, ...props }) {
       ref={light}
       penumbra={1}
       distance={6}
-      angle={0.35}
+      //   angle={0.35}
+      angle={0.25}
       attenuation={5}
-      anglePower={4}
+      //   anglePower={4}
+      anglePower={6}
       intensity={4}
       opacity={0.7}
       // shadow={{
