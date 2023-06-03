@@ -304,7 +304,7 @@ const TitleText3D = ({
             setHasRendered(true)
           }}
           onUpdate={() => {
-            if (hasRendered) afterTitleRender()
+            if (hasRendered) afterTitleRender(true)
           }}
         >
           {title}

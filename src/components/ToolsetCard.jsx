@@ -113,7 +113,7 @@ const ToolsetCard = ({
           ? `${index === 3 && 'xl:col-start-2'} ${
               index === 4 && 'col-start-2 xl:col-start-4'
             }`
-          : `${index === 2 && ''}`
+          : `${index === 2 && 'col-start-2 xl:col-start-5'}`
       } 
         
       `}

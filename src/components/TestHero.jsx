@@ -54,46 +54,57 @@ export default function TestHero() {
         setIsMouseInside(false)
       }}
     >
-      <div className="w-[50%] bg-blue-700/0 absolute left-0 h-full z-20 text-white flex flex-col justify-center pl-32 ">
-        <h1 className="text-7xl font-semibold leading-tight mb-8 ">
-          <>
-            <div className="flex bg-clip-text text-transparent bg-gradient-to-r from-customViolet to-customBlue">
+      <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-20 text-white  ">
+        <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
+          <h1 className="text-[36px] sm:text-[60px] lg:text-[72px] font-semibold leading-tight mb-8 ">
+            <div className="hidden sm:block">
+              <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customViolet to-customBlue">
+                Im
+                <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px]"></span>
+                gine. Build.
+                {/* <div>
+                  {' '}
+                  <span className="opacity-0">I</span>Build.
+                </div> */}
+              </div>
+              <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customBlue  to-customAqua inline ">
+                Ship.
+              </div>
+            </div>
+            <div className="sm:hidden bg-clip-text text-transparent bg-gradient-to-r from-customViolet via-customBlue to-customAqua">
               Im
-              <Trademark23 className="w-[39.5px] h-[39.5px] mt-[31px] -mx-[2] text-customViolet" />
-              gine. Build.
+              <span class="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px] "></span>
+              gine. Build. Ship.
             </div>
-            <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customBlue  to-customAqua inline ">
-              Ship.
-            </div>
-          </>
-        </h1>
-        <h2 className="text-xl mb-12 text-slate-400 h-36">
-          Hi, my name is Abshar Hassan. I love using code to breath life into
-          great ideas. With resuability, efficiency and best practices in mind,
-          I strive to deliver production-grade code. I am your friendly
-          neighbourhood{' '}
-          <AlternatingText
-            singleWord="frontend developer"
-            wordsObjectArray={[
-              {
-                text: 'frontend developer',
-                classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                cursor: '#5a82f9',
-              },
-              {
-                text: 'backend developer',
-                classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
-                cursor: '#09a9b8',
-              },
-              {
-                text: 'fullstack developer',
-                classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                cursor: '#5a82f9',
-              },
-            ]}
-          />
-        </h2>
-        <button className="neon-button w-52 h-12 ">Call to Action</button>
+          </h1>
+          <h2 className="sm:text-lg lg:text-xl mb-12 text-slate-400 h-44 sm:h-36 max-w-2xl ">
+            Hi, my name is Abshar Hassan. I love using code to breath life into
+            great ideas. With resuability, efficiency and best practices in
+            mind, I strive to deliver production-grade code. I am your friendly
+            neighbourhood{' '}
+            <AlternatingText
+              singleWord="frontend developer"
+              wordsObjectArray={[
+                {
+                  text: 'frontend developer',
+                  classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                  cursor: '#5a82f9',
+                },
+                {
+                  text: 'backend developer',
+                  classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
+                  cursor: '#09a9b8',
+                },
+                {
+                  text: 'fullstack developer',
+                  classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                  cursor: '#5a82f9',
+                },
+              ]}
+            />
+          </h2>
+          <button className="neon-button w-52 h-12">Call to Action</button>
+        </div>
       </div>
       <div className="w-full">
         <HeroCanvas
@@ -277,3 +288,5 @@ export default function TestHero() {
 //     />
 //   )
 // }
+
+// {/* <Trademark23 className="w-[39.5px] h-[39.5px] mt-[31px] -mx-[2] text-customViolet" /> */}

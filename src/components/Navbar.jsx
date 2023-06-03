@@ -46,7 +46,7 @@ const Navbar = () => {
     },
     {
       text: 'Projects',
-      color: '#00e0f4',
+      color: '#00a0c4',
     },
     {
       text: 'Services',
@@ -64,6 +64,10 @@ const Navbar = () => {
   useEffect(() => {
     const navObserver = new IntersectionObserver((entries) => {
       navbarRef.current.classList.toggle('sticking', !entries[0].isIntersecting)
+      navbarRef.current.classList.toggle(
+        'backdrop-blur-md',
+        !entries[0].isIntersecting
+      )
     })
 
     navObserver.observe(scrollCheck.current)
@@ -76,44 +80,20 @@ const Navbar = () => {
     <>
       <div
         ref={scrollCheck}
-        className="absolute top-0 left-0 w-full bg-red-600"
+        className="absolute top-0 left-0 w-full bg-transparent"
       />
       <header
         ref={navbarRef}
-        className="navbar fixed z-30 top-0 left-0 w-full text-zinc-400  backdrop-blur-md "
+        className="navbar fixed z-30 top-0 left-0 w-full text-zinc-400   "
       >
-        <nav className="h-full px-12  flex justify-between items-center py-5">
+        <nav className="h-full px-5 sm:px-12 transition-all duration-300  flex justify-between items-center py-5">
           <div
             id="brand"
             className="flex items-center space-x-4 w-[700px]"
           >
-            {/* <Trademark2D classes="text-green-500 opacity-20 scale-150 absolute top-0 left-0" /> */}
-            {/* <Trademark2D classes="w-8 h-8 text-zinc-200 " /> */}
             <Trademark23 className="w-8 h-8 text-zinc-200 " />
-            {/* <Trademark1 className="w-8 h-8 text-zinc-200 " />
-          <Trademark2 className="w-8 h-8 text-zinc-200 " />
-          <Trademark3 className="w-8 h-8 text-zinc-200 " />
-          <Trademark4 className="w-8 h-8 text-zinc-200 " />
-          <Trademark5 className="w-8 h-8 text-zinc-200 " />
-          <Trademark6 className="w-8 h-8 text-zinc-200 " />
-          <Trademark7 className="w-8 h-8 text-zinc-200 " />
-          <Trademark8 className="w-8 h-8 text-zinc-200 " />
-          <Trademark9 className="w-8 h-8 text-zinc-200 " />
-          <Trademark10 className="w-8 h-8 text-zinc-200 " />
-          <Trademark11 className="w-8 h-8 text-zinc-200 " />
-          <Trademark12 className="w-8 h-8 text-zinc-200 " />
-          <Trademark13 className="w-8 h-8 text-zinc-200 " />
-          <Trademark14 className="w-8 h-8 text-zinc-200 " />
-          <Trademark15 className="w-8 h-8 text-zinc-200 " />
-          <Trademark16 className="w-8 h-8 text-zinc-200 " />
-          <Trademark17 className="w-8 h-8 text-zinc-200 " />
-          <Trademark18 className="w-8 h-8 text-zinc-200 " />
-          <Trademark19 className="w-8 h-8 text-zinc-200 " />
-          <Trademark20 className="w-8 h-8 text-zinc-200 " />
-          <Trademark21 className="w-8 h-8 text-zinc-200 " />
-          <Trademark22 className="w-8 h-8 text-zinc-200 " /> */}
           </div>
-          <div className="flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             <ul
               id="links"
               className="navList font-semibold flex space-x-8 list-none tracking-wide text-sm"
@@ -130,8 +110,9 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-            <NeonButton text="Resume" />
+            {/* <NeonButton text="Resume" /> */}
           </div>
+          <div className="block md:hidden text-4xl">=</div>
         </nav>
       </header>
     </>

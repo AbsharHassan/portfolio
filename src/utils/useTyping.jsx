@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const pauseInterval = 2000
-const typingInterval = 100
-const deletingInterval = 50
+const typingInterval = 20
+const deletingInterval = 10
 
 export const useTyping = (wordArray) => {
   const [seletectedIndex, setSelectedIndex] = useState(0)
@@ -30,7 +30,6 @@ export const useTyping = (wordArray) => {
       case 'deleting': {
         if (!currentWord) {
           const nextIndex = seletectedIndex + 1
-          console.log(seletectedIndex[nextIndex])
           setSelectedIndex(wordArray[nextIndex] ? nextIndex : 0)
           setPhase('typing')
           return
@@ -64,5 +63,5 @@ export const useTyping = (wordArray) => {
     }
   }, [currentWord, wordArray, phase, seletectedIndex])
 
-  return { currentWord, seletectedIndex }
+  return { currentWord, seletectedIndex, phase }
 }

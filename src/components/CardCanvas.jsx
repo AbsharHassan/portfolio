@@ -53,7 +53,7 @@ export default function CardCanvas({
   isMouseInside,
 }) {
   const sphereRadius = 25
-  const titleTextPosition = [-127.5, 39, -10]
+  const titleTextPosition = [-127.5, 40.25, -10]
 
   let canvasRef = useRef(null)
   let planeRef = useRef(null)
@@ -71,7 +71,6 @@ export default function CardCanvas({
 
   const convertVectorToDOM = (vectorX, vectorY) => {
     const canvas = canvasRef.current
-    console.log(vectorX, vectorY)
     if (canvas) {
       if (vectorX === null || vectorY === null) {
         handleVectorToDOM(null, null)
@@ -205,7 +204,7 @@ export default function CardCanvas({
   // }, [isScreenSmall, isMouseInside, isSectionLit])
 
   useEffect(() => {
-    console.log(isMouseInside)
+    // console.log(isMouseInside)
   }, [isMouseInside])
 
   // useEffect(() => {

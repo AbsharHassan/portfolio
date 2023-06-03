@@ -51,13 +51,57 @@ const HeroCanvas = ({ isMouseInside, mousePosition }) => {
 export default HeroCanvas
 
 function Scene({ isMouseInside, mousePosition }) {
-  const { scene, viewport } = useThree()
+  const { scene, viewport, camera } = useThree()
   const [modelBoundingBox, setModelBoundingBox] = useState(new THREE.Box3())
+  const [initialViewportWidth, setInitialViewportWidth] = useState(
+    viewport?.width
+  )
+
+  useEffect(() => {
+    setInitialViewportWidth(viewport?.width)
+  }, [])
+
+  // useEffect(() => {
+  //   if (
+  //     viewport.width !== initialViewportWidth &&
+  //     viewport.width < initialViewportWidth
+  //   ) {
+  //     modelRef.current.position.setX(
+  //       modelRef.current.position.x -
+  //         (initialViewportWidth - viewport.width) / 100
+  //     )
+  //   }
+  // }, [viewport])
+
+  useEffect(() => {
+    console.log(viewport)
+    if (viewport.width < 8.5 && viewport.width > 6.5) {
+      modelRef.current.position.setX(1)
+      movingSpotTopRef.current.position.setX(-2)
+      mainSceneGroupRef.current.rotation.z = 0.15
+      camera.position.setX(-2)
+    } else if (viewport.width <= 6.5) {
+      modelRef.current.position.setX(0)
+      movingSpotTopRef.current.position.setX(-4)
+
+      mainSceneGroupRef.current.rotation.z = 0
+      camera.position.setX(0)
+    } else {
+      modelRef.current.position.setX(2)
+      movingSpotTopRef.current.position.setX(0)
+      mainSceneGroupRef.current.rotation.z = 0.15
+      camera.position.setX(-2)
+    }
+  }, [viewport.width])
 
   const colorsArray = [0xc261fe, 0x5a82f9, 0x09a9b8]
 
   let pointLightRef = useRef(null)
   let sphereRef = useRef(null)
+  let modelRef = useRef(null)
+  let mainSceneGroupRef = useRef(null)
+  let movingSpotTopRef = useRef(null)
+  let movingSpotBottomRef = useRef(null)
 
   const randomPointLight = () => {
     // console.log('pointlight going')
@@ -104,19 +148,23 @@ function Scene({ isMouseInside, mousePosition }) {
     // )
   })
   return (
-    <group rotation={[0, 0, 0.15]}>
+    <group
+      ref={mainSceneGroupRef}
+      //leave on new line
+      // rotation={[0, 0, 0.15]}
+    >
       {/* <OrthographicCamera
-          makeDefault
-          left={viewport.width / -2}
-          right={viewport.width / 2}
-          top={viewport.height / 2}
-          bottom={viewport.height / -2}
-          near={1}
-          far={20}
-          position={[-2, 2, 6]}
-          zoom={100}
-        /> */}
-      {/* <OrbitControls /> */}
+        makeDefault
+        left={viewport.width / -2}
+        right={viewport.width / 2}
+        top={viewport.height / 2}
+        bottom={viewport.height / -2}
+        near={1}
+        far={20}
+        position={[-2, 2, 6]}
+        zoom={150}
+      /> */}
+      <OrbitControls />
       {/* <Sphere
         args={[0.3, 64, 64]}
         position={[0, 0, 0]}
@@ -152,23 +200,30 @@ function Scene({ isMouseInside, mousePosition }) {
         ref={pointLightRef}
       />
 
-      <MovingSpot
-        // color="#7b53d3"
-        // color="#b00c3f"
-        color="#0c8cbf"
-        // position={[3, 3, 2]}
-        position={[4, 1, 4]}
-        mousePosition={mousePosition}
-      />
-      <MovingSpot
-        // color="#7b53d3"
-        color="#0c8cbf"
-        // color="#fff"
-        // color="#b00c3f"
-        // position={[2, 3, 0]}
-        position={[4, 3, 3]}
-        mousePosition={mousePosition}
-      />
+      <group
+        position={[0, 0, 0]}
+        ref={movingSpotTopRef}
+      >
+        <MovingSpot
+          // color="#7b53d3"
+          // color="#b00c3f"
+          color="#0c8cbf"
+          // position={[3, 3, 2]}
+          position={[4, 1, 4]}
+          mousePosition={mousePosition}
+          // ref={movingSpotTopRef}
+        />
+        <MovingSpot
+          // color="#7b53d3"
+          color="#0c8cbf"
+          // color="#fff"
+          // color="#b00c3f"
+          // position={[2, 3, 0]}
+          position={[4, 3, 3]}
+          mousePosition={mousePosition}
+          // ref={movingSpotBottomRef}
+        />
+      </group>
       {/* <MovingSpot
           // color="#7b53d3"
           color="#0c8cbf"
@@ -191,11 +246,13 @@ function Scene({ isMouseInside, mousePosition }) {
           position={[2, -1.15, 2]}
           scale={0.5}
         /> */}
-      <V18
+      <group
         position={[2, -1.15, 2]}
         scale={0.5}
-        handleModelBoundingBox={handleModelBoundingBox}
-      />
+        ref={modelRef}
+      >
+        <V18 handleModelBoundingBox={handleModelBoundingBox} />
+      </group>
       {/* <V22
         position={[2, -1.2, 2]}
         scale={0.5}
@@ -288,7 +345,7 @@ function MovingSpot({ vec = new Vector3(), mousePosition, ...props }) {
       penumbra={1}
       distance={6}
       //   angle={0.35}
-      angle={0.25}
+      angle={0.35}
       attenuation={5}
       //   anglePower={4}
       anglePower={6}

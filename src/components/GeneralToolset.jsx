@@ -169,9 +169,13 @@ const GeneralToolset = ({ sectionTitle, toolsArray }) => {
           }
           ${
             sectionTitle === 'backend' &&
-            'grid-cols-4 xl:max-w-6xl xl:grid-cols-6 '
+            // 'grid-cols-4 xl:max-w-6xl xl:grid-cols-6 '
+            ' md:max-w-3xl lg:max-w-4xl grid-cols-4 xl:max-w-6xl xl:grid-cols-6 '
           }
-          ${sectionTitle === 'devops' && 'xl:max-w-6xl xl:grid-cols-6 '}
+          ${
+            sectionTitle === 'devops' &&
+            'md:max-w-3xl lg:max-w-4xl grid-cols-4 xl:max-w-6xl xl:grid-cols-6 '
+          }
           
           `}
           style={{

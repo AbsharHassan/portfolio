@@ -1,12 +1,13 @@
-import React, { useRef } from 'react'
 import { useTyping } from '../utils/useTyping'
 
 const AlternatingText = ({ wordsObjectArray }) => {
-  const { currentWord, seletectedIndex } = useTyping(wordsObjectArray)
+  const { currentWord, seletectedIndex, phase } = useTyping(wordsObjectArray)
 
   return (
     <span
-      className={`blinking-cursor bg-clip-text text-transparent font-semibold ${wordsObjectArray[seletectedIndex].classes}`}
+      className={`whitespace-nowrap bg-clip-text text-transparent font-semibold ${
+        wordsObjectArray[seletectedIndex].classes
+      } blinking-cursor ${phase === 'idle' ? 'blinking' : ''}`}
       style={{
         '--cursor-color': wordsObjectArray[seletectedIndex].cursor,
       }}
@@ -17,5 +18,3 @@ const AlternatingText = ({ wordsObjectArray }) => {
 }
 
 export default AlternatingText
-
-//
