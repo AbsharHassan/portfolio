@@ -1,5 +1,5 @@
 import { Vector3 } from 'three'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import {
   useGLTF,
@@ -73,7 +73,7 @@ export default function TestHero() {
             </div>
             <div className="sm:hidden bg-clip-text text-transparent bg-gradient-to-r from-customViolet via-customBlue to-customAqua">
               Im
-              <span class="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px] "></span>
+              <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px] "></span>
               gine. Build. Ship.
             </div>
           </h1>
@@ -107,10 +107,18 @@ export default function TestHero() {
         </div>
       </div>
       <div className="w-full">
-        <HeroCanvas
-          isMouseInside={isMouseInside}
-          mousePosition={mousePosition}
-        />
+        <Suspense
+          fallback={
+            <>
+              <div className="text-4xl text-red-600">hello world</div>
+            </>
+          }
+        >
+          <HeroCanvas
+            isMouseInside={isMouseInside}
+            mousePosition={mousePosition}
+          />
+        </Suspense>
         {/* <Canvas
           className="w-full h-full absolute inset-0 "
           shadows

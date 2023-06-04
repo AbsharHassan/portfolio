@@ -11,11 +11,17 @@ import {
   Sphere,
   OrthographicCamera,
   MeshDistortMaterial,
+  useProgress,
 } from '@react-three/drei'
 import * as THREE from 'three'
 import V15 from './V15'
 import V17 from './V17'
 import V18 from './V18'
+import V18_3 from './V18_3'
+import V18_4 from './V18_4'
+import V18_5 from './V18_5'
+import V18_6 from './V18_6'
+import V18_7 from './V18_7'
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import gsap from 'gsap'
@@ -51,6 +57,7 @@ const HeroCanvas = ({ isMouseInside, mousePosition }) => {
 export default HeroCanvas
 
 function Scene({ isMouseInside, mousePosition }) {
+  const { progress } = useProgress()
   const { scene, viewport, camera } = useThree()
   const [modelBoundingBox, setModelBoundingBox] = useState(new THREE.Box3())
   const [initialViewportWidth, setInitialViewportWidth] = useState(
@@ -60,6 +67,10 @@ function Scene({ isMouseInside, mousePosition }) {
   useEffect(() => {
     setInitialViewportWidth(viewport?.width)
   }, [])
+
+  useEffect(() => {
+    console.log(progress)
+  }, [progress])
 
   // useEffect(() => {
   //   if (
@@ -74,7 +85,6 @@ function Scene({ isMouseInside, mousePosition }) {
   // }, [viewport])
 
   useEffect(() => {
-    console.log(viewport)
     if (viewport.width < 8.5 && viewport.width > 6.5) {
       modelRef.current.position.setX(1)
       movingSpotTopRef.current.position.setX(-2)
@@ -83,7 +93,6 @@ function Scene({ isMouseInside, mousePosition }) {
     } else if (viewport.width <= 6.5) {
       modelRef.current.position.setX(0)
       movingSpotTopRef.current.position.setX(-4)
-
       mainSceneGroupRef.current.rotation.z = 0
       camera.position.setX(0)
     } else {
@@ -126,13 +135,13 @@ function Scene({ isMouseInside, mousePosition }) {
     setModelBoundingBox(box)
   }
 
-  useEffect(() => {
-    const pointLightInterval = setInterval(randomPointLight, 5000)
+  // useEffect(() => {
+  //   const pointLightInterval = setInterval(randomPointLight, 5000)
 
-    return () => {
-      clearInterval(pointLightInterval)
-    }
-  }, [])
+  //   return () => {
+  //     clearInterval(pointLightInterval)
+  //   }
+  // }, [])
 
   useFrame((state) => {
     const randomNumber = Math.floor(Math.random() * 10) + 1
@@ -251,7 +260,8 @@ function Scene({ isMouseInside, mousePosition }) {
         scale={0.5}
         ref={modelRef}
       >
-        <V18 handleModelBoundingBox={handleModelBoundingBox} />
+        {/* <V18 handleModelBoundingBox={handleModelBoundingBox} /> */}
+        <V18_3 handleModelBoundingBox={handleModelBoundingBox} />
       </group>
       {/* <V22
         position={[2, -1.2, 2]}
