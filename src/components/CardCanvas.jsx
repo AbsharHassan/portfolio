@@ -333,7 +333,7 @@ export default function CardCanvas({
                 /> */}
                 <TitleText3D
                   position={titleTextPosition}
-                  url="/CONSOLA.ttf"
+                  url="/CONSOLA.TTF"
                   title={`<${title} />`}
                   colorTheme={colorTheme}
                   sectionTitle={sectionTitle}

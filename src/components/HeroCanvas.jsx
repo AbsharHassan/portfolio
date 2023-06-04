@@ -14,6 +14,7 @@ import {
   useProgress,
 } from '@react-three/drei'
 import * as THREE from 'three'
+import Spiral from './Spiral'
 import V15 from './V15'
 import V17 from './V17'
 import V18 from './V18'
@@ -22,6 +23,7 @@ import V18_4 from './V18_4'
 import V18_5 from './V18_5'
 import V18_6 from './V18_6'
 import V18_7 from './V18_7'
+import V18_8 from './V18_8'
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import gsap from 'gsap'
@@ -31,19 +33,20 @@ const HeroCanvas = ({ isMouseInside, mousePosition }) => {
   return (
     <Canvas
       className="w-full h-full absolute inset-0 "
-      shadows
+      shadows={{ type: THREE.PCFShadowMap }}
       dpr={[1, 2]}
       camera={{ position: [-2, 2, 6], fov: 50, near: 1, far: 20 }}
+
       //   position: [-2, 2, 6],
     >
       {/* <OrbitControls /> */}
       <color
         attach="background"
-        args={['#090909']}
+        args={['#111018']}
       />
       <fog
         attach="fog"
-        args={['#090909', 5, 20]}
+        args={['#111018', 5, 20]}
       />
       <ambientLight intensity={0.015} />
       <Scene
@@ -87,17 +90,17 @@ function Scene({ isMouseInside, mousePosition }) {
   useEffect(() => {
     if (viewport.width < 8.5 && viewport.width > 6.5) {
       modelRef.current.position.setX(1)
-      movingSpotTopRef.current.position.setX(-2)
+      // movingSpotTopRef.current.position.setX(-2)
       mainSceneGroupRef.current.rotation.z = 0.15
       camera.position.setX(-2)
     } else if (viewport.width <= 6.5) {
       modelRef.current.position.setX(0)
-      movingSpotTopRef.current.position.setX(-4)
+      // movingSpotTopRef.current.position.setX(-4)
       mainSceneGroupRef.current.rotation.z = 0
       camera.position.setX(0)
     } else {
       modelRef.current.position.setX(2)
-      movingSpotTopRef.current.position.setX(0)
+      // movingSpotTopRef.current.position.setX(0)
       mainSceneGroupRef.current.rotation.z = 0.15
       camera.position.setX(-2)
     }
@@ -135,13 +138,13 @@ function Scene({ isMouseInside, mousePosition }) {
     setModelBoundingBox(box)
   }
 
-  // useEffect(() => {
-  //   const pointLightInterval = setInterval(randomPointLight, 5000)
+  useEffect(() => {
+    const pointLightInterval = setInterval(randomPointLight, 5000)
 
-  //   return () => {
-  //     clearInterval(pointLightInterval)
-  //   }
-  // }, [])
+    return () => {
+      clearInterval(pointLightInterval)
+    }
+  }, [])
 
   useFrame((state) => {
     const randomNumber = Math.floor(Math.random() * 10) + 1
@@ -220,6 +223,10 @@ function Scene({ isMouseInside, mousePosition }) {
           // position={[3, 3, 2]}
           position={[4, 1, 4]}
           mousePosition={mousePosition}
+          // castShadow={false}
+          castShadow
+          // shadow={{ mapSize: new THREE.Vector2(512, 512) }}
+          shadow-mapSize={[256, 256]}
           // ref={movingSpotTopRef}
         />
         <MovingSpot
@@ -230,6 +237,8 @@ function Scene({ isMouseInside, mousePosition }) {
           // position={[2, 3, 0]}
           position={[4, 3, 3]}
           mousePosition={mousePosition}
+          castShadow={false}
+
           // ref={movingSpotBottomRef}
         />
       </group>
@@ -261,7 +270,9 @@ function Scene({ isMouseInside, mousePosition }) {
         ref={modelRef}
       >
         {/* <V18 handleModelBoundingBox={handleModelBoundingBox} /> */}
-        <V18_3 handleModelBoundingBox={handleModelBoundingBox} />
+        {/* <V18_3 handleModelBoundingBox={handleModelBoundingBox} /> */}
+        <V18_8 handleModelBoundingBox={handleModelBoundingBox} />
+        {/* <Spiral /> */}
       </group>
       {/* <V22
         position={[2, -1.2, 2]}
@@ -275,8 +286,8 @@ function Scene({ isMouseInside, mousePosition }) {
       >
         <planeGeometry args={[50, 50]} />
         <meshStandardMaterial
-        //   transparent
-        //   opacity={0.3}
+        // transparent
+        // opacity={0.3}
         />
       </mesh>
     </group>
@@ -350,16 +361,16 @@ function MovingSpot({ vec = new Vector3(), mousePosition, ...props }) {
   })
   return (
     <SpotLight
-      castShadow
       ref={light}
       penumbra={1}
       distance={6}
       //   angle={0.35}
       angle={0.35}
-      attenuation={5}
+      attenuation={4}
       //   anglePower={4}
       anglePower={6}
       intensity={4}
+      // decay={1}
       opacity={0.7}
       // shadow={{
       //   mapSize: { width: 1024, height: 1024 },
