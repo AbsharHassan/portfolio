@@ -86,7 +86,23 @@ body {
 
 body::-webkit-scrollbar {
   /* display: none; */
+  width: 10px;
 }
+
+body::-webkit-scrollbar-track {
+  background: #111018;
+  border-radius: 100vw;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #1f2937;
+  /* background: linear-gradient(to bottom, #0c8cbf22, #0c8cbf88, #0c8cbf22); */
+  border-radius: 100vw;
+}
+
+/* .main.is-hero-loading::-webkit-scrollbar {
+  display: none;
+} */
 
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -128,38 +144,39 @@ body::-webkit-scrollbar {
   /* color: green; */
   stroke-dasharray: 1045.3275146484375;
   stroke-dashoffset: 1045.3275146484375;
-  animation: totalAnimation 10s ease infinite;
+  /* fill: #111018; */
+  animation: totalAnimation 5s ease infinite;
 }
 
 @keyframes totalAnimation {
   0% {
     stroke-dashoffset: 1045.3275146484375;
     /* fill-opacity: 0; */
-    fill: transparent;
+    color: #e2e8f000;
   }
 
   20% {
     stroke-dashoffset: 0;
-    /* fill-opacity: 0; */
-    fill: transparent;
+    /* color-opacity: 0; */
+    color: #e2e8f000;
   }
 
   50% {
     stroke-dashoffset: 0;
-    /* fill-opacity: 100; */
-    fill: currentColor;
+    /* color-opacity: 100; */
+    color: #e2e8f0;
   }
 
   80% {
     stroke-dashoffset: 0;
-    /* fill-opacity: 0; */
-    fill: transparent;
+    /* color-opacity: 0; */
+    color: #e2e8f000;
   }
 
   100% {
     stroke-dashoffset: 1045.3275146484375;
     /* fill-opacity: 0; */
-    fill: transparent;
+    color: #e2e8f000;
   }
 }
 

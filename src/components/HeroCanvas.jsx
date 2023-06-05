@@ -60,7 +60,7 @@ const HeroCanvas = ({ isMouseInside, mousePosition }) => {
 export default HeroCanvas
 
 function Scene({ isMouseInside, mousePosition }) {
-  const { progress } = useProgress()
+  // const { progress } = useProgress()
   const { scene, viewport, camera } = useThree()
   const [modelBoundingBox, setModelBoundingBox] = useState(new THREE.Box3())
   const [initialViewportWidth, setInitialViewportWidth] = useState(
@@ -71,9 +71,9 @@ function Scene({ isMouseInside, mousePosition }) {
     setInitialViewportWidth(viewport?.width)
   }, [])
 
-  useEffect(() => {
-    console.log(progress)
-  }, [progress])
+  // useEffect(() => {
+  //   console.log(progress)
+  // }, [progress])
 
   // useEffect(() => {
   //   if (
@@ -87,20 +87,28 @@ function Scene({ isMouseInside, mousePosition }) {
   //   }
   // }, [viewport])
 
+  // useEffect(() => {
+  //   cursorPointLightRef.current.position.set(
+  //     mousePosition.x,
+  //     mousePosition.y,
+  //     2
+  //   )
+  // }, [mousePosition])
+
   useEffect(() => {
     if (viewport.width < 8.5 && viewport.width > 6.5) {
       modelRef.current.position.setX(1)
-      // movingSpotTopRef.current.position.setX(-2)
+      movingSpotTopRef.current.position.setX(-2)
       mainSceneGroupRef.current.rotation.z = 0.15
       camera.position.setX(-2)
     } else if (viewport.width <= 6.5) {
       modelRef.current.position.setX(0)
-      // movingSpotTopRef.current.position.setX(-4)
+      movingSpotTopRef.current.position.setX(-4)
       mainSceneGroupRef.current.rotation.z = 0
       camera.position.setX(0)
     } else {
       modelRef.current.position.setX(2)
-      // movingSpotTopRef.current.position.setX(0)
+      movingSpotTopRef.current.position.setX(0)
       mainSceneGroupRef.current.rotation.z = 0.15
       camera.position.setX(-2)
     }
@@ -114,6 +122,7 @@ function Scene({ isMouseInside, mousePosition }) {
   let mainSceneGroupRef = useRef(null)
   let movingSpotTopRef = useRef(null)
   let movingSpotBottomRef = useRef(null)
+  let cursorPointLightRef = useRef(null)
 
   const randomPointLight = () => {
     // console.log('pointlight going')
@@ -201,11 +210,18 @@ function Scene({ isMouseInside, mousePosition }) {
         lookAt={sphereRef.current}
       /> */}
 
+      {/* <pointLight
+        ref={cursorPointLightRef}
+        intensity={1}
+        distance={2}
+        color="green"
+        position={[0, 0, 0]}
+      /> */}
+
       <pointLight
         castShadow
         position={[0, -200, 0]}
         intensity={0}
-        color="purple"
         // decay={0}
         // decay={2}
         distance={5}

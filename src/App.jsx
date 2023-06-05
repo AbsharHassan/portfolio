@@ -25,7 +25,7 @@ import { ReactComponent as Trademark20 } from './assets/trademark/A_with_simple_
 import { ReactComponent as Trademark21 } from './assets/trademark/A_with_simple_arrow_rounded_with_mini.svg'
 import { ReactComponent as Trademark22 } from './assets/trademark/A_with_simple_arrow_rounded.svg'
 import { ReactComponent as Trademark23 } from './assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Canvas } from '@react-three/fiber'
 import { Cylinder, OrbitControls, Plane, Sphere } from '@react-three/drei'
@@ -35,16 +35,24 @@ import { Spiral } from './components/Spiral'
 import MovingSpotlight from './components/MovingSpotlight'
 import RectLightTest from './components/RectLightTest'
 import TestHero from './components/TestHero'
+import LoadingScreen from './components/LoadingScreen'
+import { useProgress } from '@react-three/drei'
 
 function App() {
   let trademark23Ref = useRef(null)
+  const { active, progress } = useProgress()
+
+  const [isHeroLoading, setisHeroLoading] = useState(true)
+
+  const toggleIsHeroLoading = (value) => {
+    setisHeroLoading(value)
+  }
 
   useEffect(() => {
-    // console.log(trademark23Ref.current.childNodes[0].getTotalLength())
-    // gsap.to({})
-  }, [trademark23Ref])
+    console.log(isHeroLoading)
+  }, [isHeroLoading])
   return (
-    <>
+    <main className={`main ${isHeroLoading ? 'is-hero-loading' : ''}`}>
       {/* <div className="w-screen h-screen flex items-center justify-center space-x-8">
         <Trademark11 className="w-40 h-40 text-red-700 " />
         <Trademark23
@@ -122,12 +130,16 @@ function App() {
       </div> */}
 
       {/* <div className="w-screen h-screen relative"> */}
+      {isHeroLoading && (
+        <LoadingScreen toggleIsHeroLoading={toggleIsHeroLoading} />
+      )}
       <Navbar />
       <TestHero />
+      {!isHeroLoading && <CompleteToolset />}
       {/* <div className="w-full h-[1000px] bg-green-700/20"></div> */}
-      <CompleteToolset />
+
       {/* </div> */}
-    </>
+    </main>
   )
 }
 
