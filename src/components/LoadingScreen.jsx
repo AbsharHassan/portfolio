@@ -59,7 +59,7 @@ const LoadingScreen = ({ toggleIsHeroLoading }) => {
 
   return (
     <div
-      className="absolute inset-0 w-full h-full flex items-center justify-center z-[9999] text-3xl text-slate-300 bg-[#111018] font-bold"
+      className="absolute inset-0 w-full h-full min-h-screen flex items-center justify-center z-[9999] text-3xl text-slate-300 bg-[#111018] font-bold"
       ref={containterRef}
     >
       <div
