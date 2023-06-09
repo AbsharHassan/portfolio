@@ -27,7 +27,7 @@ import { ReactComponent as Trademark22 } from './assets/trademark/A_with_simple_
 import { ReactComponent as Trademark23 } from './assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, extend } from '@react-three/fiber'
 import { Cylinder, OrbitControls, Plane, Sphere } from '@react-three/drei'
 import V3 from './components/V3'
 import V15 from './components/V15'
@@ -37,6 +37,19 @@ import RectLightTest from './components/RectLightTest'
 import TestHero from './components/TestHero'
 import LoadingScreen from './components/LoadingScreen'
 import { useProgress } from '@react-three/drei'
+import TestingBloom from './components/TestingBloom'
+
+// import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
+// import { BlurPass, Resizer, KernelSize, Resolution } from 'postprocessing'
+
+import { SelectiveBloom } from '@react-three/postprocessing'
+import { BlurPass, Resizer, KernelSize } from 'postprocessing'
+
+// extend({ EffectComposer, RenderPass, UnrealBloomPass })
 
 function App() {
   let trademark23Ref = useRef(null)
@@ -48,9 +61,9 @@ function App() {
     setisHeroLoading(value)
   }
 
-  useEffect(() => {
-    console.log(isHeroLoading)
-  }, [isHeroLoading])
+  let ambientRef1 = useRef()
+  let sphereRef1 = useRef()
+
   return (
     <main className={`main ${isHeroLoading ? 'is-hero-loading' : ''}`}>
       {/* <div className="w-screen h-screen flex items-center justify-center space-x-8">
@@ -133,10 +146,9 @@ function App() {
       {isHeroLoading && (
         <LoadingScreen toggleIsHeroLoading={toggleIsHeroLoading} />
       )}
-      <Navbar />
+      {/* <Navbar /> */}
       <TestHero />
       {!isHeroLoading && <CompleteToolset />}
-      {/* <div className="w-full h-[1000px] bg-green-700/20"></div> */}
 
       {/* </div> */}
     </main>
@@ -173,3 +185,58 @@ export default App
 //     {/* <Spiral position={[0, -3, 0]} /> */}
 //   </Canvas>
 // </div>
+
+// {/* <div className="w-screen h-screen flex item-center justify-center">
+//         <Canvas
+//           className="w-[90%] h-[90%] "
+//           shadows
+//           linear
+//           camera={{ position: [0, 0, 120] }}
+//         >
+//           <OrbitControls />
+//           <ambientLight ref={ambientRef1} />
+//           {/* <pointLight
+//             ref={ambientRef1}
+//             position={[0, 0, 30]}
+//           /> */}
+//           <Sphere
+//             args={[10]}
+//             ref={sphereRef1}
+//           >
+//             <meshStandardMaterial color="hotpink" />
+//           </Sphere>
+//           <Sphere
+//             args={[10]}
+//             position={[30, 20, 0]}
+//           >
+//             <meshStandardMaterial color="hotpink" />
+//           </Sphere>
+//           <EffectComposer>
+//             {/* <Bloom
+//               intensity={6}
+//               luminanceThreshold={0}
+//               luminanceSmoothing={0.9}
+//               height={300}
+//               opacity={3}
+//             ></Bloom> */}
+//             <SelectiveBloom
+//               lights={[ambientRef1]} // ⚠️ REQUIRED! all relevant lights
+//               selection={[sphereRef1]} // selection of objects that will have bloom effect
+//               selectionLayer={10} // selection layer
+//               // intensity={1.0} // The bloom intensity.
+//               blurPass={undefined} // A blur pass.
+//               width={Resizer.AUTO_SIZE} // render width
+//               height={Resizer.AUTO_SIZE} // render height
+//               kernelSize={KernelSize.LARGE} // blur kernel size
+//               // luminanceThreshold={0.9} // luminance threshold. Raise this value to mask out darker elements in the scene.
+//               // luminanceSmoothing={0.025} // smoothness of the luminance threshold. Range is [0, 1]
+
+//               intensity={6}
+//               luminanceThreshold={0}
+//               luminanceSmoothing={0.9}
+//             />
+//           </EffectComposer>
+//           {/* <TestingBloom>
+//           </TestingBloom> */}
+//         </Canvas>
+//       </div> */}

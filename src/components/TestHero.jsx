@@ -54,7 +54,7 @@ export default function TestHero() {
         setIsMouseInside(false)
       }}
     >
-      <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-20 text-white  ">
+      {/* <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-20 text-white  ">
         <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
           <h1 className="text-[36px] sm:text-[60px] lg:text-[72px] font-semibold leading-tight mb-8 ">
             <div className="hidden sm:block">
@@ -62,10 +62,6 @@ export default function TestHero() {
                 Im
                 <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px]"></span>
                 gine. Build.
-                {/* <div>
-                  {' '}
-                  <span className="opacity-0">I</span>Build.
-                </div> */}
               </div>
               <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customBlue  to-customAqua inline ">
                 Ship.
@@ -105,20 +101,12 @@ export default function TestHero() {
           </h2>
           <button className="neon-button w-52 h-12">Call to Action</button>
         </div>
-      </div>
+      </div> */}
       <div className="w-full">
-        <Suspense
-          fallback={
-            <>
-              <div className="text-4xl text-red-600">hello world</div>
-            </>
-          }
-        >
-          <HeroCanvas
-            isMouseInside={isMouseInside}
-            mousePosition={mousePosition}
-          />
-        </Suspense>
+        <HeroCanvas
+          isMouseInside={isMouseInside}
+          mousePosition={mousePosition}
+        />
         {/* <Canvas
           className="w-full h-full absolute inset-0 "
           shadows

@@ -42,7 +42,9 @@ export default function V18_8({ handleModelBoundingBox, ...props }) {
         <meshStandardMaterial
           fog={false}
           color="#808080"
+          // color="#000"
           roughness={0.1}
+          // wireframe
           // castShadow
         />
       </mesh>
