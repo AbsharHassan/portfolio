@@ -20,6 +20,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import HeroCanvas from './HeroCanvas'
 import AlternatingText from './AlternatingText'
+import HeroBloomCanvas from './HeroBloomCanvas'
 
 export default function TestHero() {
   const [isMouseInside, setIsMouseInside] = useState(false)
@@ -102,11 +103,25 @@ export default function TestHero() {
           <button className="neon-button w-52 h-12">Call to Action</button>
         </div>
       </div> */}
-      <div className="w-full">
+      <div className="w-full h-full relative">
+        <div className="w-full h-full absolute inset-0">
+          <HeroCanvas
+            isMouseInside={isMouseInside}
+            mousePosition={mousePosition}
+          />
+        </div>
+        <div className="w-full h-full absolute inset-0">
+          <HeroBloomCanvas
+            isMouseInside={isMouseInside}
+            mousePosition={mousePosition}
+          />
+        </div>
+
+        {/* <HeroBloomCanvas />
         <HeroCanvas
           isMouseInside={isMouseInside}
           mousePosition={mousePosition}
-        />
+        /> */}
         {/* <Canvas
           className="w-full h-full absolute inset-0 "
           shadows
