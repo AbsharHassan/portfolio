@@ -69,9 +69,6 @@ const SpaceDustShaderMaterial = shaderMaterial(
         pos = mix(pos2, pos1, t);
       }
       
-      // vec3 pos = pos1;
-
-      
       // Setting particle position 
       vec3 particle_position = (modelMatrix * vec4(pos, 1.0)).xyz;
 
