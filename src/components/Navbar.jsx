@@ -76,6 +76,7 @@ const Navbar = () => {
       navObserver.disconnect()
     }
   }, [])
+
   return (
     <>
       <div
@@ -84,7 +85,7 @@ const Navbar = () => {
       />
       <header
         ref={navbarRef}
-        className="navbar fixed z-30 top-0 left-0 w-full text-zinc-400   "
+        className="navbar fixed z-40 top-0 left-0 w-full text-zinc-300"
       >
         <nav className="h-full px-5 sm:px-12 transition-all duration-300  flex justify-between items-center py-5">
           <div

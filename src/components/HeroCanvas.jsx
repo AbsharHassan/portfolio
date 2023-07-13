@@ -21,19 +21,41 @@ import V18_8 from './V18_8'
 
 import gsap from 'gsap'
 import MovingSpotLight from './MovingSpotlight'
+import SpaceDustTest from './SpaceDustTest'
+import { useSelector } from 'react-redux'
 
-const HeroCanvas = ({ isMouseInside, mousePosition, bloomTheme }) => {
-  let lightRef1 = useRef()
-  let sphereRef1 = useRef()
-  const selectedMeshRef = useRef()
+const HeroCanvas = ({ isMouseInside, bloomTheme }) => {
+  // useEffect(() => {
+  //   console.log('r')
+  // })
+  // const { mousePosition } = useSelector((state) => state.threeStore)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      const { clientX, clientY } = event
+
+      const x = (clientX / window.innerWidth) * 2 - 1
+      const y = -(clientY / window.innerHeight) * 2 + 1
+
+      setMousePosition({ x, y })
+    }
+    document.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
 
   return (
     <Canvas
       className="w-full h-full absolute inset-0 "
       shadows={{ type: THREE.PCFShadowMap }}
       dpr={[1, 2]}
-      camera={{ position: [-2, 2, 6], fov: 50, near: 1, far: 20 }}
+      camera={{ position: [-2, 2, 6], fov: 50, near: 1, far: 1000 }}
     >
+      <OrbitControls />
+
       <Scene
         isMouseInside={isMouseInside}
         mousePosition={mousePosition}
@@ -41,13 +63,13 @@ const HeroCanvas = ({ isMouseInside, mousePosition, bloomTheme }) => {
       />
       <ambientLight intensity={0.015} />
 
-      <color
+      {/* <color
         attach="background"
         args={['#111018']}
-      />
+      /> */}
       <fog
         attach="fog"
-        args={['#111018', 5, 20]}
+        args={['#111018', 5, 10]}
       />
     </Canvas>
   )
@@ -64,10 +86,10 @@ function Scene({ isMouseInside, mousePosition, bloomTheme }) {
   let modelRef = useRef(null)
   let mainSceneGroupRef = useRef(null)
   let movingSpotLightGroup = useRef(null)
-  let lightRef1 = useRef()
-  let sphereRef1 = useRef()
-  const selectedMeshRef = useRef()
-  const composerRef = useRef()
+  let bloomPointLightRef = useRef()
+  let pointLightVelocity = useRef(new Vector3(0, 0, 0))
+  let bloomLightBackground = useRef()
+  let bloomLightForeground = useRef()
 
   const randomPointLight = () => {
     const randomNumberColor = Math.floor(Math.random() * 3)
@@ -113,7 +135,7 @@ function Scene({ isMouseInside, mousePosition, bloomTheme }) {
   }, [viewport.width])
 
   useEffect(() => {
-    gsap.to(bloomPointLightRef.current.color, {
+    gsap.to([bloomLightBackground.current.color], {
       r: bloomTheme.r,
       g: bloomTheme.g,
       b: bloomTheme.b,
@@ -121,29 +143,7 @@ function Scene({ isMouseInside, mousePosition, bloomTheme }) {
     })
   }, [bloomTheme])
 
-  let dumbSphereRef = useRef()
-  let bloomPointLightRef = useRef()
-
   useFrame(() => {
-    // const someVec = new THREE.Vector3(
-    //   (mousePosition.x / size.width) * 2 - 1,
-    //   (mousePosition.y / size.height) * 2 + 1,
-    //   0
-    // )
-    // someVec.unproject(camera)
-
-    // console.log(someVec)
-
-    // dumbSphereRef.current.position.copy(someVec)
-
-    // // const viewportMouse = new Vector3(
-    // //   mousePosition.x * 2 - 1,
-    // //   mousePosition.y * 2 + 1,
-    // //   0.5
-    // // )
-    // // viewportMouse.unproject(camera)
-    // // dumbSphereRef.current.position.copy(viewportMouse)
-
     const cameraPosition = new THREE.Vector3(-2, 2, 6) // Replace with your camera position
 
     // Calculate the position in world coordinates based on camera orientation
@@ -154,29 +154,65 @@ function Scene({ isMouseInside, mousePosition, bloomTheme }) {
     ).unproject(camera)
     const direction = worldPosition.sub(cameraPosition).normalize()
     const distance = (-cameraPosition.z * 0.7) / direction.z
-    const spherePosition = cameraPosition
+    const lightPositionBackground = cameraPosition
       .clone()
       .add(direction.multiplyScalar(distance))
 
-    bloomPointLightRef.current.position.lerp(spherePosition, 0.1)
+    // bloomPointLightRef.current.position.lerp(lightPositionBackground, 0.1)
+
+    const directionToTarget = lightPositionBackground
+      .clone()
+      .sub(bloomLightBackground.current.position.clone())
+
+    const distanceToTarget = directionToTarget.length()
+
+    let accelerationFactor = 0.1
+    let dampingFactor = -0.3
+
+    const acceleration = directionToTarget.multiplyScalar(
+      1 * accelerationFactor
+    )
+    const damping = pointLightVelocity.current
+      .clone()
+      .multiplyScalar(1 * dampingFactor)
+
+    bloomLightBackground.current.position.add(pointLightVelocity.current)
+    // bloomLightForeground.current.position.set(
+    //   bloomLightBackground.current.position.x,
+    //   bloomLightBackground.current.position.y,
+    //   4
+    // )
+
+    pointLightVelocity.current = pointLightVelocity.current
+      .clone()
+      .add(acceleration)
+      .add(damping)
   })
 
   return (
     <>
+      <OrbitControls />
+
       <pointLight
-        ref={bloomPointLightRef}
-        intensity={0.05}
-        decay={3}
-        distance={5}
+        ref={bloomLightBackground}
+        intensity={1}
+        distance={3}
         // castShadow
       />
+      {/* <pointLight
+        ref={bloomLightForeground}
+        intensity={1}
+        distance={3}
+        // castShadow
+      /> */}
+
       <group
         ref={mainSceneGroupRef}
         //leave on new line
         // rotation={[0, 0, 0.15]}
         toneMapped={true}
       >
-        {/* <OrbitControls /> */}
+        <OrbitControls />
 
         <pointLight
           castShadow
@@ -235,55 +271,13 @@ function Scene({ isMouseInside, mousePosition, bloomTheme }) {
           position={[0, -1.0154152154922487, 0]}
           rotation-x={-Math.PI / 2}
         >
-          <planeGeometry args={[50, 50]} />
+          <planeGeometry args={[150, 10]} />
           <meshStandardMaterial
-          // transparent
-          // opacity={0.3}
+            transparent
+            opacity={0.75}
           />
         </mesh>
       </group>
     </>
-  )
-}
-
-function MovingSpot({
-  vec = new Vector3(),
-
-  mousePosition,
-  ...props
-}) {
-  const light = useRef()
-  const viewport = useThree((state) => state.viewport)
-
-  useFrame((state) => {
-    const targetX =
-      ((((mousePosition.x + 1) / 2) * (0.6 - 0.01) + 0.01) * viewport.width) / 2
-    const targetY =
-      (((mousePosition.y + 1) * (-0.5 + 1)) / 2 - 1) * viewport.height
-
-    const targetZ = 2
-
-    light.current.target.position.lerp(
-      vec.set(targetX / 2, targetY / 2, targetZ),
-      0.1
-    )
-
-    light.current.target.updateMatrixWorld()
-  })
-  return (
-    <SpotLight
-      ref={light}
-      penumbra={1}
-      distance={6}
-      //   angle={0.35}
-      angle={0.35}
-      attenuation={4}
-      anglePower={4}
-      // anglePower={6}
-      intensity={4}
-      // decay={1}
-      opacity={0.8}
-      {...props}
-    />
   )
 }

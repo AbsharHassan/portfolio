@@ -2,7 +2,7 @@ import CompleteToolset from './components/CompleteToolset'
 // import Hero from './components/Hero'
 import Navbar from './components/Navbar'
 import Trademark2D from './components/Trademark2D'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { Canvas, extend } from '@react-three/fiber'
 import {
@@ -12,6 +12,8 @@ import {
   Sphere,
   shaderMaterial,
   Circle,
+  Stats,
+  Html,
 } from '@react-three/drei'
 import glsl from 'babel-plugin-glsl/macro'
 
@@ -22,6 +24,11 @@ import { useProgress } from '@react-three/drei'
 import * as THREE from 'three'
 import BloomSphere from './components/BloomSphere'
 import TestBloomSphere from './components/TestBloomSphere'
+import SpaceDustTest from './components/SpaceDustTest'
+import HeroParticleCanvas from './components/HeroParticleCanvas'
+
+import { GlobalThreeContext } from './Contexts/GlobalThreeContext'
+import BloomCanvas from './components/BloomCanvas'
 
 // const BloomShaderMaterial = shaderMaterial(
 //   // Uniform
@@ -212,12 +219,22 @@ import TestBloomSphere from './components/TestBloomSphere'
 // )
 
 // extend({ BloomShaderMaterial, BloomShaderMaterial2, CircleShader })
+import { useSelector, useDispatch } from 'react-redux'
+import { setMousePosition, toggleBloomTheme } from './features/three/threeSlice'
+import Projects from './components/Projects'
+import ParticleModel from './components/ParticleModel'
+import HeroCanvas from './components/HeroCanvas'
 
 function App() {
+  const dispatch = useDispatch()
+  const { bloomTheme } = useSelector((state) => state.threeStore)
+  // const { mousePosition } = useSelector((state) => state.threeStore)
+
   let trademark23Ref = useRef(null)
   const { active, progress } = useProgress()
 
   const [isHeroLoading, setisHeroLoading] = useState(true)
+  // const [mousePosition, setMousePosition] = useState(new THREE.Vector2())
 
   const toggleIsHeroLoading = (value) => {
     setisHeroLoading(value)
@@ -225,17 +242,138 @@ function App() {
 
   let ambientRef1 = useRef()
   let sphereRef1 = useRef()
+  let mainRef = useRef()
+
+  const handleMouseMove = (event) => {
+    const { clientX, clientY } = event
+
+    const sectionBounds = mainRef.current.getBoundingClientRect()
+
+    const x = ((clientX - sectionBounds.left) / sectionBounds.width) * 2 - 1
+    const y = -((clientY - sectionBounds.top) / sectionBounds.height) * 2 + 1
+
+    // setMousePosition(new THREE.Vector2(mouseX, mouseY))
+
+    // dispatch(setMousePosition({ x, y }))
+  }
+
+  // useEffect(() => {
+  //   console.log('rerenderrrrrrrrrrrrrr')
+  // })
+
+  // useEffect(() => {
+  //   console.log(mousePosition)
+  // }, [mousePosition])
+
+  let deadZoneRef = useRef(null)
+  const [isParticleModelVisible, setIsParticleModelVisible] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsParticleModelVisible(!entry.isIntersecting)
+      },
+      { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
+    )
+
+    if (deadZoneRef.current) {
+      observer.observe(deadZoneRef.current)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
-    <main className={`main ${isHeroLoading ? 'is-hero-loading' : ''}`}>
-      {isHeroLoading && (
+    // <div
+    //   className="w-screen h-screen flex items-center justify-center relative"
+    //   onPointerMove={handleMouseMove}
+    //   ref={canvasRef}
+    // >
+    //   {/* <div className="w-full h-full absolute inset-0">
+    //     <Canvas
+    //       className="w-full h-full absolute inset-0 z-10"
+    //       // ref={canvasRef}
+    //       // onPointerMove={handleMouseMove}
+    //       // camera={{ position: [0, -4, 3] }}
+    //     >
+    //       <OrbitControls />
+    //       <SpaceDustTest
+    //         particleCount={10000}
+    //         mousePosition={mousePosition}
+    //       />
+
+    //     </Canvas>
+    //   </div>
+    //   <div className="w-full h-full absolute inset-0">
+    //     <HeroBloomCanvas
+    //       mousePosition={mousePosition}
+    //       bloomTheme={new THREE.Color(0.76, 0.38, 1.0)}
+    //     />
+    //   </div> */}
+    //   <HeroParticleCanvas mousePosition={mousePosition} />
+    // </div>
+    <main
+      className={`main ${
+        isHeroLoading ? 'is-hero-loading' : ''
+      } relative w-full min-h-screen h-[10000px]`}
+      ref={mainRef}
+      // onClick={() => {
+      //   dispatch(toggleBloomTheme())
+      // }}
+    >
+      {/* {isHeroLoading && (
         <LoadingScreen toggleIsHeroLoading={toggleIsHeroLoading} />
       )}
+      <Stats />
+
       <Navbar />
+      <BloomCanvas />
+
       <Hero />
-      {!isHeroLoading && <CompleteToolset />}
-      <CompleteToolset />
+      <CompleteToolset /> */}
+
+      {/* <Navbar />
+      <BloomCanvas />
+
+      <Hero />
+
+      <Projects /> */}
+      {/* <Hero /> */}
+
+      {/* <BloomCanvas /> */}
+      {/* <CompleteToolset /> */}
+
+      <div
+        ref={deadZoneRef}
+        className="w-full h-screen bg-red-900/20"
+      ></div>
+
+      <ParticleModel isParticleModelVisible={isParticleModelVisible} />
+      <div className="w-full h-full fixed inset-0 ">
+        <HeroParticleCanvas
+          // mousePosition={mousePosition}
+          bloomTheme={bloomTheme}
+          isParticleModelVisible={isParticleModelVisible}
+        />
+      </div>
+      {/* <div className="wrapper w-full h-full">
+        <div className="browser-bar w-full h-[100px] bg-[#1d1e21] text-white">
+          hello world
+        </div>
+        <div className="iframe">
+          <iframe
+            title="iframe"
+            src="https://flood-tracker.onrender.com/"
+            //   src="http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login"
+          />
+        </div>
+      </div> */}
     </main>
+    // <div className="w-full h-full ">
+    //   <BloomCanvas />
+    // </div>
   )
 }
 

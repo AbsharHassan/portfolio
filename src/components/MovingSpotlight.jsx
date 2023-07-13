@@ -21,8 +21,6 @@ const MovingSpotLight = ({ vec = new Vector3(), mousePosition, ...props }) => {
     )
 
     light.current.target.updateMatrixWorld()
-
-    console.log(light)
   })
   return (
     <SpotLight

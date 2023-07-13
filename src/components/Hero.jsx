@@ -1,27 +1,34 @@
 import { useRef, useEffect, useState, Suspense } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleBloomTheme } from '../features/three/threeSlice'
 
 import { Vector2, Color } from 'three'
 
 import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import HeroCanvas from './HeroCanvas'
 import AlternatingText from './AlternatingText'
-import HeroBloomCanvas from './HeroBloomCanvas'
+import HeroBloomCanvas from './BloomCanvas'
+import HeroParticleCanvas from './HeroParticleCanvas'
 
 const Hero = () => {
   // Constants
+  const dispatch = useDispatch()
+
   const bloomColorsArray = [
     // new Color(0.48, 0.33, 0.83),
-    // new Color(0.35, 0.51, 0.98),
-    // new Color(0.04, 0.66, 0.72),
-    new Color(0.48 * 10, 0.33 * 10, 0.83 * 10),
-    new Color(0.35 * 10, 0.51 * 10, 0.98 * 15),
-    new Color(0.04 * 10, 0.66 * 10, 0.72 * 10),
+    new Color(0.76, 0.38, 1.0),
+    new Color(0.35, 0.51, 0.98),
+    new Color(0.04, 0.66, 0.72),
+    // new Color(0.48 * 10, 0.33 * 10, 0.83 * 10),
+    // new Color(0.35 * 10, 0.51 * 10, 0.98 * 15),
+    // new Color(0.04 * 10, 0.66 * 10, 0.72 * 10),
   ]
 
   // States
+  const { bloomTheme } = useSelector((state) => state.threeStore)
   const [isMouseInside, setIsMouseInside] = useState(false)
   const [mousePosition, setMousePosition] = useState(new Vector2())
-  const [bloomTheme, setBloomTheme] = useState(bloomColorsArray[0])
+  // const [bloomTheme, setBloomTheme] = useState(bloomColorsArray[0])
 
   let heroSectionRef = useRef(null)
   let bloomCounter = useRef(1)
@@ -40,29 +47,36 @@ const Hero = () => {
   }
 
   const bloomThemeChanger = () => {
-    console.log(bloomCounter.current)
-    setBloomTheme(bloomColorsArray[bloomCounter.current])
+    // setBloomTheme(bloomColorsArray[bloomCounter.current])
 
-    if (bloomCounter.current !== 2) {
-      bloomCounter.current++
-    } else {
-      bloomCounter.current = 0
-    }
+    // if (bloomCounter.current !== 2) {
+    //   bloomCounter.current++
+    // } else {
+    //   bloomCounter.current = 0
+    // }
+    dispatch(toggleBloomTheme())
   }
 
   useEffect(() => {
-    const bloomThemeInterval = setInterval(bloomThemeChanger, 10000)
+    const bloomThemeInterval = setInterval(
+      () => dispatch(toggleBloomTheme()),
+      10000
+    )
 
     return () => {
       clearInterval(bloomThemeInterval)
     }
   }, [])
 
+  // useEffect(() => {
+  //   console.log('rerender')
+  // })
+
   return (
     <div
       ref={heroSectionRef}
       className="w-full h-screen relative flex overflow-x-hidden bg-red-900/0"
-      onMouseMove={handleMouseMove}
+      // onMouseMove={handleMouseMove}
       onPointerEnter={() => {
         setIsMouseInside(true)
       }}
@@ -70,11 +84,11 @@ const Hero = () => {
         setIsMouseInside(false)
       }}
     >
-      <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-20 text-white  ">
+      <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-30 text-white  ">
         <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
           <h1 className="text-[36px] sm:text-[60px] lg:text-[72px] font-semibold leading-tight mb-8 ">
             <div className="hidden sm:block">
-              <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customViolet to-customBlue">
+              <div className="w-fit bg-clip-text text-transparent bg-gradient-to-r from-customViolet to-customBlue">
                 Im
                 <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px]"></span>
                 gine. Build.
@@ -118,18 +132,24 @@ const Hero = () => {
           <button className="neon-button w-52 h-12">Call to Action</button>
         </div>
       </div>
-      <div className="w-full h-full relative">
-        <div className="w-full h-full absolute inset-0">
-          <HeroCanvas
+      <div className="w-full h-full relative ">
+        {/* <div className="w-full h-full absolute inset-0">
+          <HeroBloomCanvas
+            // mousePosition={mousePosition}
+            bloomTheme={bloomTheme}
+          />
+        </div> */}
+        <div className="w-full h-full absolute inset-0 ">
+          <HeroParticleCanvas
             isMouseInside={isMouseInside}
-            mousePosition={mousePosition}
+            // mousePosition={mousePosition}
             bloomTheme={bloomTheme}
           />
         </div>
         <div className="w-full h-full absolute inset-0">
-          <HeroBloomCanvas
+          <HeroCanvas
             isMouseInside={isMouseInside}
-            mousePosition={mousePosition}
+            // mousePosition={mousePosition}
             bloomTheme={bloomTheme}
           />
         </div>

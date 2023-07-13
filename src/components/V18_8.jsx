@@ -4,21 +4,27 @@ Command: npx gltfjsx@6.1.12 public/models/v3.glb
 */
 
 import React, { useEffect, useRef } from 'react'
-import { OrbitControls, useGLTF } from '@react-three/drei'
+import { OrbitControls, PresentationControls, useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export default function V18_8({ handleModelBoundingBox, ...props }) {
-  const { nodes, materials } = useGLTF('./models/v18_8.glb')
+  const { nodes, materials } = useGLTF('./models/v18_10.glb')
   let groupRef = useRef(null)
+  let meshRef = useRef(null)
 
   useFrame(() => {
     if (groupRef?.current) {
-      groupRef.current.rotation.y = groupRef.current.rotation.y - 0.025
+      // groupRef.current.rotation.y = groupRef.current.rotation.y - 0.025
+      groupRef.current.rotation.y -= 0.005
       // const boundingBox = new THREE.Box3().setFromObject(groupRef.current)
       // console.log(boundingBox)
     }
   })
+
+  useEffect(() => {
+    console.log(meshRef.current.geometry)
+  }, [])
 
   // useEffect(() => {
   //   const boundingBox = new THREE.Box3().setFromObject(groupRef.current)
@@ -27,12 +33,14 @@ export default function V18_8({ handleModelBoundingBox, ...props }) {
   // }, [groupRef])
 
   return (
+    // <PresentationControls global>
     <group
       {...props}
       dispose={null}
       ref={groupRef}
     >
       <mesh
+        ref={meshRef}
         castShadow
         // receiveShadow
         geometry={nodes['outer-spiral'].geometry}
@@ -41,6 +49,8 @@ export default function V18_8({ handleModelBoundingBox, ...props }) {
       >
         <meshStandardMaterial
           fog={false}
+          transparent
+          // color="#808080"
           color="#808080"
           // color="#000"
           roughness={0.1}
@@ -49,6 +59,7 @@ export default function V18_8({ handleModelBoundingBox, ...props }) {
         />
       </mesh>
     </group>
+    // </PresentationControls>
   )
 }
 

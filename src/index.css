@@ -60,6 +60,14 @@
   }
 }
 
+.wrapper {
+}
+
+.wrapper .iframe iframe {
+  width: 1536px;
+  height: 753px;
+}
+
 body {
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -80,6 +88,7 @@ body {
   background-attachment: fixed; */
 
   background-color: #111018;
+  /* background-color: red; */
 
   /* background-color: #000000; */
 }
@@ -108,6 +117,27 @@ body::-webkit-scrollbar-thumb {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+
+.laptop {
+  /* display: flex; */
+  /* background-color: red; */
+  /* height: 960px; */
+}
+
+.laptop iframe {
+  /* width: 1536px;
+  height: 753px; */
+  width: 1596px;
+  /* height: 753px; */
+  aspect-ratio: 2.0398406374501992031872509960159;
+  border: none;
+  /* border-radius: 20px; */
+  opacity: 1;
+}
+.laptop p {
+  color: white;
+  opacity: 1;
+}
 
 .navbar {
   background-color: rgb(0 0 0 / 0);
