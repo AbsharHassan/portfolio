@@ -1,283 +1,115 @@
-import CompleteToolset from './components/CompleteToolset'
-// import Hero from './components/Hero'
-import Navbar from './components/Navbar'
-import Trademark2D from './components/Trademark2D'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { Canvas, extend } from '@react-three/fiber'
+import { useEffect, useRef, useState, Suspense, createRef } from 'react'
+import { createClient } from 'contentful'
+import { useSelector, useDispatch } from 'react-redux'
 import {
-  Cylinder,
-  OrbitControls,
-  Plane,
-  Sphere,
-  shaderMaterial,
-  Circle,
+  useProgress,
   Stats,
-  Html,
+  useGLTF,
+  Sphere,
+  View,
+  PerspectiveCamera,
+  OrbitControls,
 } from '@react-three/drei'
-import glsl from 'babel-plugin-glsl/macro'
 
 import Hero from './components/Hero'
-import LoadingScreen from './components/LoadingScreen'
-import { useProgress } from '@react-three/drei'
-
-import * as THREE from 'three'
-import BloomSphere from './components/BloomSphere'
-import TestBloomSphere from './components/TestBloomSphere'
-import SpaceDustTest from './components/SpaceDustTest'
-import HeroParticleCanvas from './components/HeroParticleCanvas'
-
-import { GlobalThreeContext } from './Contexts/GlobalThreeContext'
+import SpaceDustCanvas from './components/SpaceDustCanvas'
 import BloomCanvas from './components/BloomCanvas'
-
-// const BloomShaderMaterial = shaderMaterial(
-//   // Uniform
-//   {
-//     uColor: new THREE.Color(1, 1, 0.6),
-//   },
-//   // Vertex Shader
-//   glsl`
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     void main() {
-//       vNormal = normalize(normalMatrix * normal);
-//       vPosition = position;
-//       vUv = uv;
-
-//       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-//     }
-//   `,
-//   // Fragment Shader
-//   glsl`
-//     uniform vec3 uColor;
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     void main() {
-//       // float radial = 1. - vPosition.z;
-//       // radial *= radial;
-
-//       float intensity = pow(0.7 - dot(vNormal * 0.5, vec3(0, 0, 1.0)), 3.0);
-
-//       // gl_FragColor = vec4(uColor, 1.) * intensity * intensity;
-//       gl_FragColor = vec4(uColor, 1.) ;
-
-//     }
-//   `
-// )
-
-// const BloomShaderMaterial2 = shaderMaterial(
-//   // Uniform
-//   {
-//     // uColor: new THREE.Color(1 / 6, 1 / 6, 0.6 / 6),
-//     uColor: new THREE.Color(1, 1, 0.6),
-//     tDiffuse: null,
-//     resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
-//   },
-//   // Vertex Shader
-//   glsl`
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     void main() {
-//       vNormal = normalize(normalMatrix * normal);
-//       // vNormal = normal;
-//       vPosition = position;
-//       vUv = uv;
-
-//       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-//     }
-//   `,
-//   // Fragment Shader
-//   glsl`
-//     uniform vec3 uColor;
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     uniform sampler2D tDiffuse;
-//     uniform vec2 resolution;
-
-//     void main() {
-//       // float radial = 1. - vNormal.z;
-//       // radial *= radial*radial;
-
-//       // float intensity = pow(0.005 - dot(vNormal * 1.0, vec3(0, 0, 1.0)), 3.0);
-
-//       // vec3 color = vec3(uColor) * intensity;
-
-//       // // vec3 color = uColor*intensity;
-//       // gl_FragColor = vec4(uColor, 1.0) * intensity;
-//       // gl_FragColor = vec4(color, 1. * (intensity * intensity* intensity* intensity* intensity));
-
-//       // vec4 color = vec4(0.0);
-//       // vec2 offset = 1.0 / resolution;
-
-//       // for (int x =-1; x<5; x++)
-//       // {
-//       //   for (int y =-1; y<5; y++)
-//       //   {
-//       //     color += vec4(uColor, 0.5) * pow(0.2 - dot(vNormal * 1.0, vec3(0, 0, 1.0)), 3.0);
-//       //   }
-//       // }
-
-//       // color /= 500.0;
-
-//       // gl_FragColor = color;
-
-//       // float distance = length(vNormal);
-//       // float decayFactor = exp(-distance); // Exponential decay function
-
-//       // vec3 finalColor = uColor * decayFactor;
-
-//       // gl_FragColor = vec4(vec3(distance), 0.5);
-
-//       // float radial = 1. - vNormal.z;
-//       // radial *= radial*radial;
-
-//       // float dividingFactor = -2.0 * (vNormal.z) + 1.0;
-
-//       // float intensity = pow(dot(vNormal / 1., vec3(0, 0, -1.0)), 1.0);
-
-//       // // vec3 color = vec3(uColor) * intensity;
-
-//       // float somevar = exp(dot(vNormal, vec3(0,0,-1.0))) -exp(0.1);
-
-//       // // use this to create a star pattern
-//       // // vec3 color = vec3(uColor) / (2.0 + pow(abs(vNormal.x * vNormal.y *vNormal.z), 1.0) * 20.);
-
-//       // vec3 color = vec3(uColor) / ((pow(abs(vNormal.z), 0.00000000001) * 5.));
-
-//       // // vec3 color = uColor*intensity;
-//       // // gl_FragColor = vec4(uColor, 1.0) * intensity;
-
-//       // vec3 bleh = vec3(uColor) / 3.0;
-//       // gl_FragColor = vec4(bleh, 1.0) * somevar;
-//       // // gl_FragColor = vec4(somevar, 0, 0, somevar);
-//       // // gl_FragColor = vec4(uColor * intensity, 1.0);
-//       // // gl_FragColor = vec4(color, 1. * (intensity * intensity* intensity* intensity* intensity));
-
-//       float radial = 1. - vNormal.z;
-//       radial *= radial*radial;
-
-//       float intensity = pow(0.005 - dot(vNormal * 1.0, vec3(0, 0, 1.0)), 3.0);
-
-//       vec3 color = vec3(uColor) / 1.4;
-
-//       // vec3 color = uColor*intensity;
-//       gl_FragColor = vec4(color, 1.0) * intensity;
-//     }
-//   `
-// )
-
-// const CircleShader = shaderMaterial(
-//   // Uniform
-//   {
-//     // uColor: new THREE.Color(1 / 6, 1 / 6, 0.6 / 6),
-//     uColor: new THREE.Color(1, 1, 0.6),
-//     tDiffuse: null,
-//     resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
-//     uRadius: new THREE.Vector3(1.0, 1.0, 0),
-//   },
-//   // Vertex Shader
-//   glsl`
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     void main() {
-//       // vNormal = normalize(normalMatrix * normal);
-//       vNormal = normal;
-//       vPosition = position;
-//       vUv = uv;
-
-//       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-//     }
-//   `,
-//   // Fragment Shader
-//   glsl`
-//     uniform vec3 uColor;
-//     uniform vec3 uRadius;
-//     varying vec3 vNormal;
-//     varying vec3 vPosition;
-//     varying vec2 vUv;
-
-//     uniform sampler2D tDiffuse;
-//     uniform vec2 resolution;
-
-//     void main() {
-
-//       vec3 pos = vPosition + uRadius;
-
-//       gl_FragColor = vec4(abs(vUv.x), abs(vUv.y), 0.0, 1.0);
-//     }
-//   `
-// )
-
-// extend({ BloomShaderMaterial, BloomShaderMaterial2, CircleShader })
-import { useSelector, useDispatch } from 'react-redux'
-import { setMousePosition, toggleBloomTheme } from './features/three/threeSlice'
-import Projects from './components/Projects'
 import ParticleModel from './components/ParticleModel'
+import BackgroundCanvas from './components/BackgroundCanvas'
+import NewTestParticleText from './components/NewTestParticleText'
+import DistortedTexture from './components/DistortedTexture'
+import Navbar from './components/Navbar'
+import Projects from './components/Projects'
+import About from './components/About'
+import Contact from './components/Contact'
+import DummyContact from './components/DummyContact'
+import Services from './components/Services'
+import Footer from './components/Footer'
+import Toolset from './components/Toolset'
+import NeonButton from './components/NeonButton'
 import HeroCanvas from './components/HeroCanvas'
+import DynamicCanvas from './components/DynamicCanvas'
+import { Canvas } from '@react-three/fiber'
+
+import useRefs from 'react-use-refs'
+import LaptopModelViewTesting from './components/LaptopModelViewTesting'
+import LaptopModel from './components/LaptopModel'
+import PhoneModel from './components/PhoneModel'
+import useContentful from './utils/useContentful'
+import { useInViewport } from './utils/useInViewport'
 
 function App() {
-  const dispatch = useDispatch()
-  const { bloomTheme } = useSelector((state) => state.threeStore)
-  // const { mousePosition } = useSelector((state) => state.threeStore)
+  let mainRef = useRef(null)
+  let scrollContainerRef = useRef(null)
 
-  let trademark23Ref = useRef(null)
-  const { active, progress } = useProgress()
+  // maybe merge about and toolset together
+  let aboutContainerRef = useRef(null)
+  let toolsetContainerRef = useRef(null)
 
-  const [isHeroLoading, setisHeroLoading] = useState(true)
-  // const [mousePosition, setMousePosition] = useState(new THREE.Vector2())
+  let heroContainerRef = useRef(null)
+  let projectsContainerRef = useRef(null)
 
-  const toggleIsHeroLoading = (value) => {
-    setisHeroLoading(value)
-  }
+  let contactContainerRef = useRef(null)
+  let serviceContainerRef = useRef(null)
 
-  let ambientRef1 = useRef()
-  let sphereRef1 = useRef()
-  let mainRef = useRef()
-
-  const handleMouseMove = (event) => {
-    const { clientX, clientY } = event
-
-    const sectionBounds = mainRef.current.getBoundingClientRect()
-
-    const x = ((clientX - sectionBounds.left) / sectionBounds.width) * 2 - 1
-    const y = -((clientY - sectionBounds.top) / sectionBounds.height) * 2 + 1
-
-    // setMousePosition(new THREE.Vector2(mouseX, mouseY))
-
-    // dispatch(setMousePosition({ x, y }))
-  }
+  const [isParticleModelVisible, setIsParticleModelVisible] = useState(true)
+  const [dimBackground, setDimBackground] = useState(false)
+  const [isHeroFullVisible, setIsHeroFullVisible] = useState(true)
+  const [isHeroVisible, setIsHeroVisible] = useState(true)
+  const [isContactVisible, setIsContactVisible] = useState(false)
+  const [isServiceVisible, setIsServiceVisible] = useState(false)
+  const [isToolsetVisible, setIsToolsetVisible] = useState(false)
+  const [dummyHeadingRef, setDummyHeadingRef] = useState(null)
+  const [isProjectsVisible, setIsProjectsVisible] = useState(false)
+  const [isAboutVisible, setIsAboutVisible] = useState(false)
 
   // useEffect(() => {
-  //   console.log('rerenderrrrrrrrrrrrrr')
-  // })
+  //   let observerProjects
+
+  //   if (projectsContainerRef.current) {
+  //     observerProjects = new IntersectionObserver(([entry]) => {
+  //       setIsProjectsVisible(entry.isIntersecting)
+  //     })
+
+  //     observerProjects.observe(projectsContainerRef.current)
+  //   }
+
+  //   return () => {
+  //     observerProjects?.disconnect()
+  //   }
+  // }, [projectsContainerRef])
 
   // useEffect(() => {
-  //   console.log(mousePosition)
-  // }, [mousePosition])
-
-  let deadZoneRef = useRef(null)
-  const [isParticleModelVisible, setIsParticleModelVisible] = useState(false)
+  //   console.log(isProjectsVisible)
+  // }, [isProjectsVisible])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const observerHero = new IntersectionObserver(
       ([entry]) => {
-        setIsParticleModelVisible(!entry.isIntersecting)
+        setIsHeroVisible(entry.isIntersecting)
       },
       { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
     )
 
-    if (deadZoneRef.current) {
-      observer.observe(deadZoneRef.current)
+    if (heroContainerRef.current) {
+      observerHero.observe(heroContainerRef.current)
+    }
+
+    return () => {
+      observerHero.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroFullVisible(entry.isIntersecting)
+      },
+      { threshold: 1 }
+    )
+
+    if (heroContainerRef.current) {
+      observer.observe(heroContainerRef.current)
     }
 
     return () => {
@@ -285,95 +117,336 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    let observerContact
+
+    if (contactContainerRef.current) {
+      observerContact = new IntersectionObserver(
+        ([entry]) => {
+          setIsContactVisible(entry.isIntersecting)
+          // console.log(entry.intersectionRect.left)
+          // console.log(entry.intersectionRect.top)
+        },
+        { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
+      )
+
+      observerContact.observe(contactContainerRef.current)
+    }
+
+    return () => {
+      observerContact.disconnect()
+    }
+  }, [contactContainerRef])
+
+  // useEffect(() => {
+  //   const updateContactPosition = (e) => {
+  //     console.log(contactContainerRef.current.getBoundingClientRect())
+  //   }
+
+  //   if (isContactVisible) {
+  //     updateContactPosition(null)
+
+  //     window.addEventListener('scroll', updateContactPosition)
+  //   }
+
+  //   return () => {
+  //     window.removeEventListener('scroll', updateContactPosition)
+  //   }
+  // }, [isContactVisible])
+
+  useEffect(() => {
+    let observerService
+
+    if (serviceContainerRef.current) {
+      observerService = new IntersectionObserver(
+        ([entry]) => {
+          setIsServiceVisible(entry.isIntersecting)
+        }
+        // { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
+      )
+
+      observerService.observe(serviceContainerRef.current)
+    }
+
+    return () => {
+      observerService.disconnect()
+    }
+  }, [serviceContainerRef])
+
+  useEffect(() => {
+    let observerAbout
+
+    if (aboutContainerRef.current) {
+      observerAbout = new IntersectionObserver(([entry]) => {
+        setIsAboutVisible(entry.isIntersecting)
+      })
+
+      observerAbout.observe(aboutContainerRef.current)
+    }
+
+    return () => {
+      observerAbout.disconnect()
+    }
+  }, [aboutContainerRef])
+
+  useEffect(() => {
+    let observerToolset
+
+    if (toolsetContainerRef.current) {
+      observerToolset = new IntersectionObserver(([entry]) => {
+        setIsToolsetVisible(entry.isIntersecting)
+      })
+
+      observerToolset.observe(toolsetContainerRef.current)
+    }
+
+    return () => {
+      observerToolset.disconnect()
+    }
+  }, [toolsetContainerRef])
+
+  const [modelRotation, setModelRotation] = useState(0)
+
+  const checkModelRotation = (rotation) => {
+    setModelRotation(rotation)
+  }
+
+  const handleDummyHeadingRef = (dummyRef) => {
+    setDummyHeadingRef(dummyRef)
+  }
+
+  const { getProjects } = useContentful()
+
+  const [projectsArray, setProjectsArray] = useState([])
+
+  useEffect(() => {
+    getProjects().then((response) => {
+      setProjectsArray(response.items)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Add dependancy for viewport resize
+  useEffect(() => {
+    document.body.style.height = `${
+      scrollContainerRef.current.getBoundingClientRect().height
+    }px`
+  }, [scrollContainerRef, projectsArray])
+
+  useEffect(() => {
+    requestAnimationFrame(() => skewScrolling())
+  }, [])
+
+  const data = {
+    ease: 0.1,
+    current: 0,
+    previous: 0,
+    rounded: 0,
+  }
+
+  // Scrolling
+  const skewScrolling = () => {
+    //Set Current to the scroll position amount
+    data.current = window.scrollY
+    // Set Previous to the scroll previous position
+    data.previous += (data.current - data.previous) * data.ease
+    // Set rounded to
+    data.rounded = Math.round(data.previous * 100) / 100
+
+    // Difference between
+    const difference = data.current - data.rounded
+    const acceleration = difference / window.innerWidth
+    const velocity = +acceleration
+    const skew = velocity * 7.5
+
+    //Assign skew and smooth scrolling to the scroll container
+    scrollContainerRef.current.style.transform = `translateY(-${data.rounded}px)`
+
+    //loop vai raf
+    requestAnimationFrame(() => skewScrolling())
+  }
+
+  useEffect(() => {
+    // console.log('app rerender')
+  })
+
+  const [isSpaceAnimationComplete, setIsSpaceAnimationComplete] =
+    useState(false)
+
+  const toggleSpaceAnimationComplete = (value) => {
+    setIsSpaceAnimationComplete(value)
+  }
+
+  const { bloomTheme } = useSelector((state) => state.threeStore)
+
+  const [someRef, setSomeRef] = useState(null)
+  // const [view1, setView1] = useState(null)
+
+  const [fullView, setFullView] = useState(false)
+
+  const [refArray, setRefArray] = useState([])
+
+  const [visibleArray, setVisibleArray] = useState([])
+
+  const [fullViewArray, setFullViewArray] = useState([])
+
+  const arrayOfRefs = useRef([])
+
+  useEffect(() => {
+    if (!projectsArray.length) return
+  }, [projectsArray])
+
+  const addToRefs = (el) => {
+    if (
+      el &&
+      !refArray.includes({ current: el }) &&
+      refArray.length < projectsArray.length
+    ) {
+      setRefArray((prevRefs) => [...prevRefs, { current: el }])
+    }
+  }
+
+  useEffect(() => {
+    if (refArray.length === projectsArray.length && refArray.length) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      refArray.map((ref, index) => {
+        // vis
+      })
+    }
+  }, [refArray, projectsArray])
+
+  const setIntersectiom = (index, value) => {
+    const tempArray = [...visibleArray]
+
+    tempArray[index] = value
+
+    setVisibleArray(tempArray)
+  }
+
+  const changeFullViewArray = (index, value) => {
+    const tempArray = [...fullViewArray]
+
+    tempArray[index] = value
+
+    setFullViewArray(tempArray)
+  }
+
   return (
-    // <div
-    //   className="w-screen h-screen flex items-center justify-center relative"
-    //   onPointerMove={handleMouseMove}
-    //   ref={canvasRef}
-    // >
-    //   {/* <div className="w-full h-full absolute inset-0">
-    //     <Canvas
-    //       className="w-full h-full absolute inset-0 z-10"
-    //       // ref={canvasRef}
-    //       // onPointerMove={handleMouseMove}
-    //       // camera={{ position: [0, -4, 3] }}
-    //     >
-    //       <OrbitControls />
-    //       <SpaceDustTest
-    //         particleCount={10000}
-    //         mousePosition={mousePosition}
-    //       />
+    <>
+      {/* <Stats /> */}
 
-    //     </Canvas>
-    //   </div>
-    //   <div className="w-full h-full absolute inset-0">
-    //     <HeroBloomCanvas
-    //       mousePosition={mousePosition}
-    //       bloomTheme={new THREE.Color(0.76, 0.38, 1.0)}
-    //     />
-    //   </div> */}
-    //   <HeroParticleCanvas mousePosition={mousePosition} />
-    // </div>
-    <main
-      className={`main ${
-        isHeroLoading ? 'is-hero-loading' : ''
-      } relative w-full min-h-screen h-[10000px]`}
-      ref={mainRef}
-      // onClick={() => {
-      //   dispatch(toggleBloomTheme())
-      // }}
-    >
-      {/* {isHeroLoading && (
-        <LoadingScreen toggleIsHeroLoading={toggleIsHeroLoading} />
-      )}
-      <Stats />
+      <main
+        // id="main"
+        ref={mainRef}
+        // ref={ref}
+        // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
+        className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
+      >
+        <div
+          id="main"
+          ref={scrollContainerRef}
+          className="scroll "
+        >
+          <div
+            ref={heroContainerRef}
+            className="min-h-screen mb-[100vh] bg-red-700/0 "
+          >
+            <Hero />
+          </div>
 
-      <Navbar />
-      <BloomCanvas />
+          <div
+            ref={projectsContainerRef}
+            id="projects"
+            className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
+          >
+            <Projects
+              projectsArray={projectsArray}
+              // refsArray={refsArray}
+              arrayOfRefs={arrayOfRefs}
+              addToRefs={addToRefs}
+              setIntersectiom={setIntersectiom}
+              changeFullViewArray={changeFullViewArray}
+            />
+          </div>
 
-      <Hero />
-      <CompleteToolset /> */}
+          <div
+            ref={aboutContainerRef}
+            className="min-h-screen mb-[100vh] bg-red-700/0 "
+          >
+            <About sectionTitle={'backend'} />
+          </div>
 
-      {/* <Navbar />
-      <BloomCanvas />
+          <div
+            ref={toolsetContainerRef}
+            className="min-h-screen mb-[100vh] bg-red-700/0 py-[100vh]"
+          >
+            <Toolset sectionTitle={'frontend'} />
+          </div>
 
-      <Hero />
+          <div
+            ref={serviceContainerRef}
+            className="min-h-screen my-[100vh] bg-red-700/0 "
+          >
+            <Services sectionTitle={'services'} />
+          </div>
 
-      <Projects /> */}
-      {/* <Hero /> */}
+          <div
+            ref={contactContainerRef}
+            className=" min-h-screen bg-red-700/0 "
+          >
+            <Contact setDummyHeadingRef={handleDummyHeadingRef} />
+          </div>
 
-      {/* <BloomCanvas /> */}
-      {/* <CompleteToolset /> */}
+          <Footer />
+        </div>
+      </main>
+      <Navbar contactRef={contactContainerRef} />
+      <BackgroundCanvas
+        isHeroVisible={isHeroVisible}
+        isContactVisible={isContactVisible}
+        isServiceVisible={isServiceVisible}
+        isAboutVisible={isAboutVisible}
+        isToolsetVisible={isToolsetVisible}
+        aboutContainerRef={aboutContainerRef}
+        checkModelRotation={checkModelRotation}
+        dimBackground={dimBackground}
+        dummyHeadingRef={dummyHeadingRef}
+        contactContainerRef={contactContainerRef}
+        view1={projectsContainerRef}
+        eventSource={mainRef}
+        track1={heroContainerRef}
+      />
 
-      <div
-        ref={deadZoneRef}
-        className="w-full h-screen bg-red-900/20"
-      ></div>
+      <DynamicCanvas
+        eventSource={mainRef}
+        changeFullViewArray={changeFullViewArray}
+        fullViewArray={fullViewArray}
+        projectsArray={projectsArray}
+        refArray={refArray}
+        visibleArray={visibleArray}
+      />
 
-      <ParticleModel isParticleModelVisible={isParticleModelVisible} />
-      <div className="w-full h-full fixed inset-0 ">
-        <HeroParticleCanvas
+      <div className="w-full h-screen absolute top-0 z-[-100]">
+        <HeroCanvas
           // mousePosition={mousePosition}
           bloomTheme={bloomTheme}
-          isParticleModelVisible={isParticleModelVisible}
         />
       </div>
-      {/* <div className="wrapper w-full h-full">
-        <div className="browser-bar w-full h-[100px] bg-[#1d1e21] text-white">
-          hello world
-        </div>
-        <div className="iframe">
-          <iframe
-            title="iframe"
-            src="https://flood-tracker.onrender.com/"
-            //   src="http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login"
+
+      <svg
+        width="0"
+        height="0"
+      >
+        <filter id="noiseFilter">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="6.29"
+            numOctaves="6"
+            stitchTiles="stitch"
           />
-        </div>
-      </div> */}
-    </main>
-    // <div className="w-full h-full ">
-    //   <BloomCanvas />
-    // </div>
+        </filter>
+      </svg>
+    </>
   )
 }
 

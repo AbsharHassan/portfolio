@@ -21,7 +21,6 @@ export const threeSlice = createSlice({
       } else {
         state.arrayCounter = 0
       }
-      console.log(bloomColorsArray[state.arrayCounter])
       state.bloomTheme = bloomColorsArray[state.arrayCounter]
     },
   },

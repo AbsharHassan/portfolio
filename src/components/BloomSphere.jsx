@@ -3,8 +3,8 @@ import { useFrame, extend } from '@react-three/fiber'
 import { Sphere, shaderMaterial } from '@react-three/drei'
 import glsl from 'babel-plugin-glsl/macro'
 
-import heroSphereVertex from '../shaders/hero.sphere.vertex.glsl'
-import heroSphereFragment from '../shaders/hero.sphere.fragment.glsl'
+// import heroSphereVertex from '../shaders/hero.sphere.vertex.glsl'
+// import heroSphereFragment from '../shaders/hero.sphere.fragment.glsl'
 
 const BloomShaderMaterial = shaderMaterial(
   // Uniform

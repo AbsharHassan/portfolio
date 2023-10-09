@@ -1,185 +1,118 @@
+import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber'
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  forwardRef,
-} from 'react'
-import V18_8 from './V18_8'
 import {
   OrbitControls,
+  Text,
+  Text3D,
+  Wireframe,
   shaderMaterial,
   useGLTF,
-  Sphere,
 } from '@react-three/drei'
 import {
-  SphereGeometry,
   InstancedBufferAttribute,
   TextureLoader,
-  Color,
   Vector3,
+  AdditiveBlending,
+  CylinderGeometry,
+  MathUtils,
+  Scene,
+  WebGLRenderTarget,
 } from 'three'
 import glsl from 'babel-plugin-glsl/macro'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import {
+  EffectComposer,
+  Bloom,
+  ChromaticAberration,
+  DepthOfField,
+} from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
+
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import PostFX from '../utils/PostFX'
+import * as THREE from 'three'
+
+import {
+  uniforms as particleModelUniforms,
+  vertexShader as particleModelVertexShader,
+  fragmentShader as particleModelFragmentShader,
+} from '../shaders/particle-model/particleModelShaders'
+
+import {
+  uniforms as floatingParticlelUniforms,
+  vertexShader as floatingParticleVertexShader,
+  fragmentShader as floatingParticleFragmentShader,
+} from '../shaders/particle-model/floatingParticlesShaders'
+
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
+import { suspend } from 'suspend-react'
+import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader'
+
 gsap.registerPlugin(ScrollTrigger)
 
-const ParticleShaderMaterial = shaderMaterial(
-  // Uniforms
+//Creating scene and render target for ripple texture effect
+const sceneRipples = new THREE.Scene()
+
+const target = new THREE.WebGLRenderTarget(
+  window.innerWidth,
+  window.innerHeight,
   {
-    uTime: 0,
-    uSpherePos: new Vector3(-20, 0, 0),
-    uTexture: new TextureLoader().load(
-      './particles/—Pngtree—hazy white glow_6016180.png'
-    ),
-    // uColorPurple: new Color(0.76, 0.38, 1.0),
-    uColorPurple: new Color(5.0, 0.38, 5.0),
-    uColorBlue: new Color(0.35, 0.51, 0.98),
-    uColorGreen: new Color(0.04, 0.66, 0.72),
-    uSwitch: false,
-    uAnimationTime: 0,
-    uAnimationDuration: 0.5,
-    uTriggerTime: 100000000000,
-  },
-  // Vertex Shader
-  glsl`
-    attribute vec3 pos;
-    varying vec2 vUv;
-    uniform vec3 uSpherePos;
-    attribute float size;
-    attribute float colorRand;
-    uniform float uTime;
-    varying float colorRandom;
-    #pragma glslify: snoise3 = require(glsl-noise/simplex/3d.glsl);
-    #pragma glslify: cnoise = require(glsl-noise/classic/3d.glsl);
-
-    void main() {
-      // Setting up the varyings
-      vUv = uv;
-      colorRandom = colorRand;
-
-      // Setting particle position
-      vec3 particle_position = (modelMatrix * vec4(pos, 1.0)).xyz;
-      // particle_position.y = particle_position.y - 2.5;
-
-      // // Simplex noise generation
-      // float noiseFreq = 1.5;
-      // float noiseAmp = 0.5;
-      // float slowTime = 0.1;
-      // vec3 noisePos = vec3(size*noiseFreq + uTime*slowTime, size*noiseFreq + uTime*slowTime, size*noiseFreq + uTime*slowTime);
-      // float simplexNoise = snoise3(noisePos) * noiseAmp;
-
-      // // Perlin noise generation
-      float perlinNoise = cnoise(particle_position + uTime * 0.1);
-
-      // // Creating mouse interactive behaviour
-      // float distanceToSphere = pow(1.0 - clamp(length(uSpherePos.xy - particle_position.xy) -0.0, 0.0, 1.0), 10.0);
-      // vec3 dir = particle_position - uSpherePos;
-      // particle_position = mix(particle_position, uSpherePos + normalize(dir)*0.3, distanceToSphere*0.1);
-
-      // // // Applying noise to partice positions
-      // // particle_position.x += simplexNoise*sin(uTime * slowTime);
-      // // particle_position.y += simplexNoise*sin(uTime * slowTime);
-
-      // // Applying noise to partice positions
-
-      // // Simplex noise
-      // // particle_position.x += simplexNoise;
-      // // particle_position.y += simplexNoise;
-      // // particle_position = particle_position + normalize(particle_position) * simplexNoise * 1.0;
-
-      // // Perlin noise
-      // particle_position.x += perlinNoise;
-      // particle_position.y += perlinNoise;
-      // particle_position = particle_position + normalize(particle_position) * perlinNoise * 0.05;
-
-      // // Setting size of particles and rendering them
-      // vec4 view_pos = viewMatrix * vec4(particle_position, 1.0);
-      // view_pos.xyz += position * (size + perlinNoise) * 1.0;
-      // gl_Position = projectionMatrix * view_pos;
-      vec4 view_pos = viewMatrix * vec4(particle_position, 1.0);
-      view_pos.xyz += position  * 1.0;
-      gl_Position = projectionMatrix * view_pos;
-
-    }
-    //   void main() {
-    //     vUv = uv;
-    //     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    // }
-  `,
-  // Fragment Shader
-  glsl`
-    varying vec2 vUv;
-    uniform sampler2D uTexture;
-    varying float colorRandom;
-    uniform vec3 uColorPurple;
-    uniform vec3 uColorBlue;
-    uniform vec3 uColorGreen;
-    uniform float uTime;
-    uniform bool uSwitch;
-    uniform float uAnimationTime;
-    uniform float uAnimationDuration;
-    uniform float uTriggerTime;
-
-    void main() {
-      vec4 texture = texture2D(uTexture, vUv);
-      vec3 color = vec3(0.0);
-
-      if (colorRandom >= 0.0 && colorRandom < 0.10) {
-        color = uColorPurple;
-      } else if (colorRandom >= 0.10 && colorRandom < 0.66) {
-        color = uColorBlue;
-      } else {
-        color = uColorGreen;
-      }
-
-      float t = 0.0;
-      float alpha = 0.0;
-      
-      if(uSwitch == true) {
-        t = smoothstep(0.0, 1.0, (uTime - uTriggerTime)/uAnimationDuration); // Interpolation factor
-        alpha = mix(0.0, 1.0, t);
-      } else {
-        t = smoothstep(0.0, 1.0, (uTime - uTriggerTime)/(uAnimationDuration + 0.5)); // Interpolation factor
-        alpha = mix(1.0, 0.0, t);
-      }
-
-      gl_FragColor = vec4(vUv,0.0,alpha);
-      // gl_FragColor = texture;
-      // gl_FragColor = vec4(color, texture.a) * 0.8;
-    }
-    `
+    minFilter: THREE.LinearFilter,
+    magFilter: THREE.LinearFilter,
+    format: THREE.RGBAFormat,
+  }
 )
 
-extend({ ParticleShaderMaterial })
+window.addEventListener('resize', () => {
+  target.setSize(window.innerWidth, window.innerHeight)
+})
 
 const ParticleModel = ({ isParticleModelVisible }) => {
-  let parentRef = useRef(null)
+  let containerRef = useRef(null)
   return (
-    <div
-      className="w-full h-screen fixed inset-0 z-[-20] "
-      ref={parentRef}
-    >
-      <Canvas camera={{ fov: 10 }}>
-        {/* <OrbitControls /> */}
-        {/* <V18_8 /> */}
-        <Particles
-          ref={parentRef}
-          isParticleModelVisible={isParticleModelVisible}
-        />
-        {/* <EffectComposer>
-        <Bloom
-          mipmapBlur
-          luminanceThreshold={0}
-          intensity={1}
-          radius={0.8}
-        />
-      </EffectComposer> */}
-      </Canvas>
+    <div className="w-full h-screen relative">
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center ">
+        {/* <div className="w-[1070px] h-[633px] overflow-hidden rounded-2xl border border-slate-700 backdrop-blur-xl ">
+          <div className="w-full h-full test-grad-child relative "></div>
+        </div> */}
+      </div>
+      <div
+        className="w-full h-screen fixed inset-0 
+        z-[-20]
+        "
+        ref={containerRef}
+      >
+        <Canvas
+          camera={{ fov: 10, near: 0.01 }}
+          dpr={[1, 2]}
+        >
+          <OrbitControls />
+          <Particles
+            ref={containerRef}
+            isParticleModelVisible={isParticleModelVisible}
+          />
+          {/* <EffectComposer>
+            <ChromaticAberration
+              blendFunction={BlendFunction.ADD} // blend mode
+              offset={[0.001 * 5, 0.001 * 5]} // color offset
+              radialModulation
+              modulationOffset={0.5}
+            />
+            <Bloom
+              mipmapBlur
+              luminanceThreshold={0}
+              intensity={10}
+              radius={0.8}
+            />
+            <DepthOfField
+              // focusDistance={focusDistance}
+              // focalLength={focalLength}
+              bokehScale={0}
+            />
+          </EffectComposer> */}
+        </Canvas>
+      </div>
     </div>
   )
 }
@@ -187,8 +120,11 @@ const ParticleModel = ({ isParticleModelVisible }) => {
 export default ParticleModel
 
 const Particles = forwardRef(({ isParticleModelVisible }, ref) => {
+  // version 3 goes hard (v11)
   const { nodes } = useGLTF('./models/v18_10.glb')
-  const { viewport } = useThree()
+  // const { nodes } = useGLTF('./models/v18_11.glb')
+
+  const { viewport, camera } = useThree()
 
   const ANIMATION_DURATION = 0.5
 
@@ -197,94 +133,33 @@ const Particles = forwardRef(({ isParticleModelVisible }, ref) => {
   const [animationCounter, setAnimationCounter] = useState(0)
 
   let parentRef = useRef(null)
-  let meshRef = useRef(null)
-
+  let modelMeshRef = useRef(null)
+  let elapsedTime = useRef(0)
+  let triggerTime = useRef(0)
   const sphereRef = useRef(new Vector3(0, 0, 0))
+  const initialRender = useRef(true)
   let sphereVelocity = useRef(new Vector3(0, 0, 0))
   let mousePos = useRef({ x: 0, y: 0 })
+  let floatingParentRef = useRef(null)
+  let floatingIntermediateRef = useRef(null)
+  let floatingParticlesRef = useRef(null)
 
   const geometry = useMemo(() => {
     // nodes['outer-spiral'].geometry.rotateX(Math.PI / 2)
     return nodes['outer-spiral'].geometry
   }, [nodes])
 
-  let elapsedTime = useRef(0)
-  let triggerTime = useRef(0)
+  const cylinderGeo = useMemo(() => {
+    return new CylinderGeometry(
+      viewport.width,
+      viewport.width,
+      viewport.height,
+      50,
+      50
+    ).attributes.position
+  }, [])
 
   useEffect(() => {
-    if (animationCounter < 2) {
-      setDebouncedIsParticleModelVisible(isParticleModelVisible)
-      setAnimationCounter((v) => v + 1)
-      return
-    }
-    const timer = setTimeout(() => {
-      setDebouncedIsParticleModelVisible(isParticleModelVisible)
-    }, 250)
-
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [isParticleModelVisible])
-
-  useEffect(() => {
-    triggerTime.current = elapsedTime.current
-
-    meshRef.current.material.uniforms.uTriggerTime.value = elapsedTime.current
-    meshRef.current.material.uniforms.uSwitch.value = debouncedIsParticleVisible
-
-    if (!meshRef.current.geometry.attributes.pos) return
-  }, [debouncedIsParticleVisible])
-
-  useEffect(() => {
-    // gsap.to(meshRef.current.rotation, {
-    //   scrollTrigger: {
-    //     trigger: document.getElementById('root'),
-    //     onUpdate: (self) => {
-    //       // scrollSomething.current = self.progress
-    //     },
-
-    //     scrub: 1,
-    //   },
-    //   z: Math.PI * 3,
-    // })
-
-    // gsap.ticker.add(() => {
-    //   // meshRef.current.rotation.z -= 0.01
-    //   meshRef.current.rotation.set(
-    //     Math.PI / 2,
-    //     0,
-    //     meshRef.current.rotation.z - 0.01
-    //   )
-    // })
-
-    // console.log(meshRef.current.rotation)
-
-    // gsap.to(meshRef.current.rotation, {
-    //   z: '-=3.14',
-    //   duration: 2,
-    //   repeat: -1,
-    //   ease: 'linear',
-    // })
-    // gsap.to(meshRef.current.rotation, {
-    //   scrollTrigger: {
-    //     trigger: document.getElementById('root'),
-    //     onUpdate: (self) => {
-    //       console.log(self.progress)
-    //       scrollSomething.current = self.progress
-    //     },
-    //     scrub: 3,
-    //   },
-    //   z: Math.PI * 2,
-    //   // duration: 2,
-    // })
-
-    // ScrollTrigger.create({
-    //   trigger: document.getElementById('root'),
-    //   onUpdate: (self) => {
-    //     console.log(self.progress)
-    //   },
-    // })
-
     function handle(event) {
       const { clientX, clientY } = event
 
@@ -302,34 +177,158 @@ const Particles = forwardRef(({ isParticleModelVisible }, ref) => {
   }, [])
 
   useEffect(() => {
-    // const geometry = new SphereGeometry(1, 100, 100)
-    // console.log(geometry.attributes.position.array)
+    if (animationCounter < 1) {
+      setDebouncedIsParticleModelVisible(isParticleModelVisible)
+      setAnimationCounter((v) => v + 1)
+      return
+    }
+    const timer = setTimeout(() => {
+      setDebouncedIsParticleModelVisible(isParticleModelVisible)
+    }, 250)
 
-    const test = new InstancedBufferAttribute(
-      geometry.attributes.position.array,
-      3,
-      false
-    )
-    // console.log(test)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [isParticleModelVisible])
 
-    meshRef.current.geometry.setAttribute(
+  const [shouldRotate, setShouldRotate] = useState(false)
+  const [modelShouldRotate, setModelShouldRotate] = useState(false)
+  const [particlesShouldRotate, setParticlesShouldRotate] = useState(false)
+
+  useEffect(() => {
+    // if (initialRender.current) {
+    //   initialRender.current = false
+    //   return
+    // }
+
+    triggerTime.current = elapsedTime.current
+
+    modelMeshRef.current.material.uniforms.uInitialRender.value = false
+    modelMeshRef.current.material.uniforms.uTriggerTime.value =
+      elapsedTime.current
+    modelMeshRef.current.material.uniforms.uSwitch.value =
+      debouncedIsParticleVisible
+
+    floatingParticlesRef.current.material.uniforms.uInitialRender.value = false
+    floatingParticlesRef.current.material.uniforms.uTriggerTime.value =
+      elapsedTime.current
+    floatingParticlesRef.current.material.uniforms.uSwitch.value =
+      debouncedIsParticleVisible
+
+    let rotationTimer
+
+    if (debouncedIsParticleVisible) {
+      rotationTimer = setTimeout(() => {
+        setShouldRotate(true)
+        setModelShouldRotate(true)
+        setParticlesShouldRotate(true)
+      }, ANIMATION_DURATION * 1000)
+    } else {
+      clearTimeout(rotationTimer)
+      setTimeout(() => {
+        setShouldRotate(false)
+        setModelShouldRotate(false)
+        setParticlesShouldRotate(false)
+        // modelMeshRef.current.rotation.z = 0
+        // parentRef.current.rotation.z = 0
+        gsap.to(modelMeshRef.current.rotation, {
+          z: 0,
+          duration: 0.5,
+        })
+        gsap.to(parentRef.current.rotation, {
+          z: 0,
+          duration: 0.5,
+        })
+      }, ANIMATION_DURATION * 0)
+    }
+
+    if (!modelMeshRef.current.geometry.attributes.pos) return
+
+    return () => {
+      clearTimeout(rotationTimer)
+    }
+  }, [debouncedIsParticleVisible])
+
+  const animationRef1 = useRef()
+  const animationRef2 = useRef()
+
+  useEffect(() => {
+    if (modelShouldRotate) {
+      gsap.to(parentRef.current.rotation, {
+        z: -2 * Math.PI,
+        duration: 100,
+        ease: 'linear',
+        repeat: -1,
+      })
+      animationRef1.current = gsap.to(modelMeshRef.current.rotation, {
+        scrollTrigger: {
+          trigger: document.getElementById('root'),
+          onUpdate: (self) => {
+            // scrollSomething.current = self.progress
+          },
+
+          scrub: 1,
+        },
+        // z: Math.PI * 0.5,
+        z: Math.PI * 3,
+      })
+
+      // animationRef2.current = gsap.to(floatingParticlesRef.current.rotation, {
+      //   scrollTrigger: {
+      //     trigger: document.getElementById('root'),
+      //     onUpdate: (self) => {
+      //       // scrollSomething.current = self.progress
+      //     },
+
+      //     scrub: 1,
+      //   },
+      //   // z: Math.PI * 0.5,
+      //   y: Math.PI * 3,
+      // })
+    } else {
+      animationRef1.current?.kill()
+      animationRef2.current?.kill()
+    }
+  }, [modelShouldRotate])
+
+  useEffect(() => {
+    modelMeshRef.current.geometry.setAttribute(
       'pos',
       new InstancedBufferAttribute(geometry.attributes.position.array, 3, false)
     )
 
     let colorRand = new Float32Array(geometry.attributes.position.count)
     for (let i = 0; i < geometry.attributes.position.count; i++) {
-      // let s = Math.random() * 2 + 1
       colorRand[i] = Math.random() * 1
     }
 
-    meshRef.current.geometry.setAttribute(
+    modelMeshRef.current.geometry.setAttribute(
       'colorRand',
       new InstancedBufferAttribute(colorRand, 1, false)
     )
-  }, [meshRef])
 
-  let dumb = useRef(null)
+    let randomSize = new Float32Array(geometry.attributes.position.count)
+    for (let i = 0; i < geometry.attributes.position.count; i++) {
+      randomSize[i] = Math.random() * 1
+    }
+
+    modelMeshRef.current.geometry.setAttribute(
+      'randomSize',
+      new InstancedBufferAttribute(randomSize, 1, false)
+    )
+  }, [modelMeshRef])
+
+  const vec = new THREE.Vector3(0, 0, 0)
+  let delayedPos = useRef(new THREE.Vector3(0, 0, 0))
+  let prevDelayedPos = useRef(new THREE.Vector3(0, 0, 0))
+
+  const [stateDelayedPos, setStateDelayedPos] = useState(
+    new THREE.Vector3(0, 0, 0)
+  )
+
+  const [statePrevDelayedPos, setStatePrevDelayedPos] = useState(
+    new THREE.Vector3(0, 0, 0)
+  )
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
@@ -352,67 +351,401 @@ const Particles = forwardRef(({ isParticleModelVisible }, ref) => {
       .multiplyScalar(1 * dampingFactor)
 
     sphereRef.current.add(sphereVelocity.current)
-    // dumb.current.position.add(sphereVelocity.current)
 
     sphereVelocity.current = sphereVelocity.current
       .clone()
       .add(acceleration)
       .add(damping)
 
-    // sphereRef.current.lerp(
-    //   new Vector3(
-    //     (mousePosition.x * viewport.width) / 2,
-    //     (mousePosition.y * viewport.height) / 2,
-    //     0
-    //   ),
-    //   0.1
+    // if (shouldRotate) {
+    //   parentRef.current.rotation.z -= 0.001
+    //   floatingIntermediateRef.current.rotation.y += 0.001
+    //   floatingParentRef.current.rotation.z = MathUtils.degToRad(
+    //     Math.cos(state.clock.getElapsedTime() * 0.01) * 30
+    //   )
+    // }
+
+    floatingParentRef.current.rotation.z = MathUtils.degToRad(
+      Math.cos(state.clock.getElapsedTime() * 0.05) * 90
+    )
+
+    modelMeshRef.current.material.uniforms.uSpherePos.value = sphereRef.current
+
+    modelMeshRef.current.material.uniforms.uTime.value =
+      state.clock.getElapsedTime()
+    floatingParticlesRef.current.material.uniforms.uTime.value =
+      state.clock.getElapsedTime()
+
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+
+    // const mousePosTHREE = new THREE.Vector3(
+    //   (mousePos.current.x * state.viewport.width) / 2,
+    //   (mousePos.current.y * state.viewport.height) / 2,
+    //   0
+    // )
+    // delayedPos.current.lerp(
+    //   vec.set(mousePosTHREE.x, mousePosTHREE.y, mousePosTHREE.z),
+    //   0.05
     // )
 
-    // meshRef.current.rotation.y -= 0.001
-    // parentRef.current.rotation.z -= 0.001
-    meshRef.current.material.uniforms.uSpherePos.value = sphereRef.current
+    // const angleVeritcal = Math.atan(delayedPos.current.y / 5)
+    // const angleHorizontal = Math.atan(delayedPos.current.x / 5)
 
-    meshRef.current.material.uniforms.uTime.value = state.clock.getElapsedTime()
+    // const angleTilt = delayedPos.current.clone().sub(prevDelayedPos.current).x
+
+    // camera.rotateX(angleVeritcal * 0.03)
+    // camera.rotateY(-angleHorizontal * 0.01)
+    // camera.rotateZ(angleTilt * 0.2)
+
+    // const totalAngle = Math.abs(angleVeritcal) + Math.abs(angleHorizontal) * 0.1
+
+    // camera.position.z = 5 + totalAngle
+
+    // // console.log(prevDelayedPos)
+
+    // prevDelayedPos.current = delayedPos.current.clone()
+
+    // // console.log(prevDelayedPos.current)
+
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////
   })
+
+  useEffect(() => {
+    let completeTarget = []
+    let innerIndex = 0
+
+    for (let i = 0; i < cylinderGeo.array.length; i = i + 3) {
+      if (Math.random() < 0.1) {
+        completeTarget[innerIndex] = {
+          x: cylinderGeo.array[i],
+          y: cylinderGeo.array[i + 1],
+          z: cylinderGeo.array[i + 2],
+        }
+        innerIndex++
+      }
+    }
+
+    let randomPositions = new Float32Array(completeTarget.length * 3)
+
+    for (let i = 0; i < completeTarget.length; i++) {
+      let x = completeTarget[i].x + Math.random() - 0.5
+      let y = completeTarget[i].y + (Math.random() - 0.5) * 1.5
+      let z = completeTarget[i].z + Math.random()
+
+      randomPositions.set([x, y, z], i * 3)
+    }
+
+    const randomBool = new Float32Array(cylinderGeo.count)
+    for (let i = 0; i < cylinderGeo.count; i++) {
+      if (Math.random() < 0) {
+        randomBool[i] = false
+      } else {
+        randomBool[i] = true
+      }
+    }
+
+    const colorRand = new Float32Array(cylinderGeo.count)
+    for (let i = 0; i < cylinderGeo.count; i++) {
+      colorRand[i] = Math.random() * 1
+    }
+
+    floatingParticlesRef.current.geometry.setAttribute(
+      'colorRand',
+      new InstancedBufferAttribute(colorRand, 1, false)
+    )
+
+    floatingParticlesRef.current.geometry.setAttribute(
+      'someBool',
+      new InstancedBufferAttribute(randomBool, 1, false)
+    )
+    floatingParticlesRef.current.geometry.setAttribute(
+      'pos1',
+      new InstancedBufferAttribute(randomPositions, 3, false)
+    )
+  }, [floatingParticlesRef])
+
+  //************************************** */
+
+  const [particlesToWord, setParticlesToWord] = useState(false)
+
+  let particleAnimationRef1 = useRef(null)
+  let particleAnimationRef2 = useRef(null)
+
+  useEffect(() => {
+    if (particlesShouldRotate) {
+      // particleAnimationRef1.current = gsap.to(
+      //   floatingParentRef.current.rotation,
+      //   {
+      //     // add the sin function thing here to introduce a swing
+      //     // z: -2 * Math.PI,
+      //     // duration: 100,
+      //     // ease: 'linear',
+      //     // repeat: -1,
+      //   }
+      // )
+      particleAnimationRef1.current = gsap.to(
+        floatingIntermediateRef.current.rotation,
+        {
+          y: 2 * Math.PI,
+          duration: 100,
+          ease: 'linear',
+          repeat: -1,
+        }
+      )
+      particleAnimationRef2.current = gsap.to(
+        floatingParticlesRef.current.rotation,
+        {
+          scrollTrigger: {
+            trigger: document.getElementById('root'),
+            onUpdate: (self) => {
+              // scrollSomething.current = self.progress
+            },
+            scrub: 1,
+          },
+          // z: Math.PI * 0.5,
+          y: Math.PI * 3,
+        }
+      )
+    } else {
+      particleAnimationRef1.current?.kill()
+      particleAnimationRef2.current?.kill()
+    }
+  }, [particlesShouldRotate])
+
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+
+  let animationProgress = useRef(0.0)
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      // shouldTransform.current = !shouldTransform.current
+      gsap.to(animationProgress, {
+        current: animationProgress.current === 0 ? 1.0 : 0.0,
+        duration: 2,
+        ease: 'sine.inOut',
+        // repeat: -1,
+        // yoyo: true,
+        onUpdate: () => {
+          // setShouldTransform((v) => !v)
+          console.log(animationProgress.current)
+        },
+      })
+    }, 10000)
+
+    gsap.to(animationProgress, {
+      current: 1.0,
+      delay: 10,
+      duration: 2,
+      ease: 'sine.inOut',
+      // repeat: -1,
+      // yoyo: true,
+      onUpdate: () => {
+        // setShouldTransform((v) => !v)
+        console.log(animationProgress.current)
+      },
+    })
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const { gl, scene } = useThree()
+
+  const texture = useMemo(() => {
+    return new TextureLoader().load('./ripple.png')
+  }, [])
+
+  let mainMeshRef = useRef(null)
+
+  let [stateMeshes, setStateMeshes] = useState([])
+  let [maxRipples] = useState(100)
+  let [geoRipples] = useState(() => {
+    return new THREE.PlaneGeometry(0.3, 0.3, 1, 1)
+  }, [])
+
+  let mousePosition = useRef(new THREE.Vector2(0, 0))
+  let prevMousePosition = useRef(new THREE.Vector2(0, 0))
+  let currentWave = useRef(0)
+
+  useEffect(() => {
+    window.addEventListener('mousemove', (e) => {
+      if (e.movementX > 1 || e.movementY > 1 || 1) {
+        const { clientX, clientY } = e
+
+        // maybe use the dimensions of the actual container of the canvas
+        const x = (clientX / window.innerWidth) * 2 - 1
+        const y = -(clientY / window.innerHeight) * 2 + 1
+
+        mousePosition.current.x = (x * viewport.width) / 2
+        mousePosition.current.y = (y * viewport.height) / 2
+      }
+    })
+
+    let tempArray = []
+
+    for (let i = 0; i < maxRipples; i++) {
+      let mat = new THREE.MeshBasicMaterial({
+        map: texture,
+        // blending: AdditiveBlending,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+        opacity: 0,
+      })
+
+      let newMesh = new THREE.Mesh(geoRipples, mat)
+      newMesh.visible = false
+      newMesh.rotation.z = 2 * Math.PI * Math.random()
+      sceneRipples.add(newMesh)
+      tempArray.push(newMesh)
+    }
+
+    setStateMeshes(tempArray)
+
+    sceneRipples.add(camera)
+  }, [])
+
+  const setNewWave = (x, y, index) => {
+    let newMesh = stateMeshes[index]
+    newMesh.visible = true
+    newMesh.scale.x = newMesh.scale.y = 0.2
+    newMesh.position.x = x
+    newMesh.position.y = y
+    // newMesh.material.opacity = 1
+    newMesh.material.opacity = 0.5
+  }
+
+  const renderer = new PostFX(gl)
+
+  useFrame((state) => {
+    if (stateMeshes.length === maxRipples) {
+      if (
+        // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 4 &&
+        // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 4
+        // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 0.1 &&
+        // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 0.1
+        Math.abs(mousePosition.current.x - prevMousePosition.current.x) <
+          0.001 &&
+        Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 0.001
+        // mousePosition.current.x === prevMousePosition.current.x &&
+        // mousePosition.current.y === prevMousePosition.current.y
+        // false
+      ) {
+      } else {
+        setNewWave(
+          mousePosition.current.x,
+          mousePosition.current.y,
+          currentWave.current
+        )
+        currentWave.current = (currentWave.current + 1) % maxRipples
+      }
+
+      prevMousePosition.current.x = mousePosition.current.x
+      prevMousePosition.current.y = mousePosition.current.y
+
+      stateMeshes.forEach((singleMesh) => {
+        if (singleMesh.visible) {
+          singleMesh.rotation.z += 0.02
+          singleMesh.scale.x = 0.98 * singleMesh.scale.x + 0.075
+          singleMesh.scale.y = singleMesh.scale.x
+          singleMesh.material.opacity *= 0.96
+          if (singleMesh.material.opacity < 0.0002) {
+            singleMesh.material.opacity = 0
+            singleMesh.visible = false
+          }
+        }
+      })
+    }
+    // Pass into RenderTarget, pass RenderTarget texture to shader
+    state.gl.setRenderTarget(target)
+    state.gl.render(sceneRipples, state.camera)
+    // mainMeshRef.current.material.uniforms.uDisplacement.value = target.texture
+    state.gl.setRenderTarget(null)
+    state.gl.clear()
+
+    renderer.render(
+      scene,
+      camera,
+      target.texture,
+      state.clock.getElapsedTime(),
+      animationProgress.current
+    )
+  }, 1)
+
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+  // *********************************************************************************************************
+
   return (
     <>
-      {/* <Sphere
-        args={[0.01]}
-        ref={dumb}
-      /> */}
       <mesh
         ref={parentRef}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.2}
-        position={[0.5, 0, 0]}
+        scale={0.5}
+        position={[0, 0, 0]}
+        // visible={false}
       >
         <instancedMesh
           args={[null, null, geometry.attributes.position.count]}
-          ref={meshRef}
+          ref={modelMeshRef}
         >
-          <planeGeometry
-            args={[0.002, 0.002]}
-            // args={[0.05, 0.05]}
-          />
-          <particleShaderMaterial
+          <planeGeometry args={[0.002, 0.002]} />
+          <shaderMaterial
+            blending={AdditiveBlending}
             transparent
             depthTest={false}
+            depthWrite={false}
+            uniforms={particleModelUniforms}
+            vertexShader={particleModelVertexShader}
+            fragmentShader={particleModelFragmentShader}
           />
         </instancedMesh>
       </mesh>
-      {/* <mesh
-        scale={0.25}
-        position={[0.5, 0, 0]}
-        rotateX={Math.PI / 2}
-        ref={meshRef}
+      <mesh
+        scale={0.5}
+        ref={floatingParentRef}
+        rotation={[0, 0, 0]}
+        // visible={false}
       >
-        <V18_8 />
+        <mesh ref={floatingIntermediateRef}>
+          <instancedMesh
+            args={[null, null, cylinderGeo.count]}
+            ref={floatingParticlesRef}
+          >
+            <planeGeometry args={[0.008, 0.008]} />
+            <shaderMaterial
+              blending={AdditiveBlending}
+              transparent
+              depthTest={false}
+              depthWrite={false}
+              uniforms={floatingParticlelUniforms}
+              vertexShader={floatingParticleVertexShader}
+              fragmentShader={floatingParticleFragmentShader}
+            />
+          </instancedMesh>
+        </mesh>
       </mesh>
-      <directionalLight
-        intensity={10}
-        color="purple"
-        position={[0, 0, 10]}
-      /> */}
     </>
   )
 })

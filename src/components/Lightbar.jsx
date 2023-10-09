@@ -11,21 +11,8 @@ const Lightbar = forwardRef(({ sectionTitle }, ref) => {
       </div> */}
       <div
         ref={ref}
-        className={`${sectionTitle}-lightbar `}
+        className={`${sectionTitle}-lightbar visible`}
       ></div>
-      <svg
-        width="0"
-        height="0"
-      >
-        <filter id="noiseFilter">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="6.29"
-            numOctaves="6"
-            stitchTiles="stitch"
-          />
-        </filter>
-      </svg>
     </>
   )
 })

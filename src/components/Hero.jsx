@@ -8,7 +8,11 @@ import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_mi
 import HeroCanvas from './HeroCanvas'
 import AlternatingText from './AlternatingText'
 import HeroBloomCanvas from './BloomCanvas'
-import HeroParticleCanvas from './HeroParticleCanvas'
+import HeroParticleCanvas from './old_useless_backups/HeroParticleCanvas'
+
+import VanillaTilt from 'vanilla-tilt'
+import HeroCatchPhrase from './HeroCatchPhrase'
+import NeonButton from './NeonButton'
 
 const Hero = () => {
   // Constants
@@ -68,41 +72,69 @@ const Hero = () => {
     }
   }, [])
 
+  let heroTextContainerRef = useRef(null)
+
   // useEffect(() => {
-  //   console.log('rerender')
-  // })
+  //   VanillaTilt.init(heroTextContainerRef.current, {
+  //     max: 2,
+  //     speed: 1000,
+  //     // scale: 1.05,
+  //     reverse: true,
+  //     'full-page-listening': true,
+  //   })
+  // }, [])
+
+  // useEffect(() => {
+  //   const pre = document.querySelector('hero-text-container')
+
+  //   const el = heroTextContainerRef.current
+
+  //   window.addEventListener('mousemove', rotateElement)
+
+  //   function rotateElement(event) {
+  //     // get mouse position
+  //     const x = event.clientX
+  //     const y = event.clientY
+  //     // console.log(x, y)
+
+  //     // find the middle
+  //     const middleX = window.innerWidth / 2
+  //     const middleY = window.innerHeight / 2
+  //     // console.log(middleX, middleY)
+
+  //     // get offset from middle as a percentage
+  //     // and tone it down a little
+  //     const offsetX = ((x - middleX) / middleX) * 45
+  //     const offsetY = ((y - middleY) / middleY) * 45
+
+  //     // console.log(element)
+  //     // set rotation
+  //     heroTextContainerRef.current.style.setProperty(
+  //       '--rotateX',
+  //       offsetX + 'deg'
+  //     )
+  //     heroTextContainerRef.current.style.setProperty(
+  //       '--rotateY',
+  //       -1 * offsetY + 'deg'
+  //     )
+  //   }
+
+  //   return () => {
+  //     window.removeEventListener('mousemove', rotateElement)
+  //   }
+  // }, [])
 
   return (
-    <div
-      ref={heroSectionRef}
-      className="w-full h-screen relative flex overflow-x-hidden bg-red-900/0"
-      // onMouseMove={handleMouseMove}
-      onPointerEnter={() => {
-        setIsMouseInside(true)
-      }}
-      onPointerLeave={() => {
-        setIsMouseInside(false)
-      }}
-    >
-      <div className="w-[100%] bg-blue-700/00 absolute left-0 h-full z-30 text-white  ">
+    <>
+      <div
+        ref={heroTextContainerRef}
+        className="hero-text-container w-[100%] bg-blue-700/ absolute left-0 h-screen z-30 text-white"
+      >
         <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
-          <h1 className="text-[36px] sm:text-[60px] lg:text-[72px] font-semibold leading-tight mb-8 ">
-            <div className="hidden sm:block">
-              <div className="w-fit bg-clip-text text-transparent bg-gradient-to-r from-customViolet to-customBlue">
-                Im
-                <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px]"></span>
-                gine. Build.
-              </div>
-              <div className=" bg-clip-text text-transparent bg-gradient-to-r from-customBlue  to-customAqua inline ">
-                Ship.
-              </div>
-            </div>
-            <div className="sm:hidden bg-clip-text text-transparent bg-gradient-to-r from-customViolet via-customBlue to-customAqua">
-              Im
-              <span className="icon-trademark text-[22px] sm:text-[35px] lg:text-[42px] "></span>
-              gine. Build. Ship.
-            </div>
-          </h1>
+          <div className="relative">
+            <HeroCatchPhrase />
+            {/* <HeroCatchPhrase extraClasses={'absolute inset-0 blur-[50px]'} /> */}
+          </div>
           <h2 className="sm:text-lg lg:text-xl mb-12 text-slate-400 h-44 sm:h-36 max-w-2xl ">
             Hi, my name is Abshar Hassan. I love using code to breath life into
             great ideas. With resuability, efficiency and best practices in
@@ -129,32 +161,24 @@ const Hero = () => {
               ]}
             />
           </h2>
-          <button className="neon-button w-52 h-12">Call to Action</button>
+          {/* <button className="neon-button w-52 h-12">Call to Action</button> */}
+          <NeonButton
+            colorNeon="#7b53d3"
+            shadow
+            type="button"
+            extraClasses="w-52 h-12  text-[#7b53d3] hover:text-slate-400"
+          >
+            See my work
+          </NeonButton>
         </div>
       </div>
-      <div className="w-full h-full relative ">
-        {/* <div className="w-full h-full absolute inset-0">
-          <HeroBloomCanvas
-            // mousePosition={mousePosition}
-            bloomTheme={bloomTheme}
-          />
-        </div> */}
-        <div className="w-full h-full absolute inset-0 ">
-          <HeroParticleCanvas
-            isMouseInside={isMouseInside}
-            // mousePosition={mousePosition}
-            bloomTheme={bloomTheme}
-          />
-        </div>
-        <div className="w-full h-full absolute inset-0">
-          <HeroCanvas
-            isMouseInside={isMouseInside}
-            // mousePosition={mousePosition}
-            bloomTheme={bloomTheme}
-          />
-        </div>
-      </div>
-    </div>
+      {/* <div className="w-full h-screen absolute inset-0 z-[-100]">
+        <HeroCanvas
+          // mousePosition={mousePosition}
+          bloomTheme={bloomTheme}
+        />
+      </div> */}
+    </>
   )
 }
 

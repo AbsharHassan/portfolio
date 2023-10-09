@@ -9,22 +9,18 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export default function V18_8({ handleModelBoundingBox, ...props }) {
-  const { nodes, materials } = useGLTF('./models/v18_10.glb')
+  const { nodes, materials } = useGLTF('./models/v18_8.glb')
   let groupRef = useRef(null)
   let meshRef = useRef(null)
 
   useFrame(() => {
     if (groupRef?.current) {
-      // groupRef.current.rotation.y = groupRef.current.rotation.y - 0.025
-      groupRef.current.rotation.y -= 0.005
+      groupRef.current.rotation.y = groupRef.current.rotation.y - 0.025
+      // groupRef.current.rotation.y -= 0.005
       // const boundingBox = new THREE.Box3().setFromObject(groupRef.current)
       // console.log(boundingBox)
     }
   })
-
-  useEffect(() => {
-    console.log(meshRef.current.geometry)
-  }, [])
 
   // useEffect(() => {
   //   const boundingBox = new THREE.Box3().setFromObject(groupRef.current)
@@ -47,6 +43,14 @@ export default function V18_8({ handleModelBoundingBox, ...props }) {
         // material={nodes['outer-spiral'].material}
         rotation={[Math.PI / 2, 0, 0]}
       >
+        <meshPhysicalMaterial
+          color={'#808080'}
+          // roughness={0.1}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
+          metalness={0.9}
+          roughness={0.5}
+        />
         <meshStandardMaterial
           fog={false}
           transparent
