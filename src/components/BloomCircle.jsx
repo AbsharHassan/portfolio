@@ -105,7 +105,7 @@ const BloomShaderMaterial = shaderMaterial(
         // fragColor += vec4(color, m);
 
         gl_FragColor = fragColor * uOpacity;
-        // gl_FragColor = vec4(uResolution.x/1536.0, 0.0, 0.0, 1.0);
+        // gl_FragColor = vec4(vUv, 0.0, 1.0);
         // gl_FragColor = color;
 
         // gl_FragColor = vec4(vUv, 0.0, 1.0);
@@ -219,7 +219,6 @@ const BloomCircle = ({ isHeroVisible }) => {
     // meshRef.current.scale.y = viewport.height
 
     meshRef.current.matrixWorldNeedsUpdate = true
-    console.log(meshRef.current)
     // meshRef.current.instanceMatrix.needsUpdate = true
 
     meshRef.current.geometry = newGeometry
@@ -231,17 +230,20 @@ const BloomCircle = ({ isHeroVisible }) => {
   }, [windowSize, viewport, meshRef])
 
   return (
-    <>
-      <OrbitControls />
-      <mesh
-        ref={meshRef}
-        visible={true}
-        key={windowSize.width}
-      >
-        <planeGeometry args={[1, 1]} />
-        <bloomShaderMaterial transparent />
-      </mesh>
-    </>
+    <mesh
+      ref={meshRef}
+      visible={true}
+      key={windowSize.width}
+    >
+      <planeGeometry args={[1, 1]} />
+      {/* <bloomShaderMaterial transparent /> */}
+      <shaderMaterial
+        transparent
+        vertexShader={bloomCircleVertexShader}
+        fragmentShader={bloomCircleFragmentShader}
+        uniforms={bloomCircleUniforms}
+      />
+    </mesh>
   )
 }
 

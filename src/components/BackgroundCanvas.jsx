@@ -37,6 +37,7 @@ import MovingSpotLight from './MovingSpotlight'
 import V18_8 from './V18_8'
 import FloatingWordParticlesTesting from './FloatingWordParticlesTesting'
 import useWindowResize from '../utils/useWindowResize'
+import BloomCircleTesting from './old_useless_backups/BloomCircleTesting'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -150,12 +151,18 @@ const BackgroundCanvas = ({
           />
         </Hud>
 
-        {!refresh && (
+        <BloomCircle isHeroVisible={isHeroVisible} />
+
+        {/* {!refresh && (
           <BloomCircle
             isHeroVisible={isHeroVisible}
             key={windowSize.width}
           />
-        )}
+        )} */}
+
+        {/* <OrbitControls />
+
+        <BloomCircleTesting /> */}
 
         {isServiceVisible && (
           <RenderTexture ref={setRipplesTex}>
@@ -207,6 +214,12 @@ const Effect = ({
   let particleBrightness = useRef(1)
   let modelRipplesMix = useRef(1)
   let particleRipplesMix = useRef(1)
+
+  useEffect(() => {
+    return () => {
+      renderer?.dispose()
+    }
+  }, [])
 
   useEffect(() => {
     // gsap.to(modelBrightness, {

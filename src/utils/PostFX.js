@@ -58,6 +58,44 @@ export default class PostFX {
     // Our triangle will be always on screen, so avoid frustum culling checking
     this.triangle.frustumCulled = false
     this.scene.add(this.triangle)
+
+    // / Add an event listener for window resize
+    window.addEventListener('resize', this.onWindowResize.bind(this), false)
+
+    // Initialize the size of the render target
+    this.updateRenderTargetSize()
+  }
+
+  // Method to handle window resize
+  onWindowResize() {
+    this.updateRenderTargetSize()
+    // Update any other size-dependent properties or uniforms here
+  }
+
+  // Method to update the size of the render target
+  updateRenderTargetSize() {
+    // Get the new size of the renderer's drawing buffer
+    this.renderer.getDrawingBufferSize(this.resolution)
+
+    // Update the size of the render target
+    this.target.setSize(this.resolution.x, this.resolution.y)
+
+    // Update any uniforms or properties that depend on the resolution
+    this.material.uniforms.uResolution.value = this.resolution
+
+    // Update the camera aspect ratio if needed
+    const aspect = this.resolution.x / this.resolution.y
+    this.dummyCamera.left = -aspect
+    this.dummyCamera.right = aspect
+    this.dummyCamera.updateProjectionMatrix()
+
+    // Update any other size-dependent properties or uniforms here
+  }
+
+  // Don't forget to remove the event listener when you're done with the class
+  dispose() {
+    console.log('disposing')
+    window.removeEventListener('resize', this.onWindowResize.bind(this))
   }
 
   render(
