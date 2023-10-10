@@ -27,12 +27,12 @@ const MovingSpotLight = ({ vec = new Vector3(), mousePosition, ...props }) => {
       ref={light}
       penumbra={1}
       distance={7}
-      //   angle={0.35}
       angle={0.35}
+      // angle={0.25}
       attenuation={4}
       //   anglePower={4}
-      anglePower={6}
-      intensity={3}
+      anglePower={4}
+      intensity={5}
       // decay={1}
       opacity={0.7}
       // shadow={{

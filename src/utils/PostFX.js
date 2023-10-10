@@ -17,6 +17,10 @@ import {
   Scene,
   RawShaderMaterial,
   Vector2,
+  Color,
+  Fog,
+  BoxGeometry,
+  MeshBasicMaterial,
 } from 'three'
 
 export default class PostFX {
@@ -35,7 +39,7 @@ export default class PostFX {
       new BufferAttribute(vertices, 2, false)
     )
 
-    this.resolution = new Vector2()
+    this.resolution = new Vector2(window.innerWidth, window.innerHeight)
     this.renderer.getDrawingBufferSize(this.resolution)
 
     this.target = new WebGLRenderTarget(this.resolution.x, this.resolution.y, {
@@ -58,6 +62,16 @@ export default class PostFX {
     // Our triangle will be always on screen, so avoid frustum culling checking
     this.triangle.frustumCulled = false
     this.scene.add(this.triangle)
+
+    // this.fogColor = new Color(0x000000) // Color of the fog
+    // this.near = 0.1 // Near plane
+    // this.far = 2 // Far plane
+    // this.scene.fog = new Fog(this.fogColor, this.near, this.far)
+
+    // this.geometry = new BoxGeometry()
+    // this.material = new MeshBasicMaterial({ color: 0x00ff00 })
+    // this.cube = new Mesh(this.geometry, this.material)
+    // this.scene.add(this.cube)
 
     // / Add an event listener for window resize
     window.addEventListener('resize', this.onWindowResize.bind(this), false)
@@ -94,14 +108,13 @@ export default class PostFX {
 
   // Don't forget to remove the event listener when you're done with the class
   dispose() {
-    console.log('disposing')
     window.removeEventListener('resize', this.onWindowResize.bind(this))
   }
 
   render(
     mainScene,
-    particlesScene,
     camera,
+    particlesScene,
     ripplesTexture,
     time,
     animationProgress,

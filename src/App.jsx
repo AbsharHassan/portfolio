@@ -403,7 +403,7 @@ function App() {
         </div>
       </main>
       {/* <Navbar contactRef={contactContainerRef} /> */}
-      <BackgroundCanvas
+      {/* <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
         isServiceVisible={isServiceVisible}
@@ -417,7 +417,7 @@ function App() {
         view1={projectsContainerRef}
         eventSource={mainRef}
         track1={heroContainerRef}
-      />
+      /> */}
 
       {/* <DynamicCanvas
         eventSource={mainRef}
@@ -428,7 +428,7 @@ function App() {
         visibleArray={visibleArray}
       /> */}
 
-      <div className="w-full h-screen absolute top-0 z-[-100]">
+      <div className="w-full h-screen absolute top-0 z-[100000000]">
         <HeroCanvas
           // mousePosition={mousePosition}
           bloomTheme={bloomTheme}

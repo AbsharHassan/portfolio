@@ -1,6 +1,6 @@
 import { Vector3 } from 'three'
 import { useRef, useEffect, useState, useMemo } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, extend, useFrame, useThree } from '@react-three/fiber'
 import {
   useGLTF,
   SpotLight,
@@ -14,15 +14,103 @@ import {
   useProgress,
   Stars,
   Sparkles,
+  shaderMaterial,
+  Hud,
 } from '@react-three/drei'
 import * as THREE from 'three'
+import glsl from 'babel-plugin-glsl/macro'
 
 import V18_8 from './V18_8'
 
 import gsap from 'gsap'
 import MovingSpotLight from './MovingSpotlight'
-import SpaceDustTest from './SpaceDustCanvas'
-import { useSelector } from 'react-redux'
+
+import {
+  vertexShader as heroSceneVertexShader,
+  fragmentShader as heroSceneFragmentShader,
+  uniforms as heroSceneUniforms,
+} from '../shaders/hero-scene/heroSceneShaders'
+import PostFX from '../utils/PostFX'
+import { Color } from 'lamina'
+
+const PlaneShaderMaterial = shaderMaterial(
+  // Uniforms
+  {
+    uTime: 0,
+    uSpherePos: new Vector3(-20, 0, 0),
+    uTexture: new THREE.TextureLoader().load(
+      './particles/—Pngtree—hazy white glow_6016180.png'
+    ),
+    uColorPurple: new THREE.Color(0.76, 0.38, 1.0),
+    // uColorPurple: new THREE.Color(5.0, 0.38, 5.0),
+    uColorBlue: new THREE.Color(0.35, 0.51, 0.98),
+    uColorGreen: new THREE.Color(0.04 * 1, 0.66 * 1, 0.72 * 1),
+    // uColorPurple: new Color(5.0 / 10, 0.38 / 10, 5.0 / 10),
+    // uColorBlue: new Color(0.35 / 10, 0.51 / 10, 0.98 / 10),
+    // uColorGreen: new Color(0.04 / 10, 0.66 / 10, 0.72 / 10),
+    uAspect: 2.0556744846176622,
+    uOpacity: 1.0,
+  },
+  // Vertex Shader
+  glsl`
+      varying vec2 vUv;
+      varying vec2 vPosition;
+  
+      void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+  // Fragment Shader
+  glsl`
+      varying vec2 vUv;
+      uniform float uAspect;
+      uniform float uOpacity;
+      uniform vec3 uSpherePos;
+      uniform vec3 uColorPurple;
+      uniform vec3 uColorBlue;
+      uniform vec3 uColorGreen;
+  
+      uniform sampler2D uTexture;
+  
+      void main() {
+        // vec2 aspectCorrectedUV = vUv;
+        // aspectCorrectedUV.x *= uAspect;
+        // // Center the texture on the adjusted UV coordinates
+        // aspectCorrectedUV.x -= (1.0 - uAspect) / 2.0;
+  
+        vec2 p = vUv - vec2(0.5);
+  
+        // vec4 color = texture2D(uTexture, vUv);
+        // gl_FragColor = color;
+  
+        vec3 color = vec3(0.0);
+        // vec4 color = vec4(0.0);
+  
+        float d = length(p - uSpherePos.xy);
+        float m = 0.01/(d);
+  
+        color += m;
+  
+        color *= uColorGreen;
+        // color *= vec4(uColorGreen, 1.0);
+  
+        vec4 fragColor = vec4(color*1.0, pow(m, 0.5));
+  
+        // fragColor += vec4(color, m);
+  
+        gl_FragColor = fragColor * uOpacity;
+        // gl_FragColor = color;
+
+        float dimmingGradient = smoothstep(0.7, 0., abs(vUv - vec2(0.5, 0.2)).y);
+
+        // gl_FragColor = vec4(vUv, 0.0, 1.0);
+        gl_FragColor = vec4(dimmingGradient, 0.0,0.0,1.0);
+      }
+    `
+)
+
+extend({ PlaneShaderMaterial })
 
 const HeroCanvas = ({ bloomTheme }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -45,13 +133,12 @@ const HeroCanvas = ({ bloomTheme }) => {
 
   return (
     <Canvas
-      className="w-full h-full absolute inset-0 "
+      className="w-full h-full absolute inset-0 z-[100000000]"
       shadows={{ type: THREE.PCFShadowMap }}
       dpr={[1, 2]}
       camera={{
         position: [-2, 2, 6],
         // position: [0, 0, 8],
-
         fov: 50,
         near: 1,
         far: 1000,
@@ -59,19 +146,30 @@ const HeroCanvas = ({ bloomTheme }) => {
     >
       <OrbitControls />
 
-      <Scene
-        mousePosition={mousePosition}
-        bloomTheme={bloomTheme}
-      />
+      {/* looks kinda good with no fog and ambient light. Test */}
+
       <ambientLight intensity={0.015} />
 
       {/* <color
         attach="background"
         args={['#111018']}
       /> */}
-      <fog
+      {/* <fog
         attach="fog"
         args={['#111018', 5, 10]}
+      /> */}
+
+      {/* 
+      <Hud>
+        <fog
+          attach="fog"
+          args={['#0f0', 5, 10]}
+        />
+      </Hud> */}
+
+      <Scene
+        mousePosition={mousePosition}
+        bloomTheme={bloomTheme}
       />
     </Canvas>
   )
@@ -295,7 +393,8 @@ function Scene({ mousePosition, bloomTheme }) {
           <MovingSpotLight
             // color="#7b53d3"
             // color="#b00c3f"
-            color="#0c8cbf"
+            // color="#0c8cbf"
+            color="red"
             // color={[0.1, 0.3, 0.6]}
             // position={[3, 3, 2]}
             //this one
@@ -309,7 +408,8 @@ function Scene({ mousePosition, bloomTheme }) {
           />
           <MovingSpotLight
             // color="#7b53d3"
-            color="#0c8cbf"
+            // color="#0c8cbf"
+            color="red"
             // color={[0.1, 0.3, 0.6]}
             // color="#fff"
             // color="#b00c3f"
@@ -340,13 +440,36 @@ function Scene({ mousePosition, bloomTheme }) {
         >
           <planeGeometry args={[150, 10]} />
           <meshStandardMaterial
+            color="#777"
             transparent
-            opacity={0.4}
+            opacity={1}
           />
         </mesh>
       </group>
+      <Effect />
     </>
   )
 }
 
-// export default Scene
+const Effect = () => {
+  const { gl, scene, camera } = useThree()
+
+  const renderer = useMemo(() => {
+    return new PostFX(
+      gl,
+      heroSceneVertexShader,
+      heroSceneFragmentShader,
+      heroSceneUniforms
+    )
+  }, [gl])
+
+  useEffect(() => {
+    return () => {
+      renderer?.dispose()
+    }
+  }, [renderer])
+
+  return useFrame(() => {
+    renderer.render(scene, camera)
+  }, 1)
+}

@@ -436,9 +436,9 @@ body {
   background-size: cover;
   background-attachment: fixed; */
 
-  background-color: #111018;
+  /* background-color: #111018; */
 
-  /* background-color: red; */
+  background-color: black;
 
   /* background-color: #000000; */
   scroll-behavior: smooth;

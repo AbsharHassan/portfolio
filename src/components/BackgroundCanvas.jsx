@@ -294,8 +294,8 @@ const Effect = ({
   return useFrame((state) => {
     renderer.render(
       scene,
-      fParticlesTexture,
       camera,
+      fParticlesTexture,
       ripplesTexture,
       state.clock.getElapsedTime(),
       animationProgress.current,
