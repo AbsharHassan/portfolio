@@ -1,4 +1,4 @@
-import { Color, Vector2, Vector3 } from 'three'
+import { Color, Vector3 } from 'three'
 import glsl from 'babel-plugin-glsl/macro'
 
 export const uniforms = {
@@ -51,7 +51,7 @@ export const fragmentShader = glsl`
 
     color *= uColor;
 
-    vec4 fragColor = vec4(color*1.0, 1.0);
+    vec4 fragColor = vec4(color, pow(m, 0.5));
 
     gl_FragColor = fragColor * uOpacity;
   }

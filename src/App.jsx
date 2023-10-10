@@ -75,7 +75,7 @@ function App() {
   //   }
 
   //   return () => {
-  //     observerProjects?.disconnect()
+  //     observerProjects??.disconnect()
   //   }
   // }, [projectsContainerRef])
 
@@ -96,7 +96,7 @@ function App() {
     }
 
     return () => {
-      observerHero.disconnect()
+      observerHero?.disconnect()
     }
   }, [])
 
@@ -113,7 +113,7 @@ function App() {
     }
 
     return () => {
-      observer.disconnect()
+      observer?.disconnect()
     }
   }, [])
 
@@ -134,7 +134,7 @@ function App() {
     }
 
     return () => {
-      observerContact.disconnect()
+      observerContact?.disconnect()
     }
   }, [contactContainerRef])
 
@@ -169,7 +169,7 @@ function App() {
     }
 
     return () => {
-      observerService.disconnect()
+      observerService?.disconnect()
     }
   }, [serviceContainerRef])
 
@@ -185,7 +185,7 @@ function App() {
     }
 
     return () => {
-      observerAbout.disconnect()
+      observerAbout?.disconnect()
     }
   }, [aboutContainerRef])
 
@@ -201,7 +201,7 @@ function App() {
     }
 
     return () => {
-      observerToolset.disconnect()
+      observerToolset?.disconnect()
     }
   }, [toolsetContainerRef])
 
@@ -353,6 +353,8 @@ function App() {
           >
             {/* <Hero /> */}
           </div>
+
+          <div className="w-full h-[10000px]"></div>
 
           {/* <div
             ref={projectsContainerRef}

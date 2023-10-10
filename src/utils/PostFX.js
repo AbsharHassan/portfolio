@@ -119,17 +119,17 @@ export default class PostFX {
     this.renderer.render(this.scene, this.dummyCamera)
 
     this.material.uniforms.uResolution.value = this.resolution
-    this.material.uniforms.uFloatingParticles.value = particlesScene
-    this.material.uniforms.uDisplacement.value = ripplesTexture
-    this.material.uniforms.uTime.value = time
-    this.material.uniforms.uScale.value = scale
-    this.material.uniforms.uMixX.value = mixX
-    this.material.uniforms.uAnimationProgress.value = animationProgress
-    this.material.uniforms.uModelBrightness.value = modelBrightness
-    this.material.uniforms.uParticleBrightness.value = particleBrightness
-    this.material.uniforms.uModelRipplesMix.value = modelRipplesMix
-    this.material.uniforms.uParticleRipplesMix.value = particleRipplesMix
-    this.material.uniforms.uDimmingMix.value = dimmingMix
+    // this.material.uniforms.uFloatingParticles.value = particlesScene;
+    // this.material.uniforms.uDisplacement.value = ripplesTexture;
+    // this.material.uniforms.uTime.value = time;
+    // this.material.uniforms.uScale.value = scale;
+    // this.material.uniforms.uMixX.value = mixX;
+    // this.material.uniforms.uAnimationProgress.value = animationProgress;
+    // this.material.uniforms.uModelBrightness.value = modelBrightness;
+    // this.material.uniforms.uParticleBrightness.value = particleBrightness;
+    // this.material.uniforms.uModelRipplesMix.value = modelRipplesMix;
+    // this.material.uniforms.uParticleRipplesMix.value = particleRipplesMix;
+    // this.material.uniforms.uDimmingMix.value = dimmingMix;
     // this.material.uniforms.uSceneOpacity.value = opacity
   }
 }

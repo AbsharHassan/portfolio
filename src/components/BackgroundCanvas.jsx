@@ -66,7 +66,7 @@ const BackgroundCanvas = ({
 
   const [modelShouldRotate, setModelShouldRotate] = useState(false)
   const [fParticlesTexture, setFParticlesTexture] = useState(null)
-  const [ripplesTex, setRipplesTex] = useState(null)
+  const [ripplesTexture, setRipplesTexture] = useState(null)
 
   useEffect(() => {
     setRefresh(true)
@@ -125,7 +125,7 @@ const BackgroundCanvas = ({
           isServiceVisible={isServiceVisible}
           isContactVisible={isContactVisible}
           fParticlesTexture={fParticlesTexture}
-          ripplesTex={ripplesTex}
+          ripplesTexture={ripplesTexture}
           dimBackground={dimBackground}
         />
 
@@ -165,7 +165,7 @@ const BackgroundCanvas = ({
         <BloomCircleTesting /> */}
 
         {isServiceVisible && (
-          <RenderTexture ref={setRipplesTex}>
+          <RenderTexture ref={setRipplesTexture}>
             <RipplesTexture parentContainer={null} />
           </RenderTexture>
         )}
@@ -191,7 +191,7 @@ const Effect = ({
   isServiceVisible,
   isContactVisible,
   fParticlesTexture,
-  ripplesTex,
+  ripplesTexture,
   dimBackground,
 }) => {
   const { gl, scene, camera } = useThree()
@@ -296,7 +296,7 @@ const Effect = ({
       scene,
       fParticlesTexture,
       camera,
-      ripplesTex,
+      ripplesTexture,
       state.clock.getElapsedTime(),
       animationProgress.current,
       scale.current,
@@ -307,5 +307,19 @@ const Effect = ({
       particleRipplesMix.current,
       dimmingMix.current
     )
+
+    renderer.material.uniforms.uDisplacement.value = ripplesTexture
+    renderer.material.uniforms.uTime.value = state.clock.getElapsedTime()
+    renderer.material.uniforms.uScale.value = scale
+    renderer.material.uniforms.uMixX.value = mixX.current
+    renderer.material.uniforms.uAnimationProgress.value =
+      animationProgress.current
+    renderer.material.uniforms.uModelBrightness.value = modelBrightness.current
+    renderer.material.uniforms.uParticleBrightness.value =
+      particleBrightness.current
+    renderer.material.uniforms.uModelRipplesMix.value = modelRipplesMix.current
+    renderer.material.uniforms.uParticleRipplesMix.value =
+      particleRipplesMix.current
+    renderer.material.uniforms.uDimmingMix.value = dimmingMix.current
   }, 1)
 }
