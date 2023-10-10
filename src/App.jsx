@@ -351,10 +351,10 @@ function App() {
             ref={heroContainerRef}
             className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
-            <Hero />
+            {/* <Hero /> */}
           </div>
 
-          <div
+          {/* <div
             ref={projectsContainerRef}
             id="projects"
             className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
@@ -395,12 +395,12 @@ function App() {
             className=" min-h-screen bg-red-700/0 "
           >
             <Contact setDummyHeadingRef={handleDummyHeadingRef} />
-          </div>
+          </div> */}
 
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </main>
-      <Navbar contactRef={contactContainerRef} />
+      {/* <Navbar contactRef={contactContainerRef} /> */}
       <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
@@ -417,14 +417,14 @@ function App() {
         track1={heroContainerRef}
       />
 
-      <DynamicCanvas
+      {/* <DynamicCanvas
         eventSource={mainRef}
         changeFullViewArray={changeFullViewArray}
         fullViewArray={fullViewArray}
         projectsArray={projectsArray}
         refArray={refArray}
         visibleArray={visibleArray}
-      />
+      /> */}
 
       <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas

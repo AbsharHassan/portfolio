@@ -36,6 +36,7 @@ import { useSelector } from 'react-redux'
 import MovingSpotLight from './MovingSpotlight'
 import V18_8 from './V18_8'
 import FloatingWordParticlesTesting from './FloatingWordParticlesTesting'
+import useWindowResize from '../utils/useWindowResize'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -58,9 +59,27 @@ const BackgroundCanvas = ({
 
   const { bloomTheme } = useSelector((state) => state.threeStore)
 
+  const windowSize = useWindowResize()
+
+  const [refresh, setRefresh] = useState(false)
+
   const [modelShouldRotate, setModelShouldRotate] = useState(false)
   const [fParticlesTexture, setFParticlesTexture] = useState(null)
   const [ripplesTex, setRipplesTex] = useState(null)
+
+  useEffect(() => {
+    setRefresh(true)
+
+    let timeout = setTimeout(() => {
+      setRefresh(false)
+    }, 300)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [windowSize])
+
+  useEffect(() => {})
 
   useEffect(() => {
     let timeout
@@ -78,7 +97,7 @@ const BackgroundCanvas = ({
 
   return (
     <div
-      className="w-full h-screen fixed inset-0 z-[-50]
+      className="w-full h-screen fixed inset-0 z-[5000000]
         "
       ref={containerRef}
     >
@@ -131,9 +150,12 @@ const BackgroundCanvas = ({
           />
         </Hud>
 
-        <mesh position={[0, 0, 0]}>
-          <BloomCircle isHeroVisible={isHeroVisible} />
-        </mesh>
+        {!refresh && (
+          <BloomCircle
+            isHeroVisible={isHeroVisible}
+            key={windowSize.width}
+          />
+        )}
 
         {isServiceVisible && (
           <RenderTexture ref={setRipplesTex}>

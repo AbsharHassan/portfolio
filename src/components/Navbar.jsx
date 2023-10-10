@@ -135,7 +135,7 @@ const Navbar = ({ contactRef }) => {
         <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center">
           <div
             id="brand"
-            className="brand flex items-center justify-center relative rounded-full w-14 h-14 bg-transparent backdrop-blur-3xl"
+            className="brand flex items-center justify-center relative rounded-full w-14 h-14 bg-black"
             onMouseEnter={() => {
               setIsLogoHovered(true)
             }}
@@ -150,7 +150,7 @@ const Navbar = ({ contactRef }) => {
             />
             <Trademark23 className="absolute w-8 h-8 text-zinc-200 hover:text-[#5a82f9] hover:animate-ping rising-icon" />
           </div>
-          <div className="nav-links-container h-12 px-[14px] backdrop-blur bg-black/30 hidden md:flex items-center space-x-8">
+          <div className="nav-links-container h-12 px-[14px] backdrop-blur bg-black hidden md:flex items-center space-x-8">
             <ul
               id="links"
               onMouseEnter={() => {
