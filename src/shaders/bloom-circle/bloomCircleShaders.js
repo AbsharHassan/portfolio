@@ -51,7 +51,7 @@ export const fragmentShader = glsl`
 
     color *= uColor;
 
-    vec4 fragColor = vec4(color, pow(m, 0.5));
+    vec4 fragColor = vec4(color, pow(m, 0.75));
 
     gl_FragColor = fragColor * uOpacity;
   }

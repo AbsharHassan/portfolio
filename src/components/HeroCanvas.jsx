@@ -195,7 +195,7 @@ function Scene({ mousePosition, bloomTheme }) {
     const randomNumberColor = Math.floor(Math.random() * 3)
     pointLightRef.current.color.setHex(colorsArray[randomNumberColor])
 
-    pointLightRef.current.intensity = 0.5
+    pointLightRef.current.intensity = 1
 
     const randomNumber = (Math.floor(Math.random() * 21) - 10) / 10
     const xPosition = (randomNumber * viewport.width) / 2
@@ -355,8 +355,8 @@ function Scene({ mousePosition, bloomTheme }) {
 
       <pointLight
         ref={bloomLightBackground}
-        intensity={3}
-        distance={3}
+        intensity={5}
+        distance={4}
         // castShadow
       />
       {/* <pointLight
@@ -393,8 +393,8 @@ function Scene({ mousePosition, bloomTheme }) {
           <MovingSpotLight
             // color="#7b53d3"
             // color="#b00c3f"
-            // color="#0c8cbf"
-            color="red"
+            color="#0c8cbf"
+            // color="red"
             // color={[0.1, 0.3, 0.6]}
             // position={[3, 3, 2]}
             //this one
@@ -408,8 +408,8 @@ function Scene({ mousePosition, bloomTheme }) {
           />
           <MovingSpotLight
             // color="#7b53d3"
-            // color="#0c8cbf"
-            color="red"
+            color="#0c8cbf"
+            // color="red"
             // color={[0.1, 0.3, 0.6]}
             // color="#fff"
             // color="#b00c3f"
@@ -440,7 +440,7 @@ function Scene({ mousePosition, bloomTheme }) {
         >
           <planeGeometry args={[150, 10]} />
           <meshStandardMaterial
-            color="#777"
+            color="#999"
             transparent
             opacity={1}
           />

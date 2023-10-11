@@ -62,31 +62,6 @@ const ParticleModelMesh = ({
       )
     )
 
-    let particleCount = modelGeometry.attributes.position.count
-
-    let spaceDustPos = new Float32Array(particleCount * 3)
-    for (let i = 0; i < particleCount; i++) {
-      let x =
-        Math.random() * (viewport.width + 2.0) - (viewport.width + 2.0) / 2
-      let y = Math.random() * (viewport.height + 1) - (viewport.height + 1) / 2
-      let z = Math.random() * 2 * 0.1
-
-      spaceDustPos.set([x, z, y], i * 3)
-    }
-    modelMeshRef.current.geometry.setAttribute(
-      'aSpaceDustPos',
-      new InstancedBufferAttribute(spaceDustPos, 3, false)
-    )
-
-    let spaceDustOpacity = new Float32Array(particleCount)
-    for (let i = 0; i < modelGeometry.attributes.position.count; i++) {
-      spaceDustOpacity[i] = Math.random() < 0.01 ? 1 : 0.0
-    }
-    modelMeshRef.current.geometry.setAttribute(
-      'aSpaceDustOpacity',
-      new InstancedBufferAttribute(spaceDustOpacity, 1, false)
-    )
-
     let colorRand = new Float32Array(modelGeometry.attributes.position.count)
     for (let i = 0; i < modelGeometry.attributes.position.count; i++) {
       colorRand[i] = Math.random() * 1
@@ -107,6 +82,48 @@ const ParticleModelMesh = ({
       new InstancedBufferAttribute(randomSize, 1, false)
     )
   }, [modelMeshRef, modelGeometry])
+
+  useEffect(() => {
+    // console.log('this was called')
+
+    let particleCount = modelGeometry.attributes.position.count
+
+    let scaleCompensatingFactor = parentRef.current.scale
+
+    let spaceDustPos = new Float32Array(particleCount * 3)
+    for (let i = 0; i < particleCount; i++) {
+      let x
+      let y
+      if (viewport < 1) {
+        x = Math.random() * (viewport.width + 2.0) - (viewport.width + 2.0) / 2
+        y = Math.random() * (viewport.height + 5) - (viewport.height + 5) / 2
+      } else {
+        x = Math.random() * (viewport.width + 3.5) - (viewport.width + 3.5) / 2
+        y = Math.random() * (viewport.height + 5) - (viewport.height + 5) / 2
+      }
+
+      let z = Math.random() * 2 * 0.1
+
+      spaceDustPos.set([x, z, y], i * 3)
+    }
+    modelMeshRef.current.geometry.setAttribute(
+      'aSpaceDustPos',
+      new InstancedBufferAttribute(spaceDustPos, 3, false)
+    )
+
+    let spaceDustOpacity = new Float32Array(particleCount)
+    for (let i = 0; i < modelGeometry.attributes.position.count; i++) {
+      spaceDustOpacity[i] = Math.random() < 0.03 ? 1 : 0.0
+    }
+    modelMeshRef.current.geometry.setAttribute(
+      'aSpaceDustOpacity',
+      new InstancedBufferAttribute(spaceDustOpacity, 1, false)
+    )
+  }, [modelMeshRef, modelGeometry, viewport])
+
+  useEffect(() => {
+    // console.log(viewport)
+  }, [viewport])
 
   // useEffect(() => {
   //   let counter = 0
@@ -133,6 +150,10 @@ const ParticleModelMesh = ({
 
   // Spin and onScroll animations of the model
   useEffect(() => {
+    scrollAnimationRef.current?.kill()
+    rotateAnimation.current?.kill()
+
+    console.log('running')
     if (modelShouldRotate) {
       rotateAnimation.current = gsap.to(parentRef.current.rotation, {
         z: 2 * Math.PI,
@@ -146,17 +167,17 @@ const ParticleModelMesh = ({
       //   ease: 'linear',
       //   repeat: -1,
       // })
-      scrollAnimationRef.current = gsap.to(modelMeshRef.current.rotation, {
-        scrollTrigger: {
-          trigger: document.getElementById('main'), // perhaps change this so that the model doesn't spin on appear
-          scrub: 1,
-          start: false,
-        },
-        // z: Math.PI * 0.5,
-        z: Math.PI * 3,
-      })
+      // scrollAnimationRef.current = gsap.to(modelMeshRef.current.rotation, {
+      //   scrollTrigger: {
+      //     trigger: document.getElementById('main'), // perhaps change this so that the model doesn't spin on appear
+      //     scrub: 1,
+      //     start: false,
+      //   },
+      //   // z: Math.PI * 0.5,
+      //   z: Math.PI * 3,
+      // })
     } else {
-      scrollAnimationRef.current?.kill()
+      // scrollAnimationRef.current?.kill()
       rotateAnimation.current?.kill()
       // scrollAnimationRef.current?.pause()
       // rotateAnimation.current?.pause()
@@ -170,7 +191,23 @@ const ParticleModelMesh = ({
         duration: 1,
       })
     }
-  }, [modelShouldRotate])
+  }, [modelShouldRotate, viewport])
+
+  useEffect(() => {
+    scrollAnimationRef.current = gsap.to(modelMeshRef.current.rotation, {
+      scrollTrigger: {
+        trigger: document.getElementById('main'), // perhaps change this so that the model doesn't spin on appear
+        scrub: 1,
+        start: false,
+      },
+      // z: Math.PI * 0.5,
+      z: Math.PI * 3,
+    })
+
+    return () => {
+      scrollAnimationRef.current?.kill()
+    }
+  }, [viewport])
 
   useEffect(() => {
     setModelShouldRotate(!isHeroVisible)
@@ -279,13 +316,29 @@ const ParticleModelMesh = ({
     modelMeshRef.current.material.uniforms.uTime.value = time
   })
 
+  useEffect(() => {
+    if (parentRef.current) {
+      if (viewport.width > 1) {
+        parentRef.current.scale.x = 0.2793 * viewport.width
+        parentRef.current.scale.y = 0.2793 * viewport.width
+        parentRef.current.scale.z = 0.2793 * viewport.width
+        modelMeshRef.current.material.uniforms.uMouseBehaviour.value = 1
+      } else {
+        parentRef.current.scale.x = 0.2793 * 2 * viewport.width
+        parentRef.current.scale.y = 0.2793 * 2 * viewport.width
+        parentRef.current.scale.z = 0.2793 * 2 * viewport.width
+        modelMeshRef.current.material.uniforms.uMouseBehaviour.value = 0
+      }
+    }
+  }, [viewport])
+
   return (
     <>
       {/* <OrbitControls /> */}
       <mesh
         ref={parentRef}
         rotation={[Math.PI / 2, 0, 0]}
-        scale={0.5}
+        scale={0.2793}
         position={[0, 0, 0]}
         // visible={false}
       >

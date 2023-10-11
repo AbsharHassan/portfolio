@@ -67,34 +67,7 @@ const BackgroundCanvas = ({
   const [modelShouldRotate, setModelShouldRotate] = useState(false)
   const [fParticlesTexture, setFParticlesTexture] = useState(null)
   const [ripplesTexture, setRipplesTexture] = useState(null)
-
-  useEffect(() => {
-    setRefresh(true)
-
-    let timeout = setTimeout(() => {
-      setRefresh(false)
-    }, 300)
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [windowSize])
-
-  useEffect(() => {})
-
-  useEffect(() => {
-    let timeout
-
-    if (!isHeroVisible) {
-      timeout = setTimeout(() => {
-        setModelShouldRotate(true)
-      }, 2000)
-    }
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [isHeroVisible])
+  const [renderRipples, setRenderRipples] = useState(window.innerWidth > 640)
 
   return (
     <div
@@ -127,6 +100,9 @@ const BackgroundCanvas = ({
           fParticlesTexture={fParticlesTexture}
           ripplesTexture={ripplesTexture}
           dimBackground={dimBackground}
+          setRenderRipples={(value) => {
+            setRenderRipples(value)
+          }}
         />
 
         <ParticleModelMesh
@@ -151,7 +127,7 @@ const BackgroundCanvas = ({
           />
         </Hud>
 
-        <BloomCircle isHeroVisible={isHeroVisible} />
+        {/* <BloomCircle isHeroVisible={isHeroVisible} /> */}
 
         {/* {!refresh && (
           <BloomCircle
@@ -164,7 +140,7 @@ const BackgroundCanvas = ({
 
         <BloomCircleTesting /> */}
 
-        {isServiceVisible && (
+        {isServiceVisible && renderRipples && (
           <RenderTexture ref={setRipplesTexture}>
             <RipplesTexture parentContainer={null} />
           </RenderTexture>
@@ -193,8 +169,9 @@ const Effect = ({
   fParticlesTexture,
   ripplesTexture,
   dimBackground,
+  setRenderRipples,
 }) => {
-  const { gl, scene, camera } = useThree()
+  const { gl, scene, camera, viewport } = useThree()
 
   const renderer = useMemo(() => {
     return new PostFX(
@@ -220,6 +197,10 @@ const Effect = ({
       renderer?.dispose()
     }
   }, [])
+
+  useEffect(() => {
+    setRenderRipples(viewport.width > 1)
+  }, [viewport])
 
   useEffect(() => {
     // gsap.to(modelBrightness, {

@@ -100,59 +100,59 @@ function App() {
     }
   }, [])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsHeroFullVisible(entry.isIntersecting)
-      },
-      { threshold: 1 }
-    )
-
-    if (heroContainerRef.current) {
-      observer.observe(heroContainerRef.current)
-    }
-
-    return () => {
-      observer?.disconnect()
-    }
-  }, [])
-
-  useEffect(() => {
-    let observerContact
-
-    if (contactContainerRef.current) {
-      observerContact = new IntersectionObserver(
-        ([entry]) => {
-          setIsContactVisible(entry.isIntersecting)
-          // console.log(entry.intersectionRect.left)
-          // console.log(entry.intersectionRect.top)
-        },
-        { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
-      )
-
-      observerContact.observe(contactContainerRef.current)
-    }
-
-    return () => {
-      observerContact?.disconnect()
-    }
-  }, [contactContainerRef])
-
   // useEffect(() => {
-  //   const updateContactPosition = (e) => {
-  //     console.log(contactContainerRef.current.getBoundingClientRect())
-  //   }
+  //   const observer = new IntersectionObserver(
+  //     ([entry]) => {
+  //       setIsHeroFullVisible(entry.isIntersecting)
+  //     },
+  //     { threshold: 1 }
+  //   )
 
-  //   if (isContactVisible) {
-  //     updateContactPosition(null)
-
-  //     window.addEventListener('scroll', updateContactPosition)
+  //   if (heroContainerRef.current) {
+  //     observer.observe(heroContainerRef.current)
   //   }
 
   //   return () => {
-  //     window.removeEventListener('scroll', updateContactPosition)
+  //     observer?.disconnect()
   //   }
-  // }, [isContactVisible])
+  // }, [])
+
+  // useEffect(() => {
+  //   let observerContact
+
+  //   if (contactContainerRef.current) {
+  //     observerContact = new IntersectionObserver(
+  //       ([entry]) => {
+  //         setIsContactVisible(entry.isIntersecting)
+  //         // console.log(entry.intersectionRect.left)
+  //         // console.log(entry.intersectionRect.top)
+  //       },
+  //       { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
+  //     )
+
+  //     observerContact.observe(contactContainerRef.current)
+  //   }
+
+  //   return () => {
+  //     observerContact?.disconnect()
+  //   }
+  // }, [contactContainerRef])
+
+  // // useEffect(() => {
+  // //   const updateContactPosition = (e) => {
+  // //     console.log(contactContainerRef.current.getBoundingClientRect())
+  // //   }
+
+  // //   if (isContactVisible) {
+  // //     updateContactPosition(null)
+
+  // //     window.addEventListener('scroll', updateContactPosition)
+  // //   }
+
+  // //   return () => {
+  // //     window.removeEventListener('scroll', updateContactPosition)
+  // //   }
+  // // }, [isContactVisible])
 
   useEffect(() => {
     let observerService
@@ -173,37 +173,37 @@ function App() {
     }
   }, [serviceContainerRef])
 
-  useEffect(() => {
-    let observerAbout
+  // useEffect(() => {
+  //   let observerAbout
 
-    if (aboutContainerRef.current) {
-      observerAbout = new IntersectionObserver(([entry]) => {
-        setIsAboutVisible(entry.isIntersecting)
-      })
+  //   if (aboutContainerRef.current) {
+  //     observerAbout = new IntersectionObserver(([entry]) => {
+  //       setIsAboutVisible(entry.isIntersecting)
+  //     })
 
-      observerAbout.observe(aboutContainerRef.current)
-    }
+  //     observerAbout.observe(aboutContainerRef.current)
+  //   }
 
-    return () => {
-      observerAbout?.disconnect()
-    }
-  }, [aboutContainerRef])
+  //   return () => {
+  //     observerAbout?.disconnect()
+  //   }
+  // }, [aboutContainerRef])
 
-  useEffect(() => {
-    let observerToolset
+  // useEffect(() => {
+  //   let observerToolset
 
-    if (toolsetContainerRef.current) {
-      observerToolset = new IntersectionObserver(([entry]) => {
-        setIsToolsetVisible(entry.isIntersecting)
-      })
+  //   if (toolsetContainerRef.current) {
+  //     observerToolset = new IntersectionObserver(([entry]) => {
+  //       setIsToolsetVisible(entry.isIntersecting)
+  //     })
 
-      observerToolset.observe(toolsetContainerRef.current)
-    }
+  //     observerToolset.observe(toolsetContainerRef.current)
+  //   }
 
-    return () => {
-      observerToolset?.disconnect()
-    }
-  }, [toolsetContainerRef])
+  //   return () => {
+  //     observerToolset?.disconnect()
+  //   }
+  // }, [toolsetContainerRef])
 
   const [modelRotation, setModelRotation] = useState(0)
 
@@ -331,6 +331,8 @@ function App() {
     setFullViewArray(tempArray)
   }
 
+  // console.log('appppppPPPPPPPPP rerender')
+
   return (
     <>
       {/* <Stats /> */}
@@ -349,10 +351,17 @@ function App() {
         >
           <div
             ref={heroContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 "
+            className="min-h-screen mb-[100vh] bg-red-700/30 "
           >
             {/* <Hero /> */}
           </div>
+
+          {/* <div
+            ref={serviceContainerRef}
+            className="min-h-screen my-[100vh] bg-red-700/0 "
+          >
+            <Services sectionTitle={'services'} />
+          </div> */}
 
           <div className="w-full h-[10000px]"></div>
 
@@ -403,7 +412,7 @@ function App() {
         </div>
       </main>
       {/* <Navbar contactRef={contactContainerRef} /> */}
-      {/* <BackgroundCanvas
+      <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
         isServiceVisible={isServiceVisible}
@@ -417,7 +426,7 @@ function App() {
         view1={projectsContainerRef}
         eventSource={mainRef}
         track1={heroContainerRef}
-      /> */}
+      />
 
       {/* <DynamicCanvas
         eventSource={mainRef}
@@ -428,12 +437,12 @@ function App() {
         visibleArray={visibleArray}
       /> */}
 
-      <div className="w-full h-screen absolute top-0 z-[100000000]">
+      {/* <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas
           // mousePosition={mousePosition}
           bloomTheme={bloomTheme}
         />
-      </div>
+      </div> */}
 
       <svg
         width="0"

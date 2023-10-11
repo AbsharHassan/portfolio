@@ -21,6 +21,7 @@ export const uniforms = {
   uInitialRender: { value: true },
   uSizeScale: { value: 1 },
   uInterpolate: { value: 0 },
+  uMouseBehaviour: { value: window.innerWidth > 640 ? 1 : 0 },
 }
 
 export const vertexShader = glsl`
@@ -36,6 +37,7 @@ export const vertexShader = glsl`
     attribute float colorRand;
     attribute float randomSize;
     uniform float uTime;
+    uniform float uMouseBehaviour;
     uniform float uSizeScale;
     varying float colorRandom;
     #pragma glslify: snoise3 = require(glsl-noise/simplex/3d.glsl);
@@ -74,7 +76,7 @@ export const vertexShader = glsl`
         // Creating mouse interactive behaviour
         float distanceToSphere = pow(1.0 - clamp(length(uSpherePos.xy - particle_position.xy) -0.0, 0.0, 1.0), 10.0);
         vec3 dir = particle_position - uSpherePos;
-        particle_position = mix(particle_position, uSpherePos + normalize(dir)*2.0, mix(distanceToSphere*0.1, 0.0, uInterpolate));
+        particle_position = mix(particle_position, uSpherePos + normalize(dir)*2.0, mix(0.0 , distanceToSphere*0.1, (1.0 - uInterpolate)*uMouseBehaviour));
 
         // // // Applying noise to partice positions
         // // particle_position.x += simplexNoise*sin(uTime * slowTime);
@@ -100,8 +102,8 @@ export const vertexShader = glsl`
         
 
 
-        particle_position.x += perlinNoise * mix(0.05, 0.0, uInterpolate);
-        particle_position.y += perlinNoise * mix(0.05, 0.0, uInterpolate);
+        particle_position.x += perlinNoise * mix(0.025, 0.0, uInterpolate);
+        particle_position.y += perlinNoise * mix(0.025, 0.0, uInterpolate);
 
 
         vec4 view_pos = viewMatrix * vec4(particle_position, 1.0);
@@ -114,7 +116,7 @@ export const vertexShader = glsl`
         // view_pos.xyz += position  * clamp(perlinNoise*5.0, 0.5, 5.0);
 
         view_pos.xyz += position  *  mix(
-            clamp(perlinNoise*5.0, mix(1.75, 0.5, uInterpolate), mix(4.0, 3.0, uInterpolate)), 
+            clamp(perlinNoise*5.0, mix(1.75, 0.5, uInterpolate), mix(3.0, 3.0, uInterpolate)), 
             uSizeScale, 
             clamp((uSizeScale - 1.0), 0.0, 1.0));
 
@@ -189,6 +191,7 @@ export const fragmentShader = glsl`
 
 
         // gl_FragColor = vec4(vUv, 0.0,1.0);
+        // gl_FragColor = vec4(vUv, 0.0,1.0) * actualOpacity;
         // gl_FragColor = vec4(color,1.0 * gradient1 * gradient2);
         // gl_FragColor = vec4(vUv,0.0,1.0 *gradient1 * gradient2);
         // gl_FragColor = texture;

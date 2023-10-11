@@ -65,7 +65,7 @@ const RipplesTexture = ({ parentContainer, mousePositionProp }) => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [parentContainer])
+  }, [parentContainer, viewport])
 
   useEffect(() => {
     let tempArray = []
@@ -105,47 +105,50 @@ const RipplesTexture = ({ parentContainer, mousePositionProp }) => {
   }
 
   useFrame((state) => {
-    if (stateMeshes.length === maxRipples) {
-      if (
-        // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 4 &&
-        // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 4
-        // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 0.1 &&
-        // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 0.1
-        Math.abs(mousePosition.current.x - prevMousePosition.current.x) <
-          0.005 &&
-        Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 0.005
-        // mousePosition.current.x === prevMousePosition.current.x &&
-        // mousePosition.current.y === prevMousePosition.current.y
-        // false
-      ) {
-      } else {
-        setNewWave(
-          mousePosition.current.x,
-          mousePosition.current.y,
-          currentWave.current
-        )
-        currentWave.current = (currentWave.current + 1) % maxRipples
-      }
-
-      prevMousePosition.current.x = mousePosition.current.x
-      prevMousePosition.current.y = mousePosition.current.y
-
-      stateMeshes.forEach((singleMesh) => {
-        if (singleMesh.visible) {
-          singleMesh.rotation.z += 0.02
-          if (parentContainer) {
-            singleMesh.scale.x = 1.0 * singleMesh.scale.x + 0.075 * 3
-          } else {
-            singleMesh.scale.x = 0.98 * singleMesh.scale.x + 0.025
-          }
-          singleMesh.scale.y = singleMesh.scale.x
-          singleMesh.material.opacity *= 0.96
-          if (singleMesh.material.opacity < 0.0002) {
-            singleMesh.material.opacity = 0
-            singleMesh.visible = false
-          }
+    if (viewport.width > 1) {
+      if (stateMeshes.length === maxRipples) {
+        if (
+          // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 4 &&
+          // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 4
+          // Math.abs(mousePosition.current.x - prevMousePosition.current.x) < 0.1 &&
+          // Math.abs(mousePosition.current.y - prevMousePosition.current.y) < 0.1
+          Math.abs(mousePosition.current.x - prevMousePosition.current.x) <
+            0.005 &&
+          Math.abs(mousePosition.current.y - prevMousePosition.current.y) <
+            0.005
+          // mousePosition.current.x === prevMousePosition.current.x &&
+          // mousePosition.current.y === prevMousePosition.current.y
+          // false
+        ) {
+        } else {
+          setNewWave(
+            mousePosition.current.x,
+            mousePosition.current.y,
+            currentWave.current
+          )
+          currentWave.current = (currentWave.current + 1) % maxRipples
         }
-      })
+
+        prevMousePosition.current.x = mousePosition.current.x
+        prevMousePosition.current.y = mousePosition.current.y
+
+        stateMeshes.forEach((singleMesh) => {
+          if (singleMesh.visible) {
+            singleMesh.rotation.z += 0.02
+            if (parentContainer) {
+              singleMesh.scale.x = 1.0 * singleMesh.scale.x + 0.075 * 3
+            } else {
+              singleMesh.scale.x = 0.98 * singleMesh.scale.x + 0.025
+            }
+            singleMesh.scale.y = singleMesh.scale.x
+            singleMesh.material.opacity *= 0.96
+            if (singleMesh.material.opacity < 0.0002) {
+              singleMesh.material.opacity = 0
+              singleMesh.visible = false
+            }
+          }
+        })
+      }
     }
     // Pass into RenderTarget, pass RenderTarget texture to shader
     // state.gl.setRenderTarget(target)

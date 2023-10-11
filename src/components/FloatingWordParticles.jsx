@@ -267,9 +267,12 @@ const FloatingWordParticles = ({
   }, [nodes])
 
   const cylinderGeo = useMemo(() => {
+    console.log(viewport)
     const geometry = new THREE.CylinderGeometry(
-      3,
-      3,
+      (3 * viewport.width) / 1.7872416482900515 +
+        (viewport.width < 1 ? 1 : viewport.width < 1.3 && 0.5),
+      (3 * viewport.width) / 1.7872416482900515 +
+        (viewport.width < 1 ? 1 : viewport.width < 1.3 && 0.5),
       viewport.height * 2,
       50,
       50
@@ -800,6 +803,8 @@ const FloatingWordParticles = ({
         offsetY + (1 - verticalScaler)
     }
   })
+
+  useEffect(() => {}, [viewport])
 
   return (
     // position={[-0.1308784133171829, 0.7432016797772444, 2.3164561507987655]}

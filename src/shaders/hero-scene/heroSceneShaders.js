@@ -32,7 +32,7 @@ export const fragmentShader = glsl`
 
     vec4 color = texture2D(uScene, uv);
 
-    float dimmingGradient = smoothstep(0.7, 0.35, abs(uv - vec2(0.5, 0.6)).y);
+    float dimmingGradient = smoothstep(0.625, 0.35, abs(uv - vec2(0.5, 0.6)).y);
 
     // gl_FragColor = vec4(uv, 0.0, 1.0);
     // gl_FragColor = vec4(dimmingGradient, 0.0,0.0,1.0);
