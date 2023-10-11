@@ -117,7 +117,7 @@ const ParticleModelMesh = ({
 
       let spaceDustOpacity = new Float32Array(particleCount)
       for (let i = 0; i < modelGeometry.attributes.position.count; i++) {
-        spaceDustOpacity[i] = Math.random() < 1 ? 1 : 0.0
+        spaceDustOpacity[i] = Math.random() < 0.03 ? 1 : 0.0
       }
       modelMeshRef.current.geometry.setAttribute(
         'aSpaceDustOpacity',

@@ -117,26 +117,26 @@ function App() {
   //   }
   // }, [])
 
-  // useEffect(() => {
-  //   let observerContact
+  useEffect(() => {
+    let observerContact
 
-  //   if (contactContainerRef.current) {
-  //     observerContact = new IntersectionObserver(
-  //       ([entry]) => {
-  //         setIsContactVisible(entry.isIntersecting)
-  //         // console.log(entry.intersectionRect.left)
-  //         // console.log(entry.intersectionRect.top)
-  //       },
-  //       { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
-  //     )
+    if (contactContainerRef.current) {
+      observerContact = new IntersectionObserver(
+        ([entry]) => {
+          setIsContactVisible(entry.isIntersecting)
+          // console.log(entry.intersectionRect.left)
+          // console.log(entry.intersectionRect.top)
+        },
+        { threshold: 0.5 } // 1.0 indicates when 100% of the target is visible
+      )
 
-  //     observerContact.observe(contactContainerRef.current)
-  //   }
+      observerContact.observe(contactContainerRef.current)
+    }
 
-  //   return () => {
-  //     observerContact?.disconnect()
-  //   }
-  // }, [contactContainerRef])
+    return () => {
+      observerContact?.disconnect()
+    }
+  }, [contactContainerRef])
 
   // // useEffect(() => {
   // //   const updateContactPosition = (e) => {
@@ -364,6 +364,13 @@ function App() {
           </div> */}
 
           <div className="w-full h-[10000px]"></div>
+
+          <div
+            ref={contactContainerRef}
+            className=" min-h-screen bg-red-700/0 "
+          >
+            <Contact setDummyHeadingRef={handleDummyHeadingRef} />
+          </div>
 
           {/* <div
             ref={projectsContainerRef}

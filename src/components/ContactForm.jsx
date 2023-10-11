@@ -73,18 +73,18 @@ const ContactForm = () => {
   }, [resultMessage])
   return (
     <div
-      className={`relative w-[500px] rounded-xl test-gradient backdrop-blur transition-all duration-1000 ease-in-out `}
+      className={`mb-20 lg:mb-0 relative w-full sm:w-[640px] mx-auto  lg:w-[500px] rounded-xl test-gradient backdrop-blur transition-all duration-1000 ease-in-out `}
       // test-gradient
     >
-      <div className="w-full h-full test-grad-child absolute inset-0 bg-red-900/0 overflow-hidden rounded-xl border-slate-700 p-12 text-slate-400 flex flex-col gap-y-4 z-[-10]">
+      <div className="w-full h-full test-grad-child absolute inset-0 bg-red-900/0 overflow-hidden rounded-xl border-slate-7000 p-12 text-slate-400 flex flex-col gap-y-4 z-[-10] ">
         {/* test-grad-child */}
       </div>
-      <div className="py-10 px-16 flex flex-col text-slate-400 focus:outline-none">
+      <div className="w-full py-10 px-6 lg:px-16 flex flex-col text-slate-400 focus:outline-none">
         <form
-          className="flex flex-col "
+          className="flex flex-col"
           onSubmit={handleSubmit}
         >
-          <label className="text-sm w-full flex flex-col justify-between bg-red-700/0 mb-12">
+          <label className="text-sm w-full flex flex-col justify-between bg-red-700/0 mb-8 lg:mb-12">
             <span className="bg-purple-700/0 -ml-1">Your name</span>
             <input
               // placeholder="Your good name"
@@ -94,7 +94,7 @@ const ContactForm = () => {
             />
           </label>
 
-          <label className="text-sm w-full flex flex-col justify-between bg-red-700/0 mb-12">
+          <label className="text-sm w-full flex flex-col justify-between bg-red-700/0 mb-8 lg:mb-12">
             <span className="bg-purple-700/0 -ml-1">Your email</span>
             <input
               ref={emailInputRef}
@@ -133,30 +133,17 @@ const ContactForm = () => {
           >
             <span
               className={`transition-opacity delay-1000 duration-300 ${
-                resultMessage ? 'opacity-100' : 'opacity-0'
+                resultMessage ? 'opacity-100' : 'opacity-100'
               }`}
             >
               {resultMessage}
             </span>
           </div>
-          {/* <button
-            type="submit"
-            style={{ '--clr-custom': '#3667c4' }}
-            className="neon-button w-full h-12 tracking-wider "
-          >
-            {!isProcessing ? (
-              <div>Submit</div>
-            ) : (
-              <div className="w-full flex items-center justify-center ">
-                Processing
-                <ProcessingSVG className="w-8 h-8 processing-svg" />
-              </div>
-            )}
-          </button> */}
+
           <NeonButton
             type="submit"
             colorNeon="#3667c4"
-            shadow
+            shadow={false}
             extraClasses="w-full h-12 tracking-wider hover:text-slate-400"
           >
             {!isProcessing ? (
