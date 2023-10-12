@@ -135,7 +135,7 @@ const Hero = () => {
             <HeroCatchPhrase />
             {/* <HeroCatchPhrase extraClasses={'absolute inset-0 blur-[50px]'} /> */}
           </div>
-          <h2 className="sm:text-lg lg:text-xl mb-12 text-slate-400 h-44 sm:h-36 max-w-2xl ">
+          <h2 className="sm:text-lg lg:text-xl mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl ">
             Hi, my name is Abshar Hassan. I love using code to breath life into
             great ideas. With resuability, efficiency and best practices in
             mind, I strive to deliver production-grade code. I am your friendly
@@ -166,7 +166,7 @@ const Hero = () => {
             colorNeon="#7b53d3"
             shadow
             type="button"
-            extraClasses="w-52 h-12  text-[#7b53d3] hover:text-slate-400"
+            extraClasses="w-52 h-12 text-[#7b53d3] hover:text-slate-400"
           >
             See my work
           </NeonButton>

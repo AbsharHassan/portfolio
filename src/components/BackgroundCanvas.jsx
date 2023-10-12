@@ -71,7 +71,7 @@ const BackgroundCanvas = ({
 
   return (
     <div
-      className="w-full h-screen fixed inset-0 z-[-5000000]
+      className="w-full h-screen fixed inset-0 z-[-50]
         "
       ref={containerRef}
     >
@@ -127,7 +127,7 @@ const BackgroundCanvas = ({
           />
         </Hud>
 
-        {/* <BloomCircle isHeroVisible={isHeroVisible} /> */}
+        <BloomCircle isHeroVisible={isHeroVisible} />
 
         {/* {!refresh && (
           <BloomCircle

@@ -189,9 +189,9 @@ const About = ({ sectionTitle, toolsArray }) => {
         <div
           ref={triggerElRef}
           className={`mx-auto my-12 place-items-center
-           text-slate-500 text-xl text-justify relative
-           z-[1000]
-           max-w-[950px]
+           text-slate-500 text-sm sm:text-base lg:text-xl text-justify relative
+           z-[1000] p-5
+           max-w-[950px] 
           `}
           // style={{
           //   overflow: 'visible',
@@ -200,16 +200,20 @@ const About = ({ sectionTitle, toolsArray }) => {
           //   //   'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
           // }}
         >
-          Motivated and innovative web developer with a strong foundation in
-          full-stack development, gained through hands-on experience in creating
-          bespoke and complex applications from concept to deployment. Adept at
-          utilizing cutting-edge technologies such as MERN Stack, Laravel, Vue,
-          MySQL to develop robust and user-centric web solutions. I have
-          successfully developed and deployed projects ranging from student
-          information management systems to real-time flood tracking
-          applications. My ability to conceptualize, design, and execute
-          projects independently, coupled with a strong dedication to continuous
-          learning, makes me a motivated and adaptable candidate ready to
+          {/* add to contentful */}
+          <div className="backdrop-blur-sm bg-black/25 p-5 rounded-xl">
+            Motivated and innovative web developer with a strong foundation in
+            full-stack development, gained through hands-on experience in
+            creating bespoke and complex applications from concept to
+            deployment. Adept at utilizing cutting-edge technologies such as
+            MERN Stack, Laravel, Vue, MySQL to develop robust and user-centric
+            web solutions. I have successfully developed and deployed projects
+            ranging from student information management systems to real-time
+            flood tracking applications. My ability to conceptualize, design,
+            and execute projects independently, coupled with a strong dedication
+            to continuous learning, makes me a motivated and adaptable candidate
+            ready to
+          </div>
           {/* <div className="about-mask border-2 p-6 border-slate-500 rounded-xl ">
             <AboutSectionCanvas />
           </div> */}

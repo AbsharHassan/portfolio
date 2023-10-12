@@ -205,7 +205,7 @@ const Navbar = ({ contactRef }) => {
         </nav>
       </header>
       <nav
-        className={`z-[3000000] md:hidden fixed w-full h-screen bg-black/30 backdrop-blur-sm left-0 transition-all duration-700 ease-out ${
+        className={`z-[3000000] md:hidden fixed w-full h-screen bg-black/40 backdrop-blur left-0 transition-all duration-700 ease-out ${
           isNavOpen ? 'top-0' : '-top-full'
         }`}
       >

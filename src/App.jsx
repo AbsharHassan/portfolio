@@ -173,21 +173,21 @@ function App() {
     }
   }, [serviceContainerRef])
 
-  // useEffect(() => {
-  //   let observerAbout
+  useEffect(() => {
+    let observerAbout
 
-  //   if (aboutContainerRef.current) {
-  //     observerAbout = new IntersectionObserver(([entry]) => {
-  //       setIsAboutVisible(entry.isIntersecting)
-  //     })
+    if (aboutContainerRef.current) {
+      observerAbout = new IntersectionObserver(([entry]) => {
+        setIsAboutVisible(entry.isIntersecting)
+      })
 
-  //     observerAbout.observe(aboutContainerRef.current)
-  //   }
+      observerAbout.observe(aboutContainerRef.current)
+    }
 
-  //   return () => {
-  //     observerAbout?.disconnect()
-  //   }
-  // }, [aboutContainerRef])
+    return () => {
+      observerAbout?.disconnect()
+    }
+  }, [aboutContainerRef])
 
   // useEffect(() => {
   //   let observerToolset
@@ -366,18 +366,10 @@ function App() {
           <div className="w-full h-[1000px]"></div>
 
           <div
-            ref={projectsContainerRef}
-            id="projects"
-            className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
+            ref={aboutContainerRef}
+            className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
-            <Projects
-              projectsArray={projectsArray}
-              // refsArray={refsArray}
-              arrayOfRefs={arrayOfRefs}
-              addToRefs={addToRefs}
-              setIntersectiom={setIntersectiom}
-              changeFullViewArray={changeFullViewArray}
-            />
+            <About sectionTitle={'backend'} />
           </div>
 
           {/* <div
@@ -427,7 +419,7 @@ function App() {
         </div>
       </main>
       {/* <Navbar contactRef={contactContainerRef} /> */}
-      {/* <BackgroundCanvas
+      <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
         isServiceVisible={isServiceVisible}
@@ -441,16 +433,16 @@ function App() {
         view1={projectsContainerRef}
         eventSource={mainRef}
         track1={heroContainerRef}
-      /> */}
+      />
 
-      <DynamicCanvas
+      {/* <DynamicCanvas
         eventSource={mainRef}
         changeFullViewArray={changeFullViewArray}
         fullViewArray={fullViewArray}
         projectsArray={projectsArray}
         refArray={refArray}
         visibleArray={visibleArray}
-      />
+      /> */}
 
       {/* <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas
