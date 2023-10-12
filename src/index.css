@@ -1198,6 +1198,8 @@ body::-webkit-scrollbar-thumb {
 
 .frontend-heading {
   color: #c262fe;
+  /* color: #a78bfa; */
+
   transition: transform 1s ease, filter 1s ease, opacity 1s ease;
   filter: blur(5px);
 }
@@ -2166,6 +2168,9 @@ body::-webkit-scrollbar-thumb {
   /* box-shadow: rgba(90, 131, 249, 0.2) 0px 4px 24px 0px; */
   /* transition: box-shadow 0.4s ease; */
   /* border-color: #5a83f933; */
+
+  /* box-shadow: #306ee855 0px 0px 12px 0px; */
+
   transform: translateY(30px);
 
   border-color: transparent;

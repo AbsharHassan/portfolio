@@ -366,10 +366,10 @@ function App() {
           <div className="w-full h-[1000px]"></div>
 
           <div
-            ref={toolsetContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 py-[100vh]"
+            ref={serviceContainerRef}
+            className="min-h-screen my-[100vh] bg-red-700/0 "
           >
-            <Toolset sectionTitle={'frontend'} />
+            <Services sectionTitle={'services'} />
           </div>
 
           <div className="w-full h-[1000px]"></div>
@@ -403,12 +403,7 @@ function App() {
             <Toolset sectionTitle={'frontend'} />
           </div>
 
-          <div
-            ref={serviceContainerRef}
-            className="min-h-screen my-[100vh] bg-red-700/0 "
-          >
-            <Services sectionTitle={'services'} />
-          </div>
+          
 
           <div
             ref={contactContainerRef}
