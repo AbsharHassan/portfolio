@@ -54,7 +54,7 @@ const SingleProjectDetails = ({
 
   return (
     <div
-      className={`w-screen pt-[500px] xl:pt-0 min-h-screen xl:absolute xl:h-full  transition-all duration-1000 ease-in-out z-50 flex items-end xl:items-center  ${
+      className={`w-screen pt-[500px] xl:pt-0 min-h-screen xl:absolute xl:h-full transition-all duration-1000 ease-in-out z-50 flex items-end xl:items-center  ${
         fullView ? 'xl:w-[10%]' : 'xl:w-[40%]'
       }
         ${leftSide ? 'xl:left-0 xl:top-0' : 'xl:right-0 xl:top-0'}
@@ -84,7 +84,7 @@ const SingleProjectDetails = ({
           >
             <div
               // test-grad-child
-              className={`w-full h-full test-grad-child relative overflow-hidden rounded-xl border border-slate-700 transition-all duration-200 delay-300 py-7 xl:py-12 ${
+              className={`w-full h-full test-grad-child relative overflow-hidden rounded-xl  transition-all duration-200 delay-300 py-7 xl:py-12 ${
                 fullView ? 'px-0' : 'px-7 xl:px-12'
               } `}
             >
@@ -185,7 +185,7 @@ const SingleProjectDetails = ({
                   </ul>
                 </div>
                 <div
-                  className={`flex w-full items-center text-[#ccd6f6]  transition-all duration-200 ${
+                  className={`flex w-full items-center text-[#ccd6f6] transition-all duration-200 ${
                     fullView ? 'opacity-0  z-[-10]' : 'delay-500 opacity-100'
                   }`}
                 >
