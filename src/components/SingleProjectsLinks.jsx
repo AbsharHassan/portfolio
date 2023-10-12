@@ -4,7 +4,7 @@ import { ReactComponent as ExternalLinkSVG } from '../assets/icons/external-link
 const SingleProjectsLinks = ({ leftSide, fullView, url, githubLink }) => {
   return (
     <div
-      className={`absolute ${
+      className={`hidden xl:block absolute ${
         leftSide ? 'top-14 right-20' : 'top-14 left-20'
       } flex items-center justify-between space-x-6 z-10 text-[#ccd6f6] ${
         fullView ? 'opacity-100' : 'opacity-0'

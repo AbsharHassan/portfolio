@@ -14,7 +14,7 @@ const DynamicCanvas = ({
   changeFullViewArray,
 }) => {
   return (
-    <div className="w-full h-screen fixed inset-0 z-[-50]">
+    <div className="w-full max-w-[1600px] mx-auto  h-screen fixed inset-0 z-[-50]">
       <Canvas
         className="bg-blue-700/0"
         eventSource={eventSource}

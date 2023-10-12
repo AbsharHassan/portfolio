@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { extend, useFrame, useThree } from '@react-three/fiber'
-import { Html, shaderMaterial } from '@react-three/drei'
+import { Html, View, shaderMaterial } from '@react-three/drei'
 import gsap from 'gsap'
 import { ReactComponent as TestSVG } from '../assets/MacOS_Chrome_Header_1700.svg'
 import { Color, Vector3, MathUtils } from 'three'
 import glsl from 'babel-plugin-glsl/macro'
 import MacbookProHW from './MacbookProHW'
+import useWindowResize from '../utils/useWindowResize'
 
 const GlareShaderMaterial = shaderMaterial(
   // Uniforms
@@ -45,12 +46,23 @@ const LaptopModel = ({
   inView,
   index,
 }) => {
-  const { camera, invalidate } = useThree()
+  const { camera, viewport } = useThree()
+
+  const { windowSize } = useWindowResize()
 
   let laptopRef = useRef(null)
   let htmlRef = useRef(null)
   let mousePos = useRef({ x: -1, y: 0.5 })
   let lookAtVector = useRef(new Vector3(-10, 0, 0))
+
+  const [newX, setNewX] = useState(0.75)
+  const [isSmallViewport, setIsSmallViewport] = useState(
+    viewport.width <= 2.398349003611367
+  )
+  const [previousViewport, setPreviousViewport] = useState({
+    width: 0,
+    height: 0,
+  })
 
   let forceLoop = useRef(null)
 
@@ -76,8 +88,8 @@ const LaptopModel = ({
     if (inView && laptopRef) {
       gsap.to(laptopRef.current.children[1].rotation, {
         x: MathUtils.degToRad(-20),
-        delay: 2,
-        duration: 3,
+        delay: 1,
+        duration: 2,
         ease: 'back',
         onComplete: () => {
           htmlRef.current.classList.remove('opacity-0')
@@ -88,19 +100,29 @@ const LaptopModel = ({
   }, [inView])
 
   useEffect(() => {
-    gsap.to(laptopRef.current.position, {
-      x: fullView ? 0 : leftSide ? 0.75 : -0.75,
-      y: fullView ? -0.15 : 0,
-      z: fullView ? 1.4 : -0.4,
-      duration: 1,
-      ease: 'power',
-    })
+    if (!isSmallViewport) {
+      gsap.to(laptopRef.current.position, {
+        x: fullView ? 0 : leftSide ? 1 * newX : -1 * newX,
+        y: fullView ? -0.15 : 0,
+        z: fullView ? 1.4 : -0.4,
+        duration: 1,
+        ease: 'power',
+      })
+    } else {
+      gsap.to(laptopRef.current.position, {
+        x: 0,
+        y: 0.3,
+        z: -0.4,
+        duration: 1,
+        ease: 'power',
+      })
+    }
     // gsap.to(camera.position, {
     //   z: fullView ? 2.5 : 4,
     //   duration: 1,
     //   ease: 'power',
     // })
-  }, [fullView, leftSide, camera])
+  }, [fullView, leftSide, camera, newX, isSmallViewport])
 
   useEffect(() => {
     function handle(event) {
@@ -141,8 +163,49 @@ const LaptopModel = ({
   })
 
   useEffect(() => {
-    console.log(url)
-  }, [url])
+    setIsSmallViewport(viewport.width <= 2.398349003611367)
+
+    console.log(viewport.width)
+
+    if (
+      // viewport.width !== previousViewport.width ||
+      // viewport.height !== previousViewport.height
+      true
+    ) {
+      if (viewport.width > 2.88164350386745) {
+        setNewX(0.75)
+        laptopRef.current.scale.x = 0.35
+        laptopRef.current.scale.y = 0.35
+        laptopRef.current.scale.z = 0.35
+      } else if (viewport.width < 2.398349003611367) {
+        setNewX(0)
+        if (viewport.width < 1) {
+          let scale =
+            0.225 * viewport.width > 0.1125 ? 0.225 * viewport.width : 0.1125
+
+          laptopRef.current.scale.x = scale
+          laptopRef.current.scale.y = scale
+          laptopRef.current.scale.z = scale
+        } else {
+          laptopRef.current.scale.x = 0.225
+          laptopRef.current.scale.y = 0.225
+          laptopRef.current.scale.z = 0.225
+        }
+      } else {
+        laptopRef.current.scale.x = 0.35
+        laptopRef.current.scale.y = 0.35
+        laptopRef.current.scale.z = 0.35
+        setNewX(
+          ((viewport.width - 2.398349003611367) /
+            (2.88164350386745 - 2.398349003611367)) *
+            (0.75 - 0.5) +
+            0.5
+        )
+      }
+    }
+
+    setPreviousViewport({ width: viewport.width, height: viewport.height })
+  }, [viewport])
 
   return (
     <mesh
@@ -161,28 +224,29 @@ const LaptopModel = ({
       />
       <mesh
         onClick={() => {
-          setFullView()
+          // setFullView()
           // if (!fullView) setFullView()
         }}
       >
         <MacbookProHW
           ref={laptopRef}
           scale={0.35}
-          position={[0.75, 0, -0.4]}
+          position={[newX, 0, -0.4]}
         >
           <mesh
             position={[0, 0, 0.1]}
             // visible={inView}
           >
             <Html
-              wrapperClass="laptop"
+              wrapperClass="laptop "
               transform
               distanceFactor={0.815}
+              style={{ maxWidth: '1600px' }}
               // visible={inView}
             >
               <div
                 ref={htmlRef}
-                className="opacity-0 transition-opacity duration-300"
+                className="opacity-0 transition-opacity duration-300 "
               >
                 <TestSVG className="w-full h-full" />
                 <iframe

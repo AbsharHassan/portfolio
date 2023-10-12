@@ -54,15 +54,15 @@ const SingleProjectDetails = ({
 
   return (
     <div
-      className={`absolute h-full transition-all duration-1000 ease-in-out z-50 flex items-center  ${
-        fullView ? 'w-[10%]' : 'w-[40%]'
+      className={`w-screen pt-[500px] xl:pt-0 min-h-screen xl:absolute xl:h-full  transition-all duration-1000 ease-in-out z-50 flex items-end xl:items-center  ${
+        fullView ? 'xl:w-[10%]' : 'xl:w-[40%]'
       }
-        ${leftSide ? 'left-0 top-0' : 'right-0 top-0'}
+        ${leftSide ? 'xl:left-0 xl:top-0' : 'xl:right-0 xl:top-0'}
         `}
     >
-      <div className="w-full h-full relative ">
+      <div className="w-screen h-full relative  px-3 py-1">
         <div
-          className={`absolute h-full w-[450px] flex items-center justify-center transition-all duration-1000 ease-in-out 
+          className={`xl:absolute h-full xl:w-[450px] flex items-center justify-center transition-all duration-1000 ease-in-out 
 
             ${
               leftSide
@@ -76,7 +76,7 @@ const SingleProjectDetails = ({
             `}
         >
           <div
-            className={`w-[450px] h-[675px] test-gradient rounded-xl backdrop-blur transition-all duration-1000 ease-in-out ${
+            className={` w-screen max-w-[640px] xl:w-[450px] xl:h-[675px] test-gradient rounded-xl backdrop-blur transition-all duration-1000 ease-in-out ${
               fullView ? '' : ''
             }`}
             // test-gradient
@@ -84,17 +84,17 @@ const SingleProjectDetails = ({
           >
             <div
               // test-grad-child
-              className={`w-full h-full test-grad-child relative overflow-hidden rounded-xl border border-slate-700 transition-all duration-200 delay-300 py-12 ${
-                fullView ? 'px-0' : 'px-12'
+              className={`w-full h-full test-grad-child relative overflow-hidden rounded-xl border border-slate-700 transition-all duration-200 delay-300 py-7 xl:py-12 ${
+                fullView ? 'px-0' : 'px-7 xl:px-12'
               } `}
             >
               <div
                 ref={contentContainerRef}
-                className="w-full h-full flex flex-col gap-y-4 text-slate-400 relative "
+                className="w-full h-full flex flex-col xl:gap-y-4 text-slate-400 relative "
               >
                 <div className="w-full h-10 relative mb-2 flex items-center">
                   <h1
-                    className={`text-lg font-semibold tracking-tighter md:text-4xl text-slate-300 whitespace-nowrap overflow-hidden transition-all duration-200 absolute top-0 left-0 ${
+                    className={`text-3xl font-semibold tracking-tighter md:text-4xl text-slate-300 whitespace-nowrap overflow-hidden transition-all duration-200 absolute top-0 left-0 ${
                       fullView
                         ? 'opacity-0 w-0'
                         : 'delay-500 w-full opacity-100'
@@ -111,7 +111,7 @@ const SingleProjectDetails = ({
                   <button
                     ref={viewButtonRef}
                     style={{ '--clr-custom': '#3667c4' }}
-                    className={`shadow-button w-[84px] whitespace-nowrap text-[#5686f5] flex items-center space-x-1 text-xs tracking-tighter p-2 bg-slate-900 rounded-md hover:bg-black transition-colors duration-1000 absolute right-0`}
+                    className={`shadow-button w-[84px] whitespace-nowrap text-[#5686f5] hidden xl:flex items-center space-x-1 text-xs tracking-tighter p-2 bg-slate-900 rounded-md hover:bg-black transition-colors duration-1000 absolute right-0  `}
                     onClick={toggleFullView}
                   >
                     <div
@@ -148,21 +148,21 @@ const SingleProjectDetails = ({
                   </button>
                 </div>
                 <div
-                  className={`max-h-[300px] w-full overflow-hidden transition-all duration-200 ${
+                  className={`max-h-[300px] w-full overflow-hidden transition-all duration-200 text-sm xl:text-base ${
                     fullView ? 'opacity-0 z-[-10]' : 'delay-500 opacity-100'
                   }`}
                 >
-                  <p className="mb-4">{project.descriptionIntro}</p>
+                  <p className="mb-4 ">{project.descriptionIntro}</p>
                   <p>{project.descriptionMain}</p>
                 </div>
                 <div
-                  className={`w-full mb-6 transition-all duration-200 ${
+                  className={`w-full mb-6 transition-all duration-200 text-sm xl:text-base ${
                     fullView
                       ? 'opacity-0 w-0 z-[-10]'
                       : 'delay-500 opacity-100 w-full'
                   } bg-purple-700/0`}
                 >
-                  <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6 text-slate-300">
+                  <ul className="hidden sm:grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6 text-slate-300">
                     {project.techList.map((tech) => (
                       <li
                         key={tech}
@@ -170,6 +170,16 @@ const SingleProjectDetails = ({
                       >
                         <ShortArrowSVG className="text-[#135ceb] inline-block mr-3 transform transition-transform group-hover:translate-x-1" />
                         {tech}
+                      </li>
+                    ))}
+                  </ul>
+                  <ul className="block sm:hidden mt-5">
+                    {project.techList.map((tech) => (
+                      <li
+                        key={tech}
+                        className="inline"
+                      >
+                        {tech}, {'  '}
                       </li>
                     ))}
                   </ul>

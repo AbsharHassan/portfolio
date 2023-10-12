@@ -210,7 +210,8 @@
   filter: blur(160px);
 
   /* opacity: var(--opacity); */
-  opacity: 0.6;
+  /* opacity: 0.6; */
+  opacity: 0;
 }
 
 .letter-lines {

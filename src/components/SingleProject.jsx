@@ -35,12 +35,15 @@ const SingleProject = ({
   return (
     <div
       ref={addToRefs}
-      className="w-full h-screen flex items-center justify-center mx-auto relative mb-40 z-[2000]"
+      className="w-full min-h-screen mx-auto relative mb-40 z-[2000]"
       style={{ position: 'relative' }}
     >
       <div
         ref={containerRef}
-        className={`w-1/2 h-full z-[-10] absolute ${
+        className="absolute inset-0 "
+      />
+      <div
+        className={`hidden xl:block w-1/2 h-full z-[-10]  absolute ${
           leftSide ? 'right-0' : 'left-0'
         }`}
         onClick={() => {

@@ -363,13 +363,21 @@ function App() {
             <Services sectionTitle={'services'} />
           </div> */}
 
-          <div className="w-full h-[10000px]"></div>
+          <div className="w-full h-[1000px]"></div>
 
           <div
-            ref={contactContainerRef}
-            className=" min-h-screen bg-red-700/0 "
+            ref={projectsContainerRef}
+            id="projects"
+            className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
           >
-            <Contact setDummyHeadingRef={handleDummyHeadingRef} />
+            <Projects
+              projectsArray={projectsArray}
+              // refsArray={refsArray}
+              arrayOfRefs={arrayOfRefs}
+              addToRefs={addToRefs}
+              setIntersectiom={setIntersectiom}
+              changeFullViewArray={changeFullViewArray}
+            />
           </div>
 
           {/* <div
@@ -418,8 +426,8 @@ function App() {
           {/* <Footer /> */}
         </div>
       </main>
-      <Navbar contactRef={contactContainerRef} />
-      <BackgroundCanvas
+      {/* <Navbar contactRef={contactContainerRef} /> */}
+      {/* <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
         isServiceVisible={isServiceVisible}
@@ -433,16 +441,16 @@ function App() {
         view1={projectsContainerRef}
         eventSource={mainRef}
         track1={heroContainerRef}
-      />
+      /> */}
 
-      {/* <DynamicCanvas
+      <DynamicCanvas
         eventSource={mainRef}
         changeFullViewArray={changeFullViewArray}
         fullViewArray={fullViewArray}
         projectsArray={projectsArray}
         refArray={refArray}
         visibleArray={visibleArray}
-      /> */}
+      />
 
       {/* <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas
