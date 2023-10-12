@@ -13,10 +13,10 @@ const Contact = ({ setDummyHeadingRef }) => {
 
   return (
     <div className="min-h-screen w-screen px-5 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-5 xl:space-x-40 xl:px-32 justify-center items-center text-white mb-[2000px]">
-      <div className="lg:w-1/2 bg-red-800 ">
+      <div className="lg:w-1/2">
         <h1
           ref={dummyHeadingRef}
-          className="font-bold text-[#3667c4] text-center  text-5xl lg:text-7xl mb-6 lg:inline-block opacity-100 blur-3xls whitespace-nowrap"
+          className="font-bold text-[#3667c4] text-center  text-5xl lg:text-7xl mb-6 lg:inline-block opacity-0 blur-3xls whitespace-nowrap"
         >
           Get in Touch
         </h1>
@@ -29,7 +29,7 @@ const Contact = ({ setDummyHeadingRef }) => {
         <br />
         <ContactEmailBanner />
       </div>
-      <div className="w-full lg:w-1/2  bg-green-400">
+      <div className="w-full lg:w-1/2">
         <ContactForm />
       </div>
     </div>

@@ -233,9 +233,9 @@ export const fragmentShader = glsl`
       float gradient2 = smoothstep(-0.05, -0.0, frag_positions.y);
 
       // gl_FragColor = vec4(color, step(distanceFromCenter,radius)) * 1.0;
-      // gl_FragColor = vec4(color, maskTexture.a ) * 1.0;
+      gl_FragColor = vec4(color, maskTexture.a ) * 1.0;
       // * mix(1.0, 3.0, clamp(0.0,1.0, uSizeScale -1.0))
-      gl_FragColor = vec4(vUv, 0.0,1.0) * 1.0;
+      // gl_FragColor = vec4(vUv, 0.0,1.0) * 1.0;
 
       // if(vRandom < 1.0) {
       //   // discard;
