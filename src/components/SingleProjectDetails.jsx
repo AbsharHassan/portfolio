@@ -148,12 +148,12 @@ const SingleProjectDetails = ({
                   </button>
                 </div>
                 <div
-                  className={`max-h-[300px] w-full overflow-hidden transition-all duration-200 text-sm xl:text-base ${
+                  className={`max-h-[310px]  pb-1 w-full overflow-hidden transition-all duration-200 text-sm xl:text-base ${
                     fullView ? 'opacity-0 z-[-10]' : 'delay-500 opacity-100'
                   }`}
                 >
                   <p className="mb-4 ">{project.descriptionIntro}</p>
-                  <p>{project.descriptionMain}</p>
+                  <p className="mb-16">{project.descriptionMain}</p>
                 </div>
                 <div
                   className={`w-full mb-6 transition-all duration-200 text-sm xl:text-base ${
@@ -177,7 +177,7 @@ const SingleProjectDetails = ({
                     {project.techList.map((tech) => (
                       <li
                         key={tech}
-                        className="inline"
+                        className="inline text-slate-500 tracking-tighter text-xs"
                       >
                         {tech}, {'  '}
                       </li>

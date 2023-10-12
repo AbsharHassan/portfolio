@@ -14,7 +14,7 @@ const ServicesCard = ({ sectionTitle, service }) => {
           <h1 className="text-center text-lg font-semibold text-[#306ee8]">
             {service.title}
           </h1>
-          <p className="text-sm sm:text-xs lg:text-sm flex items-center justify-center text-center">
+          <p className="text-sm sm:text-xs lg:text-xs flex items-center justify-center text-center">
             {service.description}
           </p>
         </div>

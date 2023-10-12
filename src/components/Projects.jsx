@@ -62,7 +62,7 @@ const Projects = ({
       className="w-full h-full z-[2000] relative pt-14"
       id="someProject"
     >
-      <h2 className=" mb-32 text-7xl text-center font-bold text-slate-300">
+      <h2 className=" mb-32 text-5xl text-center font-bold text-slate-300">
         Flagship Projects
       </h2>
       {projectsArray.map((project, index) => (

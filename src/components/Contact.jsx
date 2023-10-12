@@ -22,9 +22,8 @@ const Contact = ({ setDummyHeadingRef }) => {
         </h1>
         {/* add this to contentful */}
         <h6 className="text-sm text-slate-500 text-center lg:text-left lg:text-lg max-w-[640px]">
-          I’m open to hearing about new opportunities. Feel free to reach out to
-          me if you have a question, or just want to say hi! Lorem ipsum dolor
-          sit amet consectetur adipisicing elit.
+          Open to exciting opportunities! Feel free to drop me a message here or
+          email me directly – let's create something great together.
         </h6>
         <br />
         <ContactEmailBanner />

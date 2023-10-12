@@ -135,28 +135,35 @@ const Hero = () => {
             <HeroCatchPhrase />
             {/* <HeroCatchPhrase extraClasses={'absolute inset-0 blur-[50px]'} /> */}
           </div>
-          <h2 className="sm:text-lg lg:text-xl mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl ">
-            Hi, my name is Abshar Hassan. I love using code to breath life into
-            great ideas. With resuability, efficiency and best practices in
-            mind, I strive to deliver production-grade code. I am your friendly
+          {/* add this to contentful */}
+          <h2 className="sm:text-lg lg:text-lg mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl ">
+            Hello, I'm Abshar Hassan. I love using the power of code to
+            transform innovative ideas into reality. With a focus on
+            reusability, efficiency, and industry best practices, I craft
+            high-quality, production-grade solutions. I am your friendly
             neighbourhood{' '}
             <AlternatingText
               singleWord="frontend developer"
               wordsObjectArray={[
                 {
-                  text: 'frontend developer',
+                  text: 'frontend developer.',
                   classes: 'bg-gradient-to-r from-customViolet to-customBlue',
                   cursor: '#5a82f9',
                 },
                 {
-                  text: 'backend developer',
+                  text: 'backend developer.',
                   classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
                   cursor: '#09a9b8',
                 },
                 {
-                  text: 'fullstack developer',
+                  text: 'fullstack developer.',
                   classes: 'bg-gradient-to-r from-customViolet to-customBlue',
                   cursor: '#5a82f9',
+                },
+                {
+                  text: 'ML engineer.',
+                  classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
+                  cursor: '#09a9b8',
                 },
               ]}
             />

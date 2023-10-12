@@ -205,7 +205,7 @@ const FloatingWordParticles = ({
       })
     } else if (isContactVisible) {
       gsap.to(meshRef.current.material.uniforms.uSizeScale, {
-        value: 3,
+        value: 2,
         duration: 2,
       })
     } else {

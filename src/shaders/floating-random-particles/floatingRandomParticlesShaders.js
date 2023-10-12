@@ -179,7 +179,7 @@ export const vertexShader = glsl`
         vec4 view_pos = viewMatrix * vec4(final_position, 1.0);
         // view_pos.xyz += position * clamp(10.0*rand1, 1.0, 1.0*(1.0-noiseScale) +1.3);
         // view_pos.xyz += position * 1.0 * uSizeScale;
-        view_pos.xyz += position * uSizeScale * mix(1.0, clamp(perlinNoise*3.5,1.0,3.5), uSizeScale -1.0);
+        view_pos.xyz += position * uSizeScale * mix(1.0, clamp(perlinNoise*5.5,1.25,5.5), uSizeScale -1.0);
         // gl_Position = projectionMatrix * view_pos;
         gl_Position = projectionMatrix * view_pos;
 

@@ -425,21 +425,21 @@ function App() {
         track1={heroContainerRef}
       />
 
-      {/* <DynamicCanvas
+      <DynamicCanvas
         eventSource={mainRef}
         changeFullViewArray={changeFullViewArray}
         fullViewArray={fullViewArray}
         projectsArray={projectsArray}
         refArray={refArray}
         visibleArray={visibleArray}
-      /> */}
+      />
 
-      {/* <div className="w-full h-screen absolute top-0 z-[-100]">
+      <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas
           // mousePosition={mousePosition}
           bloomTheme={bloomTheme}
         />
-      </div> */}
+      </div>
 
       <svg
         width="0"
