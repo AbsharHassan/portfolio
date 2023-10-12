@@ -255,6 +255,10 @@ const FloatingWordParticles = ({
   const { nodes } = useGLTF('./models/v3_Get_In_Touch.glb')
 
   const [someState, setSomeState] = useState(true)
+  const [previousViewport, setPreviousViewport] = useState({
+    width: 0,
+    height: 0,
+  })
 
   let meshRef = useRef(null)
   let floatingParentRef = useRef(null)
@@ -267,7 +271,6 @@ const FloatingWordParticles = ({
   }, [nodes])
 
   const cylinderGeo = useMemo(() => {
-    console.log(viewport)
     const geometry = new THREE.CylinderGeometry(
       (3 * viewport.width) / 1.7872416482900515 +
         (viewport.width < 1 ? 1 : viewport.width < 1.3 && 0.5),
@@ -316,58 +319,70 @@ const FloatingWordParticles = ({
   }, [cylinderGeo])
 
   useEffect(() => {
-    let allPositions = []
-    let positivePositionsZ = []
-    let innerIndex = 0
+    console.log(viewport.width)
+    console.log(previousViewport.width)
+    if (
+      viewport.width !== previousViewport.width ||
+      viewport.height !== previousViewport.height
+    ) {
+      console.log('calling')
+      let allPositions = []
+      let positivePositionsZ = []
+      let innerIndex = 0
 
-    for (let i = 0; i < textGeo.attributes.position.array.length; i = i + 3) {
-      let x = textGeo.attributes.position.array[i]
-      let y = textGeo.attributes.position.array[i + 1]
-      let z = textGeo.attributes.position.array[i + 2]
+      for (let i = 0; i < textGeo.attributes.position.array.length; i = i + 3) {
+        let x = textGeo.attributes.position.array[i]
+        let y = textGeo.attributes.position.array[i + 1]
+        let z = textGeo.attributes.position.array[i + 2]
 
-      if (y > 0) {
-        positivePositionsZ.push({ x, y, z })
+        if (y > 0) {
+          positivePositionsZ.push({ x, y, z })
+        }
       }
+
+      let beforeSparseArray = positivePositionsZ
+
+      let interval = 1
+      setParticleCount(Math.floor(beforeSparseArray.length / interval))
+      let pCount = Math.floor(beforeSparseArray.length / interval)
+      let populateIndex = 0
+
+      let aWordPos = new Float32Array(pCount * 3)
+      let randomNumbers = new Float32Array(pCount)
+      let colorRandom = new Float32Array(pCount)
+
+      for (let index = 0; index < pCount; index++) {
+        randomNumbers[index] = Math.random()
+        colorRandom[index] = Math.random()
+
+        let x =
+          beforeSparseArray[populateIndex].x * (viewport.width > 1 ? 1 : 0.7)
+        let y =
+          -beforeSparseArray[populateIndex].z * (viewport.width > 1 ? 1 : 0.7)
+        let z =
+          beforeSparseArray[populateIndex].y * (viewport.width > 1 ? 1 : 0.7)
+
+        aWordPos.set([x, y, z], index * 3)
+        populateIndex = populateIndex + interval
+      }
+
+      meshRef.current.geometry.setAttribute(
+        'aWordPos',
+        new THREE.InstancedBufferAttribute(aWordPos, 3, false)
+      )
+
+      meshRef.current.geometry.setAttribute(
+        'aRandom',
+        new THREE.InstancedBufferAttribute(randomNumbers, 1, false)
+      )
+
+      meshRef.current.geometry.setAttribute(
+        'aColorRandom',
+        new THREE.InstancedBufferAttribute(colorRandom, 1, false)
+      )
     }
-
-    let beforeSparseArray = positivePositionsZ
-
-    let interval = 1
-    setParticleCount(Math.floor(beforeSparseArray.length / interval))
-    let pCount = Math.floor(beforeSparseArray.length / interval)
-    let populateIndex = 0
-
-    let aWordPos = new Float32Array(pCount * 3)
-    let randomNumbers = new Float32Array(pCount)
-    let colorRandom = new Float32Array(pCount)
-
-    for (let index = 0; index < pCount; index++) {
-      randomNumbers[index] = Math.random()
-      colorRandom[index] = Math.random()
-
-      let x = beforeSparseArray[populateIndex].x
-      let y = -beforeSparseArray[populateIndex].z
-      let z = beforeSparseArray[populateIndex].y
-
-      aWordPos.set([x, y, z], index * 3)
-      populateIndex = populateIndex + interval
-    }
-
-    meshRef.current.geometry.setAttribute(
-      'aWordPos',
-      new THREE.InstancedBufferAttribute(aWordPos, 3, false)
-    )
-
-    meshRef.current.geometry.setAttribute(
-      'aRandom',
-      new THREE.InstancedBufferAttribute(randomNumbers, 1, false)
-    )
-
-    meshRef.current.geometry.setAttribute(
-      'aColorRandom',
-      new THREE.InstancedBufferAttribute(colorRandom, 1, false)
-    )
-  }, [meshRef, textGeo])
+    setPreviousViewport({ width: viewport.width, height: viewport.height })
+  }, [meshRef, textGeo, viewport])
 
   let elapsedTime = useRef(0)
   let triggerTime = useRef(0)
@@ -778,33 +793,97 @@ const FloatingWordParticles = ({
   //   }
   // }, [isContactVisible])
 
-  useFrame(() => {
+  useFrame((state) => {
     if (isContactVisible && dummyHeadingRef.current) {
+      // if (state.viewport.width < 1) {
+      //   meshRef.current.scale.x = 0.5
+      //   meshRef.current.scale.y = 0.5
+      //   meshRef.current.scale.z = 0.5
+      // } else {
+      //   meshRef.current.scale.x = 0.8
+      //   meshRef.current.scale.y = 0.8
+      //   meshRef.current.scale.z = 0.8
+      // }
+
       const { left, top, bottom } =
         dummyHeadingRef.current.getBoundingClientRect()
 
+      // console.log(bottom)
+
       const x = (left / window.innerWidth) * 2 - 1
-      const y = -(bottom / window.innerHeight) * 2 + 1
+      // const y = bottom / window.innerHeight
+      const y = (bottom / window.innerHeight) * -2 + 1
+
+      // console.log(y)
+
+      const ndcVector = new THREE.Vector3(0, y, 0)
+
+      // Convert the NDC vector to world space
+      ndcVector.project(state.camera)
 
       let fovCompensator = 8.77058760592
 
-      let verticalScaler = top / (window.innerHeight / 2)
+      let verticalScaler =
+        state.viewport.width > 1
+          ? top / (window.innerHeight / 2)
+          : top / window.innerHeight
       // console.log(1 - verticalScaler)
-      verticalScaler = 0
+      // verticalScaler = 0
 
-      const offsetX = (x * viewport.width * fovCompensator) / 2
-      const offsetY = (y * viewport.height * fovCompensator) / 2
+      const offsetX = (x * state.viewport.width * fovCompensator) / 2
+      const offsetY = (y * state.viewport.height * fovCompensator) / 2
 
       // console.log(offsetY)
 
       // console.log('called')
-      meshRef.current.material.uniforms.uOffsetX.value = offsetX + 1
+      // if(window.innerWidth)
+
+      // let remappedExtraOffest =
+      //   ((state.viewport.width - 1.1896209942473865) /
+      //     (1.7872416482900515 - 1.1896209942473865)) *
+      //     (1.4 - 1.0) +
+      //   1.0
+
+      let remappedExtraOffest =
+        ((1 - 1.4) / (1.7872416482900515 - 1.1896209942473865)) *
+          (state.viewport.width - 1.1896209942473865) +
+        1.4
+
+      meshRef.current.material.uniforms.uOffsetX.value =
+        window.innerWidth >= 1024 ? offsetX + remappedExtraOffest : 0
       meshRef.current.material.uniforms.uOffsetY.value =
-        offsetY + (1 - verticalScaler)
+        state.viewport.width > 1
+          ? offsetY + (1 - verticalScaler) + 0.225
+          : offsetY + (1 - verticalScaler) - 0.1
+
+      // console.log(state.viewport.height)
+
+      // console.log(ndcVector.y)
+
+      // meshRef.current.material.uniforms.uOffsetY.value = ndcVector.y
     }
   })
 
-  useEffect(() => {}, [viewport])
+  // useEffect(() => {
+  //   if (viewport.width < 1) {
+  //     gsap.to(floatingParentRef.current.scale, {
+  //       x: 0.5,
+  //       y: 0.5,
+  //       z: 0.5,
+  //       duration: 2,
+  //     })
+  //   } else {
+  //     gsap.to(floatingParentRef.current.scale, {
+  //       x: 0.8,
+  //       y: 0.8,
+  //       z: 0.8,
+  //       duration: 2,
+  //     })
+  //   }
+  // }, [viewport])
+
+  // 1.7872416482900515
+  // 1.1896209942473865
 
   return (
     // position={[-0.1308784133171829, 0.7432016797772444, 2.3164561507987655]}
@@ -821,10 +900,11 @@ const FloatingWordParticles = ({
         near={0.000001}
       />
       <mesh
-        scale={1}
+        // scale={1}
         ref={floatingParentRef}
         rotation={[0, 0, THREE.MathUtils.degToRad(0)]}
         // visible={false}
+        scale={0.8}
       >
         <mesh ref={floatingIntermediateRef}>
           <mesh ref={innerMostRef}>
@@ -833,7 +913,7 @@ const FloatingWordParticles = ({
               args={[null, null, particleCount]}
               rotation={[0, 0, 0]}
               // scale={1}
-              scale={0.8}
+              // scale={0.8}
             >
               {/* <circleGeometry args={[0.005]} /> */}
               {/* <planeGeometry args={[0.015, 0.015]} /> works well with scale=1 */}

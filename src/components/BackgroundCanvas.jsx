@@ -71,7 +71,7 @@ const BackgroundCanvas = ({
 
   return (
     <div
-      className="w-full h-screen fixed inset-0 z-[-5000000]
+      className="w-full h-screen fixed inset-0 z-[5000000]
         "
       ref={containerRef}
     >
