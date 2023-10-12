@@ -503,7 +503,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .brand {
-  box-shadow: rgba(23, 92, 230, 0.3) 0px 0px 24px 0px;
+  box-shadow: rgba(23, 92, 230, 0.6) 0px 0px 48px 0px;
 }
 
 /* .brand::before {

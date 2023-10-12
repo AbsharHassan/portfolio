@@ -167,6 +167,12 @@ const Hero = () => {
             shadow
             type="button"
             extraClasses="w-52 h-12 text-[#7b53d3] hover:text-slate-400"
+            handleClick={() => {
+              const projectsElement = document.getElementById('projects')
+              if (projectsElement) {
+                projectsElement.scrollIntoView({ behavior: 'smooth' })
+              }
+            }}
           >
             See my work
           </NeonButton>

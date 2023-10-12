@@ -355,7 +355,7 @@ function App() {
             ref={heroContainerRef}
             className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
-            {/* <Hero /> */}
+            <Hero />
           </div>
 
           <div

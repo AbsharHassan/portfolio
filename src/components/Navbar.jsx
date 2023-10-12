@@ -153,6 +153,9 @@ const Navbar = ({ contactRef }) => {
             onMouseLeave={() => {
               setIsLogoHovered(false)
             }}
+            onClick={() => {
+              window.scrollTo(0, 0)
+            }}
           >
             <Trademark23
               className={`w-8 h-8  ${
