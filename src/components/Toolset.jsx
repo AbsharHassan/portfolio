@@ -74,7 +74,7 @@ const Toolset = ({ sectionTitle }) => {
         setTriggerLight(entry.isIntersecting)
       },
       {
-        threshold: isScreenSmall ? 0.2 : isScreenMedium ? 0.4 : 0.85,
+        threshold: isScreenSmall ? 0.1 : isScreenMedium ? 0.2 : 0.85,
       }
     )
 
@@ -170,7 +170,7 @@ const Toolset = ({ sectionTitle }) => {
         <div
           ref={triggerElRef}
           className={`mx-auto my-12 transition-colors duration-1000 place-items-center ${sectionTitle}-tile-section 
-          max-w-[950px] md:grid grid-cols-10 gap-5 overflow-visible 
+          max-w-[950px]  flex flex-col items-center justify-center lg:grid grid-cols-10 gap-5 overflow-visible 
           `}
         >
           {toolsArray.map((tool, index) => {
@@ -189,7 +189,7 @@ const Toolset = ({ sectionTitle }) => {
 
         <h3
           ref={headingBottomRef}
-          className={`mx-auto font-semibold text-center text-4xl md:text-5xl relative opacity-0 ${sectionTitle}-heading -translate-y-[200%]`}
+          className={`mx-auto font-semibold text-center text-4xl lg:text-5xl relative opacity-0 ${sectionTitle}-heading -translate-y-[200%]`}
         >
           <code>&lt;/toolset&gt;</code>
         </h3>

@@ -189,21 +189,21 @@ function App() {
     }
   }, [aboutContainerRef])
 
-  // useEffect(() => {
-  //   let observerToolset
+  useEffect(() => {
+    let observerToolset
 
-  //   if (toolsetContainerRef.current) {
-  //     observerToolset = new IntersectionObserver(([entry]) => {
-  //       setIsToolsetVisible(entry.isIntersecting)
-  //     })
+    if (toolsetContainerRef.current) {
+      observerToolset = new IntersectionObserver(([entry]) => {
+        setIsToolsetVisible(entry.isIntersecting)
+      })
 
-  //     observerToolset.observe(toolsetContainerRef.current)
-  //   }
+      observerToolset.observe(toolsetContainerRef.current)
+    }
 
-  //   return () => {
-  //     observerToolset?.disconnect()
-  //   }
-  // }, [toolsetContainerRef])
+    return () => {
+      observerToolset?.disconnect()
+    }
+  }, [toolsetContainerRef])
 
   const [modelRotation, setModelRotation] = useState(0)
 
@@ -366,11 +366,13 @@ function App() {
           <div className="w-full h-[1000px]"></div>
 
           <div
-            ref={aboutContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 "
+            ref={toolsetContainerRef}
+            className="min-h-screen mb-[100vh] bg-red-700/0 py-[100vh]"
           >
-            <About sectionTitle={'backend'} />
+            <Toolset sectionTitle={'frontend'} />
           </div>
+
+          <div className="w-full h-[1000px]"></div>
 
           {/* <div
             ref={projectsContainerRef}

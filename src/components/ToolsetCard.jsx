@@ -22,8 +22,8 @@ const ToolsetCard = ({
   return (
     <div
       ref={cardRef}
-      className={`col-span-2 w-full h-[85.6px] text-3xl transition-all duration-1000 inset-0 text-transparent relative 
-      ${index === 11 && 'col-start-3 '}
+      className={`md:col-span-2 w-full  flex items-center justify-center h-[85.6px] text-3xl transition-all duration-1000 inset-0 text-transparent relative 
+      ${index === 11 && 'md:col-start-3 '}
       ${index === cellOnTop && 'z-50'}
       `}
       key={tool.id}
