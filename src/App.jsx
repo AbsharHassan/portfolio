@@ -351,6 +351,7 @@ function App() {
           className="scroll "
         >
           <div
+            id="hero"
             ref={heroContainerRef}
             className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
@@ -373,6 +374,7 @@ function App() {
           </div>
 
           <div
+            id="about"
             ref={aboutContainerRef}
             className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
@@ -380,6 +382,7 @@ function App() {
           </div>
 
           <div
+            id="toolset"
             ref={toolsetContainerRef}
             className="min-h-screen mb-[200vh] bg-red-700/0 py-[100vh]"
           >
@@ -387,6 +390,7 @@ function App() {
           </div>
 
           <div
+            id="services"
             ref={serviceContainerRef}
             className="min-h-screen my-[100vh] bg-red-700/0 "
           >
@@ -394,6 +398,7 @@ function App() {
           </div>
 
           <div
+            id="contact"
             ref={contactContainerRef}
             className="min-h-screen bg-red-700/0 "
           >

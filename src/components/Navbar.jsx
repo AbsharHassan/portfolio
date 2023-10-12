@@ -35,22 +35,27 @@ const Navbar = ({ contactRef }) => {
     {
       text: 'About',
       color: '#a78bfa',
+      link: '#about',
     },
     {
       text: 'Toolset',
       color: '#5a82f9',
+      link: '#toolset',
     },
     {
       text: 'Projects',
       color: '#00a0c4',
+      link: '#projects',
     },
     {
       text: 'Services',
       color: '#a78bfa',
+      link: '#services',
     },
     {
       text: 'Contact',
       color: '#5a82f9',
+      link: '#contact',
     },
   ]
 
@@ -184,7 +189,7 @@ const Navbar = ({ contactRef }) => {
                     setHoverIndex(index)
                   }}
                 >
-                  <a href="#contact">{linkItem.text}</a>
+                  <a href={linkItem.link}>{linkItem.text}</a>
                 </li>
               ))}
             </ul>
@@ -205,7 +210,7 @@ const Navbar = ({ contactRef }) => {
         </nav>
       </header>
       <nav
-        className={`z-[3000000] md:hidden fixed w-full h-screen bg-black/40 backdrop-blur left-0 transition-all duration-700 ease-out ${
+        className={`z-[3000000] md:hidden fixed w-full h-screen bg-black/40 backdrop-blur-md left-0 transition-all duration-700 ease-out ${
           isNavOpen ? 'top-0' : '-top-full'
         }`}
       >
@@ -229,7 +234,7 @@ const Navbar = ({ contactRef }) => {
               }`}
               data-text={linkItem.text}
               onClick={() => {
-                contactRef.current.scrollIntoView({ behavior: 'smooth' })
+                setIsNavOpen(false)
               }}
               style={{
                 '--text-color': linkItem.color,
@@ -240,7 +245,7 @@ const Navbar = ({ contactRef }) => {
               }}
             >
               <p className="text-zinc-200 hover:text-[var(--text-color)] transition-colors duration-300">
-                {linkItem.text}
+                <a href={linkItem.link}>{linkItem.text}</a>
               </p>
             </li>
           ))}

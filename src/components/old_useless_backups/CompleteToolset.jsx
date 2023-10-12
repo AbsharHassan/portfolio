@@ -171,7 +171,6 @@
 
 //   return (
 //     <section
-//       id="toolset"
 //       className="mx-auto py-12 mt-96 h-[1000px]"
 //     >
 //       {/* <h2 className="text-4xl font-bold mb-8">
