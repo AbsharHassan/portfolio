@@ -173,7 +173,7 @@ const Navbar = ({ contactRef }) => {
                   className={`nav-links text-zinc-200 w-24 h-full flex items-center justify-center cursor-pointer `}
                   data-text={linkItem.text}
                   onClick={() => {
-                    contactRef.current.scrollIntoView({ behavior: 'smooth' })
+                    // contactRef.current.scrollIntoView({ behavior: 'smooth' })
                   }}
                   style={{
                     '--text-color': linkItem.color,
@@ -184,7 +184,7 @@ const Navbar = ({ contactRef }) => {
                     setHoverIndex(index)
                   }}
                 >
-                  {linkItem.text}
+                  <a href="#contact">{linkItem.text}</a>
                 </li>
               ))}
             </ul>

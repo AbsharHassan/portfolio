@@ -226,45 +226,45 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Add dependancy for viewport resize
-  useEffect(() => {
-    document.body.style.height = `${
-      scrollContainerRef.current.getBoundingClientRect().height
-    }px`
-  }, [scrollContainerRef, projectsArray])
+  // // Add dependancy for viewport resize
+  // useEffect(() => {
+  //   document.body.style.height = `${
+  //     scrollContainerRef.current.getBoundingClientRect().height
+  //   }px`
+  // }, [scrollContainerRef, projectsArray])
 
-  useEffect(() => {
-    requestAnimationFrame(() => skewScrolling())
-  }, [])
+  // useEffect(() => {
+  //   requestAnimationFrame(() => skewScrolling())
+  // }, [])
 
-  const data = {
-    ease: 0.1,
-    current: 0,
-    previous: 0,
-    rounded: 0,
-  }
+  // const data = {
+  //   ease: 0.1,
+  //   current: 0,
+  //   previous: 0,
+  //   rounded: 0,
+  // }
 
-  // Scrolling
-  const skewScrolling = () => {
-    //Set Current to the scroll position amount
-    data.current = window.scrollY
-    // Set Previous to the scroll previous position
-    data.previous += (data.current - data.previous) * data.ease
-    // Set rounded to
-    data.rounded = Math.round(data.previous * 100) / 100
+  // // Scrolling
+  // const skewScrolling = () => {
+  //   //Set Current to the scroll position amount
+  //   data.current = window.scrollY
+  //   // Set Previous to the scroll previous position
+  //   data.previous += (data.current - data.previous) * data.ease
+  //   // Set rounded to
+  //   data.rounded = Math.round(data.previous * 100) / 100
 
-    // Difference between
-    const difference = data.current - data.rounded
-    const acceleration = difference / window.innerWidth
-    const velocity = +acceleration
-    const skew = velocity * 7.5
+  //   // Difference between
+  //   const difference = data.current - data.rounded
+  //   const acceleration = difference / window.innerWidth
+  //   const velocity = +acceleration
+  //   const skew = velocity * 7.5
 
-    //Assign skew and smooth scrolling to the scroll container
-    scrollContainerRef.current.style.transform = `translateY(-${data.rounded}px)`
+  //   //Assign skew and smooth scrolling to the scroll container
+  //   scrollContainerRef.current.style.transform = `translateY(-${data.rounded}px)`
 
-    //loop vai raf
-    requestAnimationFrame(() => skewScrolling())
-  }
+  //   //loop vai raf
+  //   requestAnimationFrame(() => skewScrolling())
+  // }
 
   useEffect(() => {
     // console.log('app rerender')
@@ -342,7 +342,8 @@ function App() {
         ref={mainRef}
         // ref={ref}
         // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
-        className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
+        // className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
+        className={`main relative overflow-x-hidden w-full h-full z-[2000]`}
       >
         <div
           id="main"
@@ -356,25 +357,7 @@ function App() {
             {/* <Hero /> */}
           </div>
 
-          {/* <div
-            ref={serviceContainerRef}
-            className="min-h-screen my-[100vh] bg-red-700/0 "
-          >
-            <Services sectionTitle={'services'} />
-          </div> */}
-
-          <div className="w-full h-[1000px]"></div>
-
           <div
-            ref={serviceContainerRef}
-            className="min-h-screen my-[100vh] bg-red-700/0 "
-          >
-            <Services sectionTitle={'services'} />
-          </div>
-
-          <div className="w-full h-[1000px]"></div>
-
-          {/* <div
             ref={projectsContainerRef}
             id="projects"
             className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
@@ -398,24 +381,29 @@ function App() {
 
           <div
             ref={toolsetContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 py-[100vh]"
+            className="min-h-screen mb-[200vh] bg-red-700/0 py-[100vh]"
           >
             <Toolset sectionTitle={'frontend'} />
           </div>
 
-          
+          <div
+            ref={serviceContainerRef}
+            className="min-h-screen my-[100vh] bg-red-700/0 "
+          >
+            <Services sectionTitle={'services'} />
+          </div>
 
           <div
             ref={contactContainerRef}
-            className=" min-h-screen bg-red-700/0 "
+            className="min-h-screen bg-red-700/0 "
           >
             <Contact setDummyHeadingRef={handleDummyHeadingRef} />
-          </div> */}
+          </div>
 
-          {/* <Footer /> */}
+          <Footer />
         </div>
       </main>
-      {/* <Navbar contactRef={contactContainerRef} /> */}
+      <Navbar contactRef={contactContainerRef} />
       <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}

@@ -12,7 +12,10 @@ const Contact = ({ setDummyHeadingRef }) => {
   }, [dummyHeadingRef, setDummyHeadingRef])
 
   return (
-    <div className="min-h-screen w-screen px-5 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-5 xl:space-x-40 xl:px-32 justify-center items-center text-white mb-[2000px]">
+    <div
+      id="contact"
+      className="min-h-screen w-screen px-5 flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-5 xl:space-x-40 xl:px-32 justify-center items-center text-white"
+    >
       <div className="lg:w-1/2">
         <h1
           ref={dummyHeadingRef}
