@@ -351,7 +351,7 @@ function App() {
         >
           <div
             ref={heroContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/30 "
+            className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
             {/* <Hero /> */}
           </div>
@@ -418,7 +418,7 @@ function App() {
           {/* <Footer /> */}
         </div>
       </main>
-      {/* <Navbar contactRef={contactContainerRef} /> */}
+      <Navbar contactRef={contactContainerRef} />
       <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}

@@ -24,14 +24,17 @@ import { ReactComponent as Trademark20 } from '../assets/trademark/A_with_simple
 import { ReactComponent as Trademark21 } from '../assets/trademark/A_with_simple_arrow_rounded_with_mini.svg'
 import { ReactComponent as Trademark22 } from '../assets/trademark/A_with_simple_arrow_rounded.svg'
 import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
+import { ReactComponent as Cross } from '../assets/icons/cross.svg'
+// import { ReactComponent as Hamburger } from '../assets/icons/hamburger.svg'
 
 import gsap from 'gsap'
+import ContactEmailBanner from './ContactEmailBanner'
 
 const Navbar = ({ contactRef }) => {
   const navLinks = [
     {
       text: 'About',
-      color: '#c261fe',
+      color: '#a78bfa',
     },
     {
       text: 'Toolset',
@@ -43,7 +46,7 @@ const Navbar = ({ contactRef }) => {
     },
     {
       text: 'Services',
-      color: '#c261fe',
+      color: '#a78bfa',
     },
     {
       text: 'Contact',
@@ -54,6 +57,7 @@ const Navbar = ({ contactRef }) => {
   const [hoverIndex, setHoverIndex] = useState(0)
   const [isNavHovered, setIsNavHovered] = useState(false)
   const [isLogoHovered, setIsLogoHovered] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
 
   let navbarRef = useRef(null)
   let underlineRef = useRef(null)
@@ -78,37 +82,39 @@ const Navbar = ({ contactRef }) => {
     }
 
     const scrollingInterval = setInterval(() => {
-      if (scrolling) {
-        scrolling = false
-        if (window.scrollY > oldOffset) {
-          console.log('scrolling down')
-          navbarRef.current.classList.remove('sticking')
-          if (window.scrollY <= 15) {
-            navbarRef.current.classList.remove('scrolling-down')
-          } else {
-            navbarRef.current.classList.add('scrolling-down')
-          }
-        } else {
-          console.log('scrolling up')
-          navbarRef.current.classList.remove('scrolling-down')
-          if (window.scrollY <= 15) {
+      if (!isNavOpen) {
+        if (scrolling) {
+          scrolling = false
+          if (window.scrollY > oldOffset) {
+            console.log('scrolling down')
             navbarRef.current.classList.remove('sticking')
-            navbarRef.current.classList.remove('py-5')
-            navbarRef.current.classList.add('py-10')
+            if (window.scrollY <= 15) {
+              navbarRef.current.classList.remove('scrolling-down')
+            } else {
+              navbarRef.current.classList.add('scrolling-down')
+            }
           } else {
-            navbarRef.current.classList.add('sticking')
-            navbarRef.current.classList.remove('py-10')
-            navbarRef.current.classList.add('py-5')
+            console.log('scrolling up')
+            navbarRef.current.classList.remove('scrolling-down')
+            if (window.scrollY <= 15) {
+              navbarRef.current.classList.remove('sticking')
+              navbarRef.current.classList.remove('py-5')
+              navbarRef.current.classList.add('py-10')
+            } else {
+              navbarRef.current.classList.add('sticking')
+              navbarRef.current.classList.remove('py-10')
+              navbarRef.current.classList.add('py-5')
+            }
           }
+          oldOffset = window.scrollY
         }
-        oldOffset = window.scrollY
       }
     }, 300)
 
     return () => {
       clearInterval(scrollingInterval)
     }
-  }, [])
+  }, [isNavOpen])
 
   useEffect(() => {
     gsap.to(underlineRef.current, {
@@ -132,7 +138,7 @@ const Navbar = ({ contactRef }) => {
         ref={navbarRef}
         className="navbar fixed z-[4000000] top-0 left-0 w-full text-zinc-300"
       >
-        <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center">
+        <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center relative ">
           <div
             id="brand"
             className="brand flex items-center justify-center relative rounded-full w-14 h-14 bg-black"
@@ -188,11 +194,100 @@ const Navbar = ({ contactRef }) => {
             />
             {/* <NeonButton text="Resume" /> */}
           </div>
-          <div className="block md:hidden text-4xl">=</div>
+          <div className="block md:hidden text-4xl">
+            <Hamburger
+              isOpen={isNavOpen}
+              handleClick={() => {
+                setIsNavOpen((v) => !v)
+              }}
+            />
+          </div>
         </nav>
       </header>
+      <nav
+        className={`z-[3000000] md:hidden fixed w-full h-screen bg-black/30 backdrop-blur-sm left-0 transition-all duration-700 ease-out ${
+          isNavOpen ? 'top-0' : '-top-full'
+        }`}
+      >
+        <ul
+          id="links"
+          onMouseEnter={() => {
+            setIsNavHovered(true)
+          }}
+          onMouseLeave={() => {
+            setIsNavHovered(false)
+          }}
+          className="w-full h-[90%] font-semibold flex flex-col items-center justify-center space-y-14 list-none tracking-tighter text-3xl"
+        >
+          {navLinks.map((linkItem, index) => (
+            <li
+              key={index}
+              className={`flex items-center justify-center cursor-pointer transition-[opacity,_transform] duration-300 translate-y-0  ${
+                isNavOpen
+                  ? 'opacity-100 delay-[var(--delay)] translate-y-8'
+                  : 'opacity-0 '
+              }`}
+              data-text={linkItem.text}
+              onClick={() => {
+                contactRef.current.scrollIntoView({ behavior: 'smooth' })
+              }}
+              style={{
+                '--text-color': linkItem.color,
+                '--delay': `${index * 120 + 700}ms`,
+              }}
+              onMouseEnter={() => {
+                setHoverIndex(index)
+              }}
+            >
+              <p className="text-zinc-200 hover:text-[var(--text-color)] transition-colors duration-300">
+                {linkItem.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <div
+          className={`flex items-center justify-center cursor-pointer transition-opacity duration-300  ${
+            isNavOpen ? 'opacity-100 delay-[1500ms]' : 'opacity-0 '
+          }`}
+        >
+          <ContactEmailBanner />
+        </div>
+      </nav>
     </>
   )
 }
 
 export default Navbar
+
+const Hamburger = ({ isOpen, handleClick }) => {
+  return (
+    <svg
+      fill="currentColor"
+      className="w-10 h-10 cursor-pointer rounded p-2 hover:bg-slate-200/20 transition-colors duration-300"
+      viewBox="0 0 100 100"
+      onClick={handleClick}
+    >
+      <rect
+        className={`origin-center transition-[transform,_y] duration-300 ease-out ${
+          !isOpen ? 'rotate-0 [y:30]' : 'rotate-45 [y:45]'
+        }`}
+        width={90}
+        height={5}
+        x={5}
+        y={35}
+        rx={3}
+      ></rect>
+
+      <rect
+        className={`origin-center transition-[transform,_y] duration-300 ease-out ${
+          !isOpen ? 'rotate-0 [y:60]' : '-rotate-45 [y:45]'
+        }`}
+        width={90}
+        height={5}
+        x={5}
+        y={55}
+        rx={3}
+      ></rect>
+    </svg>
+  )
+}
