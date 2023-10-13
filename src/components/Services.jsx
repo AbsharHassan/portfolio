@@ -172,13 +172,13 @@ const Services = ({ sectionTitle, toolsArray }) => {
           `}
         >
           {/* <code>&lt;Service&gt;</code> */}
-          What can I do for you
+          What can I do for you?
         </h3>
 
         <div
           ref={triggerElRef}
           // onMouseMove={handleMouseMove}
-          className={`${sectionTitle}-grid max-w-6xl mx-auto   md:my-12 p-5 transition-colors duration-1000 place-items-center ${sectionTitle}-tile-section 
+          className={`${sectionTitle}-grid max-w-6xl mx-auto md:my-12 p-5 transition-colors duration-1000 place-items-center ${sectionTitle}-tile-section 
            md:grid grid-cols-6 gap-5 gap-y-12 overflow-visible bg-green-700/0
           `}
         >

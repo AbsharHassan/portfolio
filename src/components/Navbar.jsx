@@ -192,7 +192,12 @@ const Navbar = ({ contactRef }) => {
                     setHoverIndex(index)
                   }}
                 >
-                  <a href={linkItem.link}>{linkItem.text}</a>
+                  <a
+                    className=" w-full h-full flex items-center justify-center cursor-pointer"
+                    href={linkItem.link}
+                  >
+                    {linkItem.text}
+                  </a>
                 </li>
               ))}
             </ul>

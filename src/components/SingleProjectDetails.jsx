@@ -90,9 +90,9 @@ const SingleProjectDetails = ({
             >
               <div
                 ref={contentContainerRef}
-                className="w-full h-full flex flex-col xl:gap-y-4 text-slate-400 relative "
+                className="w-full h-full flex flex-col xl:gap-y-0 text-slate-400 relative "
               >
-                <div className="w-full h-10 relative mb-2 flex items-center">
+                <div className="w-full h-10 relative mb-3 flex items-center">
                   <h1
                     className={`text-3xl font-semibold tracking-tighter md:text-4xl text-slate-300 whitespace-nowrap overflow-hidden transition-all duration-200 absolute top-0 left-0 ${
                       fullView
@@ -148,21 +148,21 @@ const SingleProjectDetails = ({
                   </button>
                 </div>
                 <div
-                  className={`max-h-[310px]  pb-1 w-full overflow-hidden transition-all duration-200 text-sm xl:text-base ${
+                  className={`  pb-1 w-full overflow-hidden transition-all duration-200 text-sm xl:text-base ${
                     fullView ? 'opacity-0 z-[-10]' : 'delay-500 opacity-100'
                   }`}
                 >
                   <p className="mb-4 ">{project.descriptionIntro}</p>
-                  <p className="mb-16">{project.descriptionMain}</p>
+                  <p>{project.descriptionMain}</p>
                 </div>
                 <div
-                  className={`w-full mb-6 transition-all duration-200 text-sm xl:text-base ${
+                  className={` w-full  transition-all duration-200 text-sm xl:text-base ${
                     fullView
                       ? 'opacity-0 w-0 z-[-10]'
                       : 'delay-500 opacity-100 w-full'
                   } bg-purple-700/0`}
                 >
-                  <ul className="hidden sm:grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6 text-slate-300">
+                  <ul className="hidden sm:grid grid-cols-1 gap-2 sm:grid-cols-2 my-6 text-slate-300">
                     {project.techList.map((tech) => (
                       <li
                         key={tech}
