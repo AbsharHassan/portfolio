@@ -249,7 +249,12 @@ const LaptopModel = ({
                 className="opacity-0 transition-opacity duration-300 "
               >
                 <TestSVG className="w-full h-full" />
-                {url !==
+                <iframe
+                  title="iframe"
+                  src={url}
+                  // src="http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login"
+                />
+                {/* {url !==
                 'http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login' ? (
                   <iframe
                     title="iframe"
@@ -267,7 +272,7 @@ const LaptopModel = ({
                     Please use the external link to view the web app, in the
                     meantime
                   </div>
-                )}
+                )} */}
                 {/* <div className="w-[1600px] h-[800px] bg-red-900"></div> */}
                 <img
                   src="./MacOS_Desktop_fox_wallpaper_bottombar.png"
