@@ -159,7 +159,7 @@ const Navbar = ({ contactRef }) => {
     <>
       <header
         ref={navbarRef}
-        className="navbar fixed z-[4000000] top-0 left-0 w-full text-zinc-300"
+        className=" transition-all duration-300 fixed z-[4000000] top-0 left-0 w-full text-zinc-300"
       >
         <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center relative">
           <div
