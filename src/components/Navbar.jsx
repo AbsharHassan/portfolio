@@ -1,30 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Trademark2D from './Trademark2D'
-import NeonButton from './NeonButton'
-import { ReactComponent as Trademark1 } from '../assets/trademark/A_made_by_Subtract.svg'
-import { ReactComponent as Trademark2 } from '../assets/trademark/A_rocket_lookalike.svg'
-import { ReactComponent as Trademark3 } from '../assets/trademark/A_trapeziods_smooth_corners_with_tilt.svg'
-import { ReactComponent as Trademark4 } from '../assets/trademark/A_trapeziods_smooth_corners.svg'
-import { ReactComponent as Trademark5 } from '../assets/trademark/A_trapeziods.svg'
-import { ReactComponent as Trademark6 } from '../assets/trademark/A_upside_down_V_with_tilt.svg'
-import { ReactComponent as Trademark7 } from '../assets/trademark/A_upside_down_V.svg'
-import { ReactComponent as Trademark8 } from '../assets/trademark/A_with_circles_at_ends.svg'
-import { ReactComponent as Trademark9 } from '../assets/trademark/A_with_dot_with_tilt.svg'
-import { ReactComponent as Trademark10 } from '../assets/trademark/A_with_dot.svg'
-import { ReactComponent as Trademark11 } from '../assets/trademark/A_with_leg_missing_tall.svg'
-import { ReactComponent as Trademark12 } from '../assets/trademark/A_with_leg_missing.svg'
-import { ReactComponent as Trademark13 } from '../assets/trademark/A_with_parallelogram_dot_rounded.svg'
-import { ReactComponent as Trademark14 } from '../assets/trademark/A_with_parallelogram_dot_tilted_1_rounded.svg'
-import { ReactComponent as Trademark15 } from '../assets/trademark/A_with_parallelogram_dot_tilted_1.svg'
-import { ReactComponent as Trademark16 } from '../assets/trademark/A_with_parallelogram_dot_tilted_2.svg'
-import { ReactComponent as Trademark17 } from '../assets/trademark/A_with_parallelogram_dot.svg'
-import { ReactComponent as Trademark18 } from '../assets/trademark/A_with_simple_arrow_rounded_with_circle.svg'
-import { ReactComponent as Trademark19 } from '../assets/trademark/A_with_simple_arrow_rounded_with_middle_bar_normal.svg'
-import { ReactComponent as Trademark20 } from '../assets/trademark/A_with_simple_arrow_rounded_with_middle_bar_wide.svg'
-import { ReactComponent as Trademark21 } from '../assets/trademark/A_with_simple_arrow_rounded_with_mini.svg'
-import { ReactComponent as Trademark22 } from '../assets/trademark/A_with_simple_arrow_rounded.svg'
+import { useEffect, useRef, useState } from 'react'
+
 import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
-import { ReactComponent as Cross } from '../assets/icons/cross.svg'
+
 // import { ReactComponent as Hamburger } from '../assets/icons/hamburger.svg'
 
 import gsap from 'gsap'
@@ -77,20 +54,11 @@ const Navbar = ({ contactRef }) => {
     }
 
     if (window.scrollY <= 15) {
-      // navbarRef.current.classList.remove('sticking')
-
-      // navbarRef.current.classList.remove('py-5')
-      // navbarRef.current.classList.add('py-10')
-
-      navbarRef.current.style.paddingTop = '40px'
-      navbarRef.current.style.paddingBottom = '40px'
+      navbarRef.current.style.paddingTop = '2.5rem'
+      navbarRef.current.style.paddingBottom = '2.5rem'
     } else {
-      // navbarRef.current.classList.add('sticking')
-      // navbarRef.current.classList.remove('py-10')
-      // navbarRef.current.classList.add('py-5')
-
-      navbarRef.current.style.paddingTop = '20px'
-      navbarRef.current.style.paddingBottom = '20px'
+      navbarRef.current.style.paddingTop = '1.25rem'
+      navbarRef.current.style.paddingBottom = '1.25rem'
     }
 
     const scrollingInterval = setInterval(() => {
@@ -100,33 +68,19 @@ const Navbar = ({ contactRef }) => {
 
           scrolling = false
           if (window.scrollY > oldOffset) {
-            console.log('scrolling down')
-            // navbarRef.current.classList.remove('sticking')
             if (window.scrollY <= 15) {
-              // navbarRef.current.classList.remove('scrolling-down')
               navbarRef.current.style.transform = 'translateY(0px)'
             } else {
-              // navbarRef.current.classList.add('scrolling-down')
-              navbarRef.current.style.transform = 'translateY(-120px)'
+              navbarRef.current.style.transform = 'translateY(-140px)'
             }
           } else {
-            console.log('scrolling up')
-            // navbarRef.current.classList.remove('scrolling-down')
             navbarRef.current.style.transform = 'translateY(0px)'
             if (window.scrollY <= 15) {
-              // navbarRef.current.classList.remove('sticking')
-              // navbarRef.current.classList.remove('py-5')
-              // navbarRef.current.classList.add('py-10')
-
-              navbarRef.current.style.paddingTop = '40px'
-              navbarRef.current.style.paddingBottom = '40px'
+              navbarRef.current.style.paddingTop = '2.5rem'
+              navbarRef.current.style.paddingBottom = '2.5rem'
             } else {
-              // navbarRef.current.classList.add('sticking')
-              // navbarRef.current.classList.remove('py-10')
-              // navbarRef.current.classList.add('py-5')
-
-              navbarRef.current.style.paddingTop = '20px'
-              navbarRef.current.style.paddingBottom = '20px'
+              navbarRef.current.style.paddingTop = '1.25rem'
+              navbarRef.current.style.paddingBottom = '1.25rem'
             }
           }
           oldOffset = window.scrollY
@@ -159,7 +113,7 @@ const Navbar = ({ contactRef }) => {
     <>
       <header
         ref={navbarRef}
-        className=" transition-all duration-300 fixed z-[4000000] top-0 left-0 w-full text-zinc-300"
+        className="fixed z-[4000000] top-0 left-0 w-full text-zinc-300 transition-all duration-300"
       >
         <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center relative">
           <div
