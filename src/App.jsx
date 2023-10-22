@@ -39,6 +39,12 @@ import useContentful from './utils/useContentful'
 import { useInViewport } from './utils/useInViewport'
 
 function App() {
+  // const progress = useProgress()
+
+  // useEffect(() => {
+  //   console.log(progress)
+  // }, [progress])
+
   let mainRef = useRef(null)
   let scrollContainerRef = useRef(null)
 
@@ -335,7 +341,7 @@ function App() {
 
   return (
     <>
-      {/* <Stats /> */}
+      <Stats />
 
       <main
         // id="main"
@@ -355,7 +361,7 @@ function App() {
             ref={heroContainerRef}
             className="min-h-screen mb-[100vh] bg-red-700/0 "
           >
-            <Hero />
+            {/* <Hero /> */}
           </div>
 
           <div
@@ -409,7 +415,7 @@ function App() {
         </div>
       </main>
       <Navbar contactRef={contactContainerRef} />
-      <BackgroundCanvas
+      {/* <BackgroundCanvas
         isHeroVisible={isHeroVisible}
         isContactVisible={isContactVisible}
         isServiceVisible={isServiceVisible}
@@ -423,7 +429,7 @@ function App() {
         view1={projectsContainerRef}
         eventSource={mainRef}
         track1={heroContainerRef}
-      />
+      /> */}
 
       <DynamicCanvas
         eventSource={mainRef}
@@ -434,12 +440,12 @@ function App() {
         visibleArray={visibleArray}
       />
 
-      <div className="w-full h-screen absolute top-0 z-[-100]">
+      {/* <div className="w-full h-screen absolute top-0 z-[-100]">
         <HeroCanvas
           // mousePosition={mousePosition}
           bloomTheme={bloomTheme}
         />
-      </div>
+      </div> */}
 
       <svg
         width="0"

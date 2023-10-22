@@ -81,10 +81,6 @@ const LaptopModel = ({
   // }, [inView])
 
   useEffect(() => {
-    console.log(url)
-  }, [url])
-
-  useEffect(() => {
     if (inView && laptopRef) {
       gsap.to(laptopRef.current.children[1].rotation, {
         x: MathUtils.degToRad(-20),
@@ -164,8 +160,6 @@ const LaptopModel = ({
 
   useEffect(() => {
     setIsSmallViewport(viewport.width <= 2.398349003611367)
-
-    console.log(viewport.width)
 
     if (
       // viewport.width !== previousViewport.width ||
@@ -251,7 +245,12 @@ const LaptopModel = ({
                 <TestSVG className="w-full h-full" />
                 <iframe
                   title="iframe"
-                  src={url}
+                  // src={
+                  //   url !== `https://absharhassan.onrender.com/`
+                  //     ? url
+                  //     : 'https://example.com/'
+                  // }
+                  src={null}
                   // src="http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login"
                 />
                 {/* {url !==

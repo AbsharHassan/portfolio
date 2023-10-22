@@ -16,7 +16,6 @@ const Services = ({ sectionTitle, toolsArray }) => {
 
   useEffect(() => {
     getServices().then((response) => {
-      console.log(response.items)
       setServicesArray(response.items)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,35 +90,35 @@ const Services = ({ sectionTitle, toolsArray }) => {
   }, [isScreenSmall, isScreenMedium])
 
   useEffect(() => {
-    if (!isScreenSmall) {
-      if (isContainerVisibile) {
-        console.log('show annimation')
-        animationCards.current?.kill()
-        animationCards.current = gsap.fromTo(
-          `.${sectionTitle}-card`,
-          {
-            duration: 0,
-            opacity: 0,
-            translateY: 30,
-          },
-          {
-            duration: 0.3,
-            opacity: 1,
-            translateY: 0,
-            stagger: 0.1,
-          }
-        )
-      } else {
-        console.log('exitttttttttt annimation')
-        animationCards.current?.kill()
-        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
-          duration: 0,
-          opacity: 0,
-          translateY: 30,
-          // stagger: 0.1,
-        })
-      }
-    }
+    // if (!isScreenSmall) {
+    //   if (isContainerVisibile) {
+    //     console.log('show annimation')
+    //     animationCards.current?.kill()
+    //     animationCards.current = gsap.fromTo(
+    //       `.${sectionTitle}-card`,
+    //       {
+    //         duration: 0,
+    //         opacity: 0,
+    //         translateY: 30,
+    //       },
+    //       {
+    //         duration: 0.3,
+    //         opacity: 1,
+    //         translateY: 0,
+    //         stagger: 0.1,
+    //       }
+    //     )
+    //   } else {
+    //     console.log('exitttttttttt annimation')
+    //     animationCards.current?.kill()
+    //     animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+    //       duration: 0,
+    //       opacity: 0,
+    //       translateY: 30,
+    //       // stagger: 0.1,
+    //     })
+    //   }
+    // }
   }, [isContainerVisibile, isScreenSmall])
 
   useEffect(() => {

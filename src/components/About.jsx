@@ -11,9 +11,9 @@ import { Text } from '@react-three/drei'
 import AboutSectionCanvas from './AboutSectionCanvas'
 import AboutCanvasContainer from './AboutCanvasContainer'
 
-const About = ({ sectionTitle, toolsArray }) => {
-  gsap.registerPlugin(CSSPlugin)
+gsap.registerPlugin(CSSPlugin)
 
+const About = ({ sectionTitle, toolsArray }) => {
   let sectionRef = useRef(null)
   let lightbarRef = useRef(null)
   let contentRef = useRef(null)
@@ -91,37 +91,37 @@ const About = ({ sectionTitle, toolsArray }) => {
     }
   }, [isScreenSmall, isScreenMedium])
 
-  useEffect(() => {
-    if (!isScreenSmall) {
-      if (isContainerVisibile) {
-        console.log('show annimation')
-        animationCards.current?.kill()
-        animationCards.current = gsap.fromTo(
-          `.${sectionTitle}-card`,
-          {
-            duration: 0,
-            opacity: 0,
-            translateY: 30,
-          },
-          {
-            duration: 0.3,
-            opacity: 1,
-            translateY: 0,
-            stagger: 0.1,
-          }
-        )
-      } else {
-        console.log('exitttttttttt annimation')
-        animationCards.current?.kill()
-        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
-          duration: 0,
-          opacity: 0,
-          translateY: 30,
-          // stagger: 0.1,
-        })
-      }
-    }
-  }, [isContainerVisibile, isScreenSmall])
+  // useEffect(() => {
+  //   if (!isScreenSmall) {
+  //     if (isContainerVisibile) {
+  //       console.log('show annimation')
+  //       animationCards.current?.kill()
+  //       animationCards.current = gsap.fromTo(
+  //         `.${sectionTitle}-card`,
+  //         {
+  //           duration: 0,
+  //           opacity: 0,
+  //           translateY: 30,
+  //         },
+  //         {
+  //           duration: 0.3,
+  //           opacity: 1,
+  //           translateY: 0,
+  //           stagger: 0.1,
+  //         }
+  //       )
+  //     } else {
+  //       console.log('exitttttttttt annimation')
+  //       animationCards.current?.kill()
+  //       animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+  //         duration: 0,
+  //         opacity: 0,
+  //         translateY: 30,
+  //         // stagger: 0.1,
+  //       })
+  //     }
+  //   }
+  // }, [isContainerVisibile, isScreenSmall])
 
   useEffect(() => {
     triggerElRef.current.classList.toggle('visible', triggerLight)

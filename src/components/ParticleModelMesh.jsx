@@ -157,7 +157,6 @@ const ParticleModelMesh = ({
 
   // Spin and onScroll animations of the model
   useEffect(() => {
-    console.log('running')
     if (modelShouldRotate) {
       rotateAnimation.current = gsap.to(parentRef.current.rotation, {
         z: 2 * Math.PI,

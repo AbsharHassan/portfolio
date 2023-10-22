@@ -77,38 +77,56 @@ const Navbar = ({ contactRef }) => {
     }
 
     if (window.scrollY <= 15) {
-      navbarRef.current.classList.remove('sticking')
-      navbarRef.current.classList.remove('py-5')
-      navbarRef.current.classList.add('py-10')
+      // navbarRef.current.classList.remove('sticking')
+
+      // navbarRef.current.classList.remove('py-5')
+      // navbarRef.current.classList.add('py-10')
+
+      navbarRef.current.style.paddingTop = '40px'
+      navbarRef.current.style.paddingBottom = '40px'
     } else {
-      navbarRef.current.classList.add('sticking')
-      navbarRef.current.classList.remove('py-10')
-      navbarRef.current.classList.add('py-5')
+      // navbarRef.current.classList.add('sticking')
+      // navbarRef.current.classList.remove('py-10')
+      // navbarRef.current.classList.add('py-5')
+
+      navbarRef.current.style.paddingTop = '20px'
+      navbarRef.current.style.paddingBottom = '20px'
     }
 
     const scrollingInterval = setInterval(() => {
       if (!isNavOpen) {
         if (scrolling) {
+          console.log(navbarRef.current.style)
+
           scrolling = false
           if (window.scrollY > oldOffset) {
             console.log('scrolling down')
-            navbarRef.current.classList.remove('sticking')
+            // navbarRef.current.classList.remove('sticking')
             if (window.scrollY <= 15) {
-              navbarRef.current.classList.remove('scrolling-down')
+              // navbarRef.current.classList.remove('scrolling-down')
+              navbarRef.current.style.transform = 'translateY(0px)'
             } else {
-              navbarRef.current.classList.add('scrolling-down')
+              // navbarRef.current.classList.add('scrolling-down')
+              navbarRef.current.style.transform = 'translateY(-120px)'
             }
           } else {
             console.log('scrolling up')
-            navbarRef.current.classList.remove('scrolling-down')
+            // navbarRef.current.classList.remove('scrolling-down')
+            navbarRef.current.style.transform = 'translateY(0px)'
             if (window.scrollY <= 15) {
-              navbarRef.current.classList.remove('sticking')
-              navbarRef.current.classList.remove('py-5')
-              navbarRef.current.classList.add('py-10')
+              // navbarRef.current.classList.remove('sticking')
+              // navbarRef.current.classList.remove('py-5')
+              // navbarRef.current.classList.add('py-10')
+
+              navbarRef.current.style.paddingTop = '40px'
+              navbarRef.current.style.paddingBottom = '40px'
             } else {
-              navbarRef.current.classList.add('sticking')
-              navbarRef.current.classList.remove('py-10')
-              navbarRef.current.classList.add('py-5')
+              // navbarRef.current.classList.add('sticking')
+              // navbarRef.current.classList.remove('py-10')
+              // navbarRef.current.classList.add('py-5')
+
+              navbarRef.current.style.paddingTop = '20px'
+              navbarRef.current.style.paddingBottom = '20px'
             }
           }
           oldOffset = window.scrollY
@@ -143,7 +161,7 @@ const Navbar = ({ contactRef }) => {
         ref={navbarRef}
         className="navbar fixed z-[4000000] top-0 left-0 w-full text-zinc-300"
       >
-        <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center relative ">
+        <nav className="h-full px-5 sm:px-20 transition-all duration-300 flex justify-between items-center relative">
           <div
             id="brand"
             className="brand flex items-center justify-center relative rounded-full w-14 h-14 bg-black"
@@ -164,7 +182,7 @@ const Navbar = ({ contactRef }) => {
             />
             <Trademark23 className="absolute w-8 h-8 text-zinc-200 hover:text-[#5a82f9] hover:animate-ping rising-icon" />
           </div>
-          <div className="nav-links-container h-12 px-[14px] backdrop-blur bg-black hidden md:flex items-center space-x-8">
+          <div className="nav-links-container  h-12 px-[14px] backdrop-blur bg-black hidden md:flex items-center space-x-8">
             <ul
               id="links"
               onMouseEnter={() => {
