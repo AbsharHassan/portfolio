@@ -28,9 +28,9 @@ const LoadingScreen = ({ toggleIsHeroLoading }) => {
         scale: 0.5,
         opacity: 0,
         duration: 1,
-        onComplete: () => {
-          toggleIsHeroLoading(false)
-        },
+        // onComplete: () => {
+        //   toggleIsHeroLoading(false)
+        // },
       })
       // gsap.to(containterRef.current, {
       //   backgroundColor: '#11101800',

@@ -37,6 +37,7 @@ import LaptopModel from './components/LaptopModel'
 import PhoneModel from './components/PhoneModel'
 import useContentful from './utils/useContentful'
 import { useInViewport } from './utils/useInViewport'
+import LoadingScreen from './components/LoadingScreen'
 
 function App() {
   // const progress = useProgress()
@@ -343,109 +344,111 @@ function App() {
     <>
       <Stats />
 
-      <main
-        // id="main"
-        ref={mainRef}
-        // ref={ref}
-        // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
-        // className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
-        className={`main relative overflow-x-hidden w-full h-full z-[2000]`}
-      >
-        <div
-          id="main"
-          ref={scrollContainerRef}
-          className="scroll "
+      <Suspense fallback={<LoadingScreen />}>
+        <main
+          // id="main"
+          ref={mainRef}
+          // ref={ref}
+          // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
+          // className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
+          className={`main relative overflow-x-hidden w-full h-full z-[2000]`}
         >
           <div
-            id="hero"
-            ref={heroContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 "
+            id="main"
+            ref={scrollContainerRef}
+            className="scroll "
           >
-            <Hero />
+            <div
+              id="hero"
+              ref={heroContainerRef}
+              className="min-h-screen mb-[100vh] bg-red-700/0 "
+            >
+              <Hero />
+            </div>
+
+            <div
+              ref={projectsContainerRef}
+              id="projects"
+              className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
+            >
+              <Projects
+                projectsArray={projectsArray}
+                // refsArray={refsArray}
+                arrayOfRefs={arrayOfRefs}
+                addToRefs={addToRefs}
+                setIntersectiom={setIntersectiom}
+                changeFullViewArray={changeFullViewArray}
+              />
+            </div>
+
+            <div
+              id="about"
+              ref={aboutContainerRef}
+              className="min-h-screen mb-[100vh] bg-red-700/0 "
+            >
+              <About sectionTitle={'backend'} />
+            </div>
+
+            <div
+              id="toolset"
+              ref={toolsetContainerRef}
+              className="min-h-screen mb-[200vh] bg-red-700/0 py-[100vh]"
+            >
+              <Toolset sectionTitle={'frontend'} />
+            </div>
+
+            <div
+              id="services"
+              ref={serviceContainerRef}
+              className="min-h-screen my-[100vh] bg-red-700/0 "
+            >
+              <Services sectionTitle={'services'} />
+            </div>
+
+            <div
+              id="contact"
+              ref={contactContainerRef}
+              className="min-h-screen bg-red-700/0 "
+            >
+              <Contact setDummyHeadingRef={handleDummyHeadingRef} />
+            </div>
+
+            <Footer />
           </div>
-
-          <div
-            ref={projectsContainerRef}
-            id="projects"
-            className="min-h-screen mb-[100vh] bg-red-700/0 mt-[100vh] relative"
-          >
-            <Projects
-              projectsArray={projectsArray}
-              // refsArray={refsArray}
-              arrayOfRefs={arrayOfRefs}
-              addToRefs={addToRefs}
-              setIntersectiom={setIntersectiom}
-              changeFullViewArray={changeFullViewArray}
-            />
-          </div>
-
-          <div
-            id="about"
-            ref={aboutContainerRef}
-            className="min-h-screen mb-[100vh] bg-red-700/0 "
-          >
-            <About sectionTitle={'backend'} />
-          </div>
-
-          <div
-            id="toolset"
-            ref={toolsetContainerRef}
-            className="min-h-screen mb-[200vh] bg-red-700/0 py-[100vh]"
-          >
-            <Toolset sectionTitle={'frontend'} />
-          </div>
-
-          <div
-            id="services"
-            ref={serviceContainerRef}
-            className="min-h-screen my-[100vh] bg-red-700/0 "
-          >
-            <Services sectionTitle={'services'} />
-          </div>
-
-          <div
-            id="contact"
-            ref={contactContainerRef}
-            className="min-h-screen bg-red-700/0 "
-          >
-            <Contact setDummyHeadingRef={handleDummyHeadingRef} />
-          </div>
-
-          <Footer />
-        </div>
-      </main>
-      <Navbar contactRef={contactContainerRef} />
-      <BackgroundCanvas
-        isHeroVisible={isHeroVisible}
-        isContactVisible={isContactVisible}
-        isServiceVisible={isServiceVisible}
-        isAboutVisible={isAboutVisible}
-        isToolsetVisible={isToolsetVisible}
-        aboutContainerRef={aboutContainerRef}
-        checkModelRotation={checkModelRotation}
-        dimBackground={dimBackground}
-        dummyHeadingRef={dummyHeadingRef}
-        contactContainerRef={contactContainerRef}
-        view1={projectsContainerRef}
-        eventSource={mainRef}
-        track1={heroContainerRef}
-      />
-
-      <DynamicCanvas
-        eventSource={mainRef}
-        changeFullViewArray={changeFullViewArray}
-        fullViewArray={fullViewArray}
-        projectsArray={projectsArray}
-        refArray={refArray}
-        visibleArray={visibleArray}
-      />
-
-      <div className="w-full h-screen absolute top-0 z-[-100]">
-        <HeroCanvas
-          // mousePosition={mousePosition}
-          bloomTheme={bloomTheme}
+        </main>
+        <Navbar contactRef={contactContainerRef} />
+        <BackgroundCanvas
+          isHeroVisible={isHeroVisible}
+          isContactVisible={isContactVisible}
+          isServiceVisible={isServiceVisible}
+          isAboutVisible={isAboutVisible}
+          isToolsetVisible={isToolsetVisible}
+          aboutContainerRef={aboutContainerRef}
+          checkModelRotation={checkModelRotation}
+          dimBackground={dimBackground}
+          dummyHeadingRef={dummyHeadingRef}
+          contactContainerRef={contactContainerRef}
+          view1={projectsContainerRef}
+          eventSource={mainRef}
+          track1={heroContainerRef}
         />
-      </div>
+
+        <DynamicCanvas
+          eventSource={mainRef}
+          changeFullViewArray={changeFullViewArray}
+          fullViewArray={fullViewArray}
+          projectsArray={projectsArray}
+          refArray={refArray}
+          visibleArray={visibleArray}
+        />
+
+        <div className="w-full h-screen absolute top-0 z-[-100]">
+          <HeroCanvas
+            // mousePosition={mousePosition}
+            bloomTheme={bloomTheme}
+          />
+        </div>
+      </Suspense>
 
       <svg
         width="0"
