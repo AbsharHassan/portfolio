@@ -40,11 +40,11 @@ import { useInViewport } from './utils/useInViewport'
 import LoadingScreen from './components/LoadingScreen'
 
 function App() {
-  // const progress = useProgress()
+  const progress = useProgress()
 
-  // useEffect(() => {
-  //   console.log(progress)
-  // }, [progress])
+  useEffect(() => {
+    console.log(progress)
+  }, [progress])
 
   let mainRef = useRef(null)
   let scrollContainerRef = useRef(null)
@@ -340,11 +340,21 @@ function App() {
 
   // console.log('appppppPPPPPPPPP rerender')
 
+  const [assetsLoading, setAssetsLoading] = useState(true)
+
   return (
-    <>
+    <div className="main-container">
       <Stats />
 
-      <Suspense fallback={<LoadingScreen />}>
+      {assetsLoading && (
+        <LoadingScreen
+          toggleAssetsLoading={() => {
+            setAssetsLoading(false)
+          }}
+        />
+      )}
+
+      <div className="relative">
         <main
           // id="main"
           ref={mainRef}
@@ -442,28 +452,14 @@ function App() {
           visibleArray={visibleArray}
         />
 
-        <div className="w-full h-screen absolute top-0 z-[-100]">
+        <div className="w-full h-screen absolute top-0 z-[-100000000000000000000]">
           <HeroCanvas
             // mousePosition={mousePosition}
             bloomTheme={bloomTheme}
           />
         </div>
-      </Suspense>
-
-      <svg
-        width="0"
-        height="0"
-      >
-        <filter id="noiseFilter">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="6.29"
-            numOctaves="6"
-            stitchTiles="stitch"
-          />
-        </filter>
-      </svg>
-    </>
+      </div>
+    </div>
   )
 }
 

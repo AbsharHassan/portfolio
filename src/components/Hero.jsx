@@ -191,6 +191,12 @@ const Hero = () => {
           bloomTheme={bloomTheme}
         />
       </div> */}
+      {/* <div className="w-full h-screen absolute top-0 z-[-100]">
+        <HeroCanvas
+          // mousePosition={mousePosition}
+          bloomTheme={bloomTheme}
+        />
+      </div> */}
     </>
   )
 }

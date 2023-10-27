@@ -50,6 +50,7 @@ const Navbar = ({ contactRef }) => {
     let oldOffset = 0
 
     window.onscroll = () => {
+      console.log('scrolling')
       scrolling = true
     }
 
@@ -64,8 +65,6 @@ const Navbar = ({ contactRef }) => {
     const scrollingInterval = setInterval(() => {
       if (!isNavOpen) {
         if (scrolling) {
-          console.log(navbarRef.current.style)
-
           scrolling = false
           if (window.scrollY > oldOffset) {
             if (window.scrollY <= 15) {
@@ -130,11 +129,15 @@ const Navbar = ({ contactRef }) => {
             }}
           >
             <Trademark23
-              className={`w-8 h-8  ${
+              fill={isLogoHovered ? '#3667c4' : '#e4e4e7'}
+              className={`w-8 h-8 transition-[fill] duration-300 ${
                 isLogoHovered ? 'text-[#3667c4]' : 'text-zinc-200'
               }`}
             />
-            <Trademark23 className="absolute w-8 h-8 text-zinc-200 hover:text-[#5a82f9] hover:animate-ping rising-icon" />
+            <Trademark23
+              fill={isLogoHovered ? '#3667c4' : '#e4e4e7'}
+              className="absolute w-8 h-8 transition-[fill] duration-300 text-zinc-200 hover:text-[#5a82f9] hover:animate-ping rising-icon"
+            />
           </div>
           <div className="nav-links-container  h-12 px-[14px] backdrop-blur bg-black hidden md:flex items-center space-x-8">
             <ul

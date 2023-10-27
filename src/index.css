@@ -442,26 +442,45 @@ body {
   background-color: black;
 
   /* background-color: #000000; */
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 
-body::-webkit-scrollbar {
-  /* display: none; */
+#root {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.main-container {
+  width: 100vw; /* Take the full width of the viewport */
+  height: 100vh; /* Take the full height of the viewport */
+  overflow-y: scroll; /* Enable vertical scrollbar */
+}
+
+.main-container::-webkit-scrollbar {
+  width: 8px; /* Adjust the width as needed */
+  background: transparent; /* Set the track background to transparent */
+}
+
+.main-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 0, 1); /* Set the thumb background color as needed */
+  border-radius: 4px; /* Adjust the border-radius as needed */
+}
+
+/* body::-webkit-scrollbar {
   width: 10px;
   background: transparent;
 }
 
 body::-webkit-scrollbar-track {
-  /* background: #111018; */
   background: transparent;
   border-radius: 100vw;
 }
 
 body::-webkit-scrollbar-thumb {
   background-color: #1f2937;
-  /* background: linear-gradient(to bottom, #0c8cbf22, #0c8cbf88, #0c8cbf22); */
   border-radius: 100vw;
-}
+} */
 
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
