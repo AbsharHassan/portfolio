@@ -42,10 +42,6 @@ import LoadingScreen from './components/LoadingScreen'
 function App() {
   const progress = useProgress()
 
-  useEffect(() => {
-    console.log(progress)
-  }, [progress])
-
   let mainRef = useRef(null)
   let scrollContainerRef = useRef(null)
 
@@ -342,8 +338,13 @@ function App() {
 
   const [assetsLoading, setAssetsLoading] = useState(true)
 
+  let scrollElRef = useRef(null)
+
   return (
-    <div className="main-container">
+    <div
+      ref={scrollElRef}
+      id="main-container"
+    >
       <Stats />
 
       {assetsLoading && (
@@ -356,7 +357,7 @@ function App() {
 
       <div className="relative">
         <main
-          // id="main"
+          id="main"
           ref={mainRef}
           // ref={ref}
           // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
@@ -426,7 +427,10 @@ function App() {
             <Footer />
           </div>
         </main>
-        <Navbar contactRef={contactContainerRef} />
+        <Navbar
+          contactRef={contactContainerRef}
+          scrollEl={scrollElRef.current}
+        />
         <BackgroundCanvas
           isHeroVisible={isHeroVisible}
           isContactVisible={isContactVisible}

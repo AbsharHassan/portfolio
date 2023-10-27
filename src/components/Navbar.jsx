@@ -7,7 +7,7 @@ import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_mi
 import gsap from 'gsap'
 import ContactEmailBanner from './ContactEmailBanner'
 
-const Navbar = ({ contactRef }) => {
+const Navbar = ({ contactRef, scrollEl }) => {
   const navLinks = [
     {
       text: 'About',
@@ -49,8 +49,9 @@ const Navbar = ({ contactRef }) => {
     let scrolling = false
     let oldOffset = 0
 
+    // let scrollEl = document.getElementById('main-container')
+
     window.onscroll = () => {
-      console.log('scrolling')
       scrolling = true
     }
 
@@ -65,6 +66,7 @@ const Navbar = ({ contactRef }) => {
     const scrollingInterval = setInterval(() => {
       if (!isNavOpen) {
         if (scrolling) {
+          console.log(scrollEl.scrollY)
           scrolling = false
           if (window.scrollY > oldOffset) {
             if (window.scrollY <= 15) {
@@ -90,7 +92,7 @@ const Navbar = ({ contactRef }) => {
     return () => {
       clearInterval(scrollingInterval)
     }
-  }, [isNavOpen])
+  }, [isNavOpen, scrollEl])
 
   useEffect(() => {
     gsap.to(underlineRef.current, {

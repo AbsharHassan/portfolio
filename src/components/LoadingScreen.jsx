@@ -25,7 +25,6 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
 
   useEffect(() => {
     if (brandRef.current) {
-      console.log(brandRef)
       gsap.to(brandRef.current, {
         strokeDashoffset: 1045.3275146484375,
         duration: 1, // Animation duration in seconds
@@ -37,8 +36,6 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
   }, [brandRef])
 
   useEffect(() => {
-    console.log(active)
-    console.log(isAnimationComplete)
     if (!active && isAnimationComplete) {
       gsap.to(brandRef.current, {
         fillOpacity: 1,
@@ -64,7 +61,6 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
         duration: 0.5,
         ease: 'power2',
         onComplete: () => {
-          console.log('completed')
           toggleAssetsLoading()
         },
       })

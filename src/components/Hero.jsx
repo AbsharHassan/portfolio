@@ -13,6 +13,7 @@ import HeroParticleCanvas from './old_useless_backups/HeroParticleCanvas'
 import VanillaTilt from 'vanilla-tilt'
 import HeroCatchPhrase from './HeroCatchPhrase'
 import NeonButton from './NeonButton'
+import { useInView } from 'react-intersection-observer'
 
 const Hero = () => {
   // Constants
@@ -72,8 +73,6 @@ const Hero = () => {
     }
   }, [])
 
-  let heroTextContainerRef = useRef(null)
-
   // useEffect(() => {
   //   VanillaTilt.init(heroTextContainerRef.current, {
   //     max: 2,
@@ -124,11 +123,13 @@ const Hero = () => {
   //   }
   // }, [])
 
+  const [heroTextContainerRef, inView] = useInView({ threshold: 1 })
+
   return (
     <>
       <div
         ref={heroTextContainerRef}
-        className="hero-text-container w-[100%] bg-blue-700/ absolute left-0 h-screen z-30 text-white"
+        className="hero-text-container w-[100%]  relative h-screen z-30 text-white "
       >
         <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
           <div className="relative">
@@ -183,6 +184,20 @@ const Hero = () => {
           >
             See my work
           </NeonButton>
+        </div>
+        <div
+          className={`absolute  w-full h-[38px]  flex justify-center items-center transition-all duration-300 ${
+            inView ? 'opacity-100 bottom-[8vh]' : 'bottom-0 opacity-0'
+          }`}
+        >
+          <a
+            href="#projects"
+            className="w-[26px] h-[38px] rounded-3xl border-2 border-slate-500 flex justify-center items-center"
+          >
+            <span className="scroll-span w-[4px] h-[10px] bg-slate-600 rounded-md">
+              {' '}
+            </span>
+          </a>
         </div>
       </div>
       {/* <div className="w-full h-screen absolute inset-0 z-[-100]">

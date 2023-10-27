@@ -445,27 +445,59 @@ body {
   /* scroll-behavior: smooth; */
 }
 
-#root {
+body::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgb(63 63 70);
+  border-radius: 4px;
+}
+
+.scroll-span {
+  transform: translateY(-8px);
+  animation: scroll-prompt 2s linear infinite;
+}
+
+@keyframes scroll-prompt {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+
+  30% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+/* #root {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-.main-container {
-  width: 100vw; /* Take the full width of the viewport */
-  height: 100vh; /* Take the full height of the viewport */
-  overflow-y: scroll; /* Enable vertical scrollbar */
+#main-container {
+  width: 100vw; 
+  height: 100vh; 
+  overflow-y: scroll; 
 }
 
-.main-container::-webkit-scrollbar {
-  width: 8px; /* Adjust the width as needed */
-  background: transparent; /* Set the track background to transparent */
+#main-container::-webkit-scrollbar {
+  width: 8px; 
+  background: transparent; 
 }
 
-.main-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 0, 0, 1); /* Set the thumb background color as needed */
-  border-radius: 4px; /* Adjust the border-radius as needed */
-}
+#main-container::-webkit-scrollbar-thumb {
+  background: rgb(63 63 70); 
+  border-radius: 4px; 
+} */
 
 /* body::-webkit-scrollbar {
   width: 10px;
