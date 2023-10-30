@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Vector3 } from 'three'
@@ -13,10 +13,12 @@ import {
   uniforms as bloomCircleUniforms,
 } from '../shaders/bloom-circle/bloomCircleShaders'
 
-const BloomCircle = ({ isHeroVisible }) => {
+const BloomCircle = ({ isHeroVisible, assetsLoading }) => {
   const { viewport } = useThree()
   const { bloomTheme } = useSelector((state) => state.threeStore)
   const windowSize = useWindowResize()
+
+  const [delayedAssetsLoading, setDelayedAssetsLoading] = useState(true)
 
   let meshRef = useRef()
 
@@ -52,11 +54,25 @@ const BloomCircle = ({ isHeroVisible }) => {
   }, [bloomTheme])
 
   useEffect(() => {
-    gsap.to(meshRef.current.material.uniforms?.uOpacity, {
-      value: isHeroVisible ? 1 : 0,
-      ease: 'sine.inOut',
-    })
-  }, [isHeroVisible])
+    let timeout = setTimeout(() => {
+      setDelayedAssetsLoading(assetsLoading)
+    }, 3700)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [assetsLoading])
+
+  useEffect(() => {
+    console.log(delayedAssetsLoading)
+    if (!delayedAssetsLoading) {
+      console.log('run')
+      gsap.to(meshRef.current.material.uniforms?.uOpacity, {
+        value: isHeroVisible ? 1 : 0,
+        ease: 'sine.inOut',
+      })
+    }
+  }, [isHeroVisible, delayedAssetsLoading])
 
   useFrame(() => {
     const directionToTarget = new Vector3(

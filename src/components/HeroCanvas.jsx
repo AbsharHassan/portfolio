@@ -112,7 +112,7 @@ const PlaneShaderMaterial = shaderMaterial(
 
 extend({ PlaneShaderMaterial })
 
-const HeroCanvas = ({ bloomTheme }) => {
+const HeroCanvas = ({ bloomTheme, assetsLoading }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const HeroCanvas = ({ bloomTheme }) => {
         far: 1000,
       }}
     >
-      <OrbitControls />
+      {/* <OrbitControls /> */}
 
       {/* looks kinda good with no fog and ambient light. Test */}
 
@@ -170,6 +170,7 @@ const HeroCanvas = ({ bloomTheme }) => {
       <Scene
         mousePosition={mousePosition}
         bloomTheme={bloomTheme}
+        assetsLoading={assetsLoading}
       />
     </Canvas>
   )
@@ -177,7 +178,7 @@ const HeroCanvas = ({ bloomTheme }) => {
 
 export default HeroCanvas
 
-function Scene({ mousePosition, bloomTheme }) {
+function Scene({ mousePosition, bloomTheme, assetsLoading }) {
   const { scene, viewport, camera, gl, size } = useThree()
 
   const colorsArray = [0xc261fe, 0x5a82f9, 0x09a9b8]
@@ -349,13 +350,62 @@ function Scene({ mousePosition, bloomTheme }) {
   //   prevDelayedPos.current = delayedPos.current.clone()
   // })
 
+  let testOpacity = useRef(0.0)
+
+  useEffect(() => {
+    if (!assetsLoading) {
+      gsap.to(bloomLightBackground.current, {
+        delay: 3.7,
+        intensity: 5,
+        ease: 'sine.inOut',
+      })
+
+      gsap.to(movingSpotLightGroup.current.children[0].children[0], {
+        delay: 2.7,
+        intensity: 10,
+        ease: 'sine.inOut',
+      })
+      gsap.to(movingSpotLightGroup.current.children[1].children[0], {
+        delay: 2.7,
+
+        intensity: 10,
+        ease: 'sine.inOut',
+      })
+
+      gsap.to(
+        movingSpotLightGroup.current.children[0].children[0].children[0]
+          .material.uniforms.opacity,
+        {
+          delay: 2.7,
+
+          value: 0.7,
+          ease: 'sine.inOut',
+        }
+      )
+      gsap.to(
+        movingSpotLightGroup.current.children[1].children[0].children[0]
+          .material.uniforms.opacity,
+        {
+          delay: 2.7,
+
+          value: 0.7,
+          ease: 'sine.inOut',
+        }
+      )
+    }
+
+    console.log(
+      movingSpotLightGroup.current.children[0].children[0].children[0].material
+        .uniforms.opacity.value
+    )
+    console.log(movingSpotLightGroup)
+  }, [assetsLoading])
+
   return (
     <>
-      <OrbitControls />
-
       <pointLight
         ref={bloomLightBackground}
-        intensity={5}
+        intensity={0}
         distance={4}
         // castShadow
       />
@@ -374,7 +424,7 @@ function Scene({ mousePosition, bloomTheme }) {
       >
         <OrbitControls />
 
-        <pointLight
+        {/* <pointLight
           castShadow
           position={[0, -200, 0]}
           intensity={0}
@@ -383,7 +433,7 @@ function Scene({ mousePosition, bloomTheme }) {
           distance={5}
           ref={pointLightRef}
           toneMapped={true}
-        />
+        /> */}
 
         <group
           position={[0, 0, 0]}

@@ -3,7 +3,7 @@ import glsl from 'babel-plugin-glsl/macro'
 
 export const uniforms = {
   uMousePosition: { value: new Vector3(-20, 0, 0) },
-  uOpacity: { value: 1.0 },
+  uOpacity: { value: 0.0 },
   uColor: { value: new Color(0.76, 0.38, 1.0) },
   uAspectRatio: { value: window.innerHeight / window.innerWidth },
 }

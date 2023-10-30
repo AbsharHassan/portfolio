@@ -42,6 +42,7 @@ import BloomCircleTesting from './old_useless_backups/BloomCircleTesting'
 gsap.registerPlugin(ScrollTrigger)
 
 const BackgroundCanvas = ({
+  assetsLoading,
   isHeroVisible,
   isContactVisible,
   isServiceVisible,
@@ -94,6 +95,7 @@ const BackgroundCanvas = ({
         /> */}
 
         <Effect
+          assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
           isServiceVisible={isServiceVisible}
           isContactVisible={isContactVisible}
@@ -127,7 +129,10 @@ const BackgroundCanvas = ({
           />
         </Hud>
 
-        <BloomCircle isHeroVisible={isHeroVisible} />
+        <BloomCircle
+          assetsLoading={assetsLoading}
+          isHeroVisible={isHeroVisible}
+        />
 
         {/* {!refresh && (
           <BloomCircle

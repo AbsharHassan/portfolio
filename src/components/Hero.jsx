@@ -15,7 +15,7 @@ import HeroCatchPhrase from './HeroCatchPhrase'
 import NeonButton from './NeonButton'
 import { useInView } from 'react-intersection-observer'
 
-const Hero = () => {
+const Hero = ({ assetsLoading }) => {
   // Constants
   const dispatch = useDispatch()
 
@@ -129,70 +129,79 @@ const Hero = () => {
     <>
       <div
         ref={heroTextContainerRef}
-        className="hero-text-container w-[100%]  relative h-screen z-30 text-white "
+        className="hero-text-container w-[100%] bg-red-700/0 relative h-screen z-30 text-white "
       >
         <div className="h-full flex flex-col justify-center mx-auto px-4 sm:px-12 xl:max-w-7xl">
           <div className="relative">
-            <HeroCatchPhrase />
+            <HeroCatchPhrase assetsLoading={assetsLoading} />
             {/* <HeroCatchPhrase extraClasses={'absolute inset-0 blur-[50px]'} /> */}
           </div>
           {/* add this to contentful */}
-          <h2 className="sm:text-lg lg:text-lg mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl ">
-            Hello, I'm Abshar Hassan. I love using the power of code to
-            transform innovative ideas into reality. With a focus on
-            reusability, efficiency, and industry best practices, I craft
-            high-quality, production-grade solutions. I am your friendly
-            neighbourhood{' '}
-            <AlternatingText
-              singleWord="frontend developer"
-              wordsObjectArray={[
-                {
-                  text: 'frontend developer.',
-                  classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                  cursor: '#5a82f9',
-                },
-                {
-                  text: 'backend developer.',
-                  classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
-                  cursor: '#09a9b8',
-                },
-                {
-                  text: 'fullstack developer.',
-                  classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                  cursor: '#5a82f9',
-                },
-                {
-                  text: 'ML engineer.',
-                  classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
-                  cursor: '#09a9b8',
-                },
-              ]}
-            />
-          </h2>
-          {/* <button className="neon-button w-52 h-12">Call to Action</button> */}
-          <NeonButton
-            colorNeon="#7b53d3"
-            shadow
-            type="button"
-            extraClasses="w-52 h-12 text-[#7b53d3] hover:text-slate-400"
-            handleClick={() => {
-              const projectsElement = document.getElementById('projects')
-              if (projectsElement) {
-                projectsElement.scrollIntoView({ behavior: 'smooth' })
-              }
-            }}
+          <div
+            className={`transition-opacity duration-700 delay-[2000ms] ${
+              assetsLoading ? 'opacity-0' : 'opacity-100'
+            }`}
           >
-            See my work
-          </NeonButton>
+            <h2
+              className={`sm:text-lg lg:text-lg mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl`}
+            >
+              Hello, I'm Abshar Hassan. I love using the power of code to
+              transform innovative ideas into reality. With a focus on
+              reusability, efficiency, and industry best practices, I craft
+              high-quality, production-grade solutions. I am your friendly
+              neighbourhood{' '}
+              <AlternatingText
+                singleWord="frontend developer"
+                wordsObjectArray={[
+                  {
+                    text: 'frontend developer.',
+                    classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                    cursor: '#5a82f9',
+                  },
+                  {
+                    text: 'backend developer.',
+                    classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
+                    cursor: '#09a9b8',
+                  },
+                  {
+                    text: 'fullstack developer.',
+                    classes: 'bg-gradient-to-r from-customViolet to-customBlue',
+                    cursor: '#5a82f9',
+                  },
+                  {
+                    text: 'ML engineer.',
+                    classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
+                    cursor: '#09a9b8',
+                  },
+                ]}
+              />
+            </h2>
+            <NeonButton
+              colorNeon="#7b53d3"
+              shadow
+              type="button"
+              extraClasses="w-52 h-12 text-[#7b53d3] hover:text-slate-400"
+              handleClick={() => {
+                const projectsElement = document.getElementById('projects')
+                if (projectsElement) {
+                  projectsElement.scrollIntoView({ behavior: 'smooth' })
+                }
+              }}
+            >
+              See my work
+            </NeonButton>
+          </div>
         </div>
         <div
-          className={`absolute  w-full h-[38px]  flex justify-center items-center transition-all duration-300 ${
+          className={`absolute w-full h-[38px]  flex justify-center items-center transition-all duration-300 ${
             inView ? 'opacity-100 bottom-[8vh]' : 'bottom-0 opacity-0'
           }`}
         >
           <a
             href="#projects"
-            className="w-[26px] h-[38px] rounded-3xl border-2 border-slate-500 flex justify-center items-center"
+            className={`w-[26px] h-[38px] rounded-3xl border-2 border-slate-500 flex justify-center items-center transition-opacity duration-700 delay-[2000ms] ${
+              assetsLoading ? 'opacity-0' : 'opacity-100'
+            }`}
           >
             <span className="scroll-span w-[4px] h-[10px] bg-slate-600 rounded-md">
               {' '}

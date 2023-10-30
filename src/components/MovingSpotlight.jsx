@@ -21,6 +21,8 @@ const MovingSpotLight = ({ vec = new Vector3(), mousePosition, ...props }) => {
     )
 
     light.current.target.updateMatrixWorld()
+
+    // console.log(light)
   })
   return (
     <SpotLight
@@ -32,9 +34,11 @@ const MovingSpotLight = ({ vec = new Vector3(), mousePosition, ...props }) => {
       attenuation={4}
       //   anglePower={4}
       anglePower={4}
-      intensity={10}
+      // intensity={10}
+      intensity={0}
       // decay={1}
-      opacity={0.7}
+      // opacity={0.7}
+      opacity={0}
       // shadow={{
       //   mapSize: { width: 1024, height: 1024 },
       //   opacity: 0.5, // Adjust shadow opacity here

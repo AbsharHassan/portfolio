@@ -26,8 +26,8 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
   useEffect(() => {
     if (brandRef.current) {
       gsap.to(brandRef.current, {
-        strokeDashoffset: 1045.3275146484375,
-        duration: 1, // Animation duration in seconds
+        strokeDashoffset: 0,
+        duration: 2, // Animation duration in seconds
         ease: 'power2.inOut', // Easing function
         repeat: -1, // Repeat indefinitely
         yoyo: true, // Reverse animation to create a ping-pong effect
@@ -62,6 +62,7 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
         ease: 'power2',
         onComplete: () => {
           toggleAssetsLoading()
+          console.log('complete')
         },
       })
     }
@@ -85,6 +86,7 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
           className="w-40 h-w-40 mb-6 "
           style={{
             strokeDasharray: 1045.3275146484375,
+            strokeDashoffset: 1045.3275146484375,
           }}
         />
         {/* <div className="mb-3">Readying 3D assets</div> */}

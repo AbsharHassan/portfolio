@@ -7,7 +7,7 @@ import { ReactComponent as Trademark23 } from '../assets/trademark/A_with_leg_mi
 import gsap from 'gsap'
 import ContactEmailBanner from './ContactEmailBanner'
 
-const Navbar = ({ contactRef, scrollEl }) => {
+const Navbar = ({ contactRef, scrollEl, assetsLoading }) => {
   const navLinks = [
     {
       text: 'About',
@@ -111,7 +111,11 @@ const Navbar = ({ contactRef, scrollEl }) => {
   }, [hoverIndex])
 
   return (
-    <>
+    <div
+      className={`transition-opacity duration-700 delay-[2000ms] ${
+        assetsLoading ? 'opacity-0' : 'opacity-100'
+      }`}
+    >
       <header
         ref={navbarRef}
         className="fixed z-[4000000] top-0 left-0 w-full text-zinc-300 transition-all duration-300"
@@ -243,7 +247,7 @@ const Navbar = ({ contactRef, scrollEl }) => {
           <ContactEmailBanner />
         </div>
       </nav>
-    </>
+    </div>
   )
 }
 
