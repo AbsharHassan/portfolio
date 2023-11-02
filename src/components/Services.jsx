@@ -78,7 +78,7 @@ const Services = ({ sectionTitle, toolsArray }) => {
         setTriggerLight(entry.isIntersecting)
       },
       {
-        threshold: isScreenSmall ? 0.2 : isScreenMedium ? 0.4 : 0.85,
+        threshold: isScreenSmall ? 0.2 : isScreenMedium ? 0.4 : 0.5,
       }
     )
 
@@ -123,7 +123,7 @@ const Services = ({ sectionTitle, toolsArray }) => {
 
   useEffect(() => {
     triggerElRef.current.classList.toggle('visible', triggerLight)
-    // lightbarRef.current?.classList.toggle('visible', triggerLight)
+    lightbarRef.current?.classList.toggle('visible', triggerLight)
     sectionRef.current.classList.toggle('visible', triggerLight)
     headingTopRef.current?.classList.toggle('visible', triggerLight)
     // headingBottomRef.current?.classList.toggle('visible', triggerLight)
