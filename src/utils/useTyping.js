@@ -12,7 +12,7 @@ export const useTyping = (wordArray) => {
   useEffect(() => {
     switch (phase) {
       case 'typing': {
-        const wordDisplayed = wordArray[seletectedIndex].text.slice(
+        const wordDisplayed = wordArray[seletectedIndex].slice(
           0,
           currentWord.length + 1
         )
@@ -34,7 +34,7 @@ export const useTyping = (wordArray) => {
           setPhase('typing')
           return
         }
-        const wordDisplayed = wordArray[seletectedIndex].text.slice(
+        const wordDisplayed = wordArray[seletectedIndex].slice(
           0,
           currentWord.length - 1
         )

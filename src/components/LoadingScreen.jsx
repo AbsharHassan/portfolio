@@ -3,7 +3,10 @@ import { useProgress } from '@react-three/drei'
 import { ReactComponent as Trademark } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import gsap from 'gsap'
 
-const LoadingScreen = ({ toggleAssetsLoading }) => {
+const LoadingScreen = ({
+  contentfulFetchingData,
+  toggleAssetsLoading,
+}) => {
   const { active, progress } = useProgress()
 
   const [isAnimationComplete, setIsAnimationComplete] = useState(false)
@@ -36,7 +39,7 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
   }, [brandRef])
 
   useEffect(() => {
-    if (!active && isAnimationComplete) {
+    if (!active && isAnimationComplete && !contentfulFetchingData) {
       gsap.to(brandRef.current, {
         fillOpacity: 1,
         duration: 0.4,
@@ -66,7 +69,7 @@ const LoadingScreen = ({ toggleAssetsLoading }) => {
         },
       })
     }
-  }, [active, isAnimationComplete])
+  }, [active, isAnimationComplete, contentfulFetchingData])
 
   return (
     <div

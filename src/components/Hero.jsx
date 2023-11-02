@@ -15,7 +15,7 @@ import HeroCatchPhrase from './HeroCatchPhrase'
 import NeonButton from './NeonButton'
 import { useInView } from 'react-intersection-observer'
 
-const Hero = ({ assetsLoading }) => {
+const Hero = ({ heroContent, assetsLoading }) => {
   // Constants
   const dispatch = useDispatch()
 
@@ -33,6 +33,7 @@ const Hero = ({ assetsLoading }) => {
   const { bloomTheme } = useSelector((state) => state.threeStore)
   const [isMouseInside, setIsMouseInside] = useState(false)
   const [mousePosition, setMousePosition] = useState(new Vector2())
+  const [displayAlternatingText, setDisplayAlternatingText] = useState(false)
   // const [bloomTheme, setBloomTheme] = useState(bloomColorsArray[0])
 
   let heroSectionRef = useRef(null)
@@ -72,6 +73,20 @@ const Hero = ({ assetsLoading }) => {
       clearInterval(bloomThemeInterval)
     }
   }, [])
+
+  useEffect(() => {
+    let timeout
+
+    if (!assetsLoading) {
+      timeout = setTimeout(() => {
+        setDisplayAlternatingText(true)
+      }, 2700)
+    }
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [assetsLoading])
 
   // useEffect(() => {
   //   VanillaTilt.init(heroTextContainerRef.current, {
@@ -145,36 +160,13 @@ const Hero = ({ assetsLoading }) => {
             <h2
               className={`sm:text-lg lg:text-lg mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl`}
             >
-              Hello, I'm Abshar Hassan. I love using the power of code to
-              transform innovative ideas into reality. With a focus on
-              reusability, efficiency, and industry best practices, I craft
-              high-quality, production-grade solutions. I am your friendly
-              neighbourhood{' '}
-              <AlternatingText
-                singleWord="frontend developer"
-                wordsObjectArray={[
-                  {
-                    text: 'frontend developer.',
-                    classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                    cursor: '#5a82f9',
-                  },
-                  {
-                    text: 'backend developer.',
-                    classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
-                    cursor: '#09a9b8',
-                  },
-                  {
-                    text: 'fullstack developer.',
-                    classes: 'bg-gradient-to-r from-customViolet to-customBlue',
-                    cursor: '#5a82f9',
-                  },
-                  {
-                    text: 'ML engineer.',
-                    classes: 'bg-gradient-to-r from-customBlue  to-customAqua',
-                    cursor: '#09a9b8',
-                  },
-                ]}
-              />
+              {heroContent.abstract}{' '}
+              {heroContent.qualifications.length && displayAlternatingText && (
+                <AlternatingText
+                  singleWord="fullstack developer"
+                  wordsObjectArray={heroContent.qualifications}
+                />
+              )}
             </h2>
             <NeonButton
               colorNeon="#7b53d3"
@@ -203,9 +195,7 @@ const Hero = ({ assetsLoading }) => {
               assetsLoading ? 'opacity-0' : 'opacity-100'
             }`}
           >
-            <span className="scroll-span w-[4px] h-[10px] bg-slate-600 rounded-md">
-              {' '}
-            </span>
+            <span className="scroll-span w-[4px] h-[10px] bg-slate-500 rounded-md" />
           </a>
         </div>
       </div>

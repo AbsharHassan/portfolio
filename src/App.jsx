@@ -65,6 +65,10 @@ function App() {
   const [dummyHeadingRef, setDummyHeadingRef] = useState(null)
   const [isProjectsVisible, setIsProjectsVisible] = useState(false)
   const [isAboutVisible, setIsAboutVisible] = useState(false)
+  const [heroContent, setHeroContent] = useState({
+    abstract: null,
+    qualifications: [],
+  })
 
   // useEffect(() => {
   //   let observerProjects
@@ -218,21 +222,27 @@ function App() {
     setDummyHeadingRef(dummyRef)
   }
 
-  const { getHero, getProjects } = useContentful()
+  const { contentfulFetchingData, getHero, getProjects } = useContentful()
 
   const [projectsArray, setProjectsArray] = useState([])
 
   useEffect(() => {
     getHero().then((response) => {
-      console.log(response.items)
+      setHeroContent({
+        abstract: response.items[0].fields.abstract.content[0].content[0].value,
+        qualifications: response.items[0].fields.qualifications,
+      })
     })
-
     getProjects().then((response) => {
       setProjectsArray(response.items)
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    console.log(heroContent)
+  }, [heroContent])
 
   // // Add dependancy for viewport resize
   // useEffect(() => {
@@ -355,6 +365,7 @@ function App() {
       {assetsLoading && (
         <LoadingScreen
           toggleAssetsLoading={() => {
+            console.log(contentfulFetchingData)
             setAssetsLoading(false)
           }}
         />
@@ -379,7 +390,10 @@ function App() {
               ref={heroContainerRef}
               className="min-h-screen mb-[100vh] bg-red-700/0 "
             >
-              <Hero assetsLoading={assetsLoading} />
+              <Hero
+                assetsLoading={assetsLoading}
+                heroContent={heroContent}
+              />
             </div>
 
             <div
