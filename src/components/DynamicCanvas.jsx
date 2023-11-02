@@ -46,25 +46,23 @@ const DynamicCanvas = ({
             track={refArray[index]}
           >
             {project.fields.model === 'laptop' ? (
-              <>
-                <LaptopModel
-                  inView={visibleArray[index]}
-                  fullView={fullViewArray[index]}
-                  leftSide={index % 2 === 0}
-                  index={index}
-                  changeFullViewArray={changeFullViewArray}
-                  // setFullView={setFullView}
-                  url={project.fields.url}
-                  // inView={inView}
-                />
-              </>
+              <LaptopModel
+                inView={visibleArray[index]}
+                fullView={fullViewArray[index]}
+                leftSide={index % 2 === 0}
+                index={index}
+                changeFullViewArray={changeFullViewArray}
+                // setFullView={setFullView}
+                url={project.fields.url}
+                title={project.fields.title}
+                favicon={'https:' + project.fields.favicon.fields.file.url}
+                // inView={inView}
+              />
             ) : (
-              <>
-                <PhoneModel
-                  fullView={fullViewArray[index]}
-                  inView={visibleArray[index]}
-                />
-              </>
+              <PhoneModel
+                fullView={fullViewArray[index]}
+                inView={visibleArray[index]}
+              />
             )}
           </View>
         ))}

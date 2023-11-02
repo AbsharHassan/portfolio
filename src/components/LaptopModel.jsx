@@ -45,6 +45,8 @@ const LaptopModel = ({
   url,
   inView,
   index,
+  title,
+  favicon,
 }) => {
   const { camera, viewport } = useThree()
 
@@ -101,6 +103,7 @@ const LaptopModel = ({
         x: fullView ? 0 : leftSide ? 1 * newX : -1 * newX,
         y: fullView ? -0.15 : 0,
         z: fullView ? 1.4 : -0.4,
+
         duration: 1,
         ease: 'power',
       })
@@ -242,15 +245,31 @@ const LaptopModel = ({
                 ref={htmlRef}
                 className="opacity-0 transition-opacity duration-300 "
               >
-                <TestSVG className="w-full h-full" />
+                <div className=" text-slate-200 relative">
+                  <TestSVG className="w-full" />
+                  <div className="absolute top-[17px] left-[108px] min-w-[150px] font-semibold text-[12px] bg-[#35363A] ">
+                    {title}
+                  </div>
+                  <div className="absolute top-[51px] left-[135px] font-thin text-[11px] min-w-[300px] bg-[#202124]  ">
+                    {url}
+                  </div>
+                  <div className="absolute top-[17px] left-[84px] bg-[#35363A]">
+                    <img
+                      src={favicon}
+                      alt="favicon"
+                      width={16}
+                      height={16}
+                    />
+                  </div>
+                </div>
                 <iframe
                   title="iframe"
-                  // src={
-                  //   url !== `https://absharhassan.onrender.com/`
-                  //     ? url
-                  //     : 'https://example.com/'
-                  // }
-                  src={null}
+                  src={
+                    url !== `https://absharhassan.onrender.com/`
+                      ? url
+                      : 'https://example.com/'
+                  }
+                  // src={null}
                   // src="http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login"
                 />
                 {/* {url !==

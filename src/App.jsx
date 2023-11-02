@@ -218,14 +218,19 @@ function App() {
     setDummyHeadingRef(dummyRef)
   }
 
-  const { getProjects } = useContentful()
+  const { getHero, getProjects } = useContentful()
 
   const [projectsArray, setProjectsArray] = useState([])
 
   useEffect(() => {
+    getHero().then((response) => {
+      console.log(response.items)
+    })
+
     getProjects().then((response) => {
       setProjectsArray(response.items)
     })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
