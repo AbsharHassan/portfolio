@@ -61,6 +61,24 @@ const useContentful = () => {
     }
   }
 
+  const getAbout = async () => {
+    try {
+      incrementRequestCount()
+
+      const data = await client.getEntries({
+        content_type: 'about',
+        select: 'fields',
+        order: 'sys.createdAt',
+      })
+
+      decrementRequestCount()
+      return data
+    } catch (error) {
+      decrementRequestCount()
+      console.log(error)
+    }
+  }
+
   const getServices = async () => {
     try {
       incrementRequestCount()
@@ -101,6 +119,7 @@ const useContentful = () => {
     contentfulFetchingData,
     getHero,
     getProjects,
+    getAbout,
     getServices,
     getToolset,
   }

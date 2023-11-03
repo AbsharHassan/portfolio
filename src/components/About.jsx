@@ -10,10 +10,13 @@ import { Canvas } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import AboutSectionCanvas from './AboutSectionCanvas'
 import AboutCanvasContainer from './AboutCanvasContainer'
+import useContentful from '../utils/useContentful'
 
 gsap.registerPlugin(CSSPlugin)
 
 const About = ({ sectionTitle, toolsArray }) => {
+  const { getAbout } = useContentful()
+
   let sectionRef = useRef(null)
   let lightbarRef = useRef(null)
   let contentRef = useRef(null)
@@ -25,6 +28,7 @@ const About = ({ sectionTitle, toolsArray }) => {
   let canvasContainerRef = useRef(null)
 
   const [isContainerVisibile, setIsContainerVisible] = useState(false)
+  const [aboutText, setAboutText] = useState('')
   const [triggerLight, setTriggerLight] = useState(false)
   const [isMouseOver, setIsMouseOver] = useState(false)
   const [hoveredTool, setHoveredTool] = useState('')
@@ -66,6 +70,12 @@ const About = ({ sectionTitle, toolsArray }) => {
     }
 
     window.addEventListener('resize', checkScreenSm)
+
+    getAbout().then((response) => {
+      console.log(response)
+      console.log(response.items[0].fields.aboutMe)
+      setAboutText(response.items[0].fields.aboutMe)
+    })
 
     return () => {
       window.removeEventListener('resize', checkScreenSm)
@@ -130,21 +140,21 @@ const About = ({ sectionTitle, toolsArray }) => {
     headingTopRef.current?.classList.toggle('visible', triggerLight)
     headingBottomRef.current?.classList.toggle('visible', triggerLight)
 
-    if (triggerLight) {
-      animationMask.current?.kill()
-      animationMask.current = gsap.to(triggerElRef.current.style, {
-        WebkitMaskImage:
-          'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 1))',
-        duration: 1,
-      })
-    } else {
-      animationMask.current?.kill()
-      animationMask.current = gsap.to(triggerElRef.current.style, {
-        WebkitMaskImage:
-          'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
-        duration: 1,
-      })
-    }
+    // if (triggerLight) {
+    //   animationMask.current?.kill()
+    //   animationMask.current = gsap.to(triggerElRef.current.style, {
+    //     WebkitMaskImage:
+    //       'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 1))',
+    //     duration: 1,
+    //   })
+    // } else {
+    //   animationMask.current?.kill()
+    //   animationMask.current = gsap.to(triggerElRef.current.style, {
+    //     WebkitMaskImage:
+    //       'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
+    //     duration: 1,
+    //   })
+    // }
   }, [triggerLight])
 
   // useEffect(() => {
@@ -160,10 +170,14 @@ const About = ({ sectionTitle, toolsArray }) => {
   //   #2857ff
   return (
     <section
-      className={`${sectionTitle}-main min-h-[1000px]`}
+      className={`${sectionTitle}-main min-h-[1000px] `}
       ref={sectionRef}
       onPointerMove={() => {
         // console.log('pointer is moving in grandparent')
+      }}
+      style={{
+        background:
+          'radial-gradient(ellipse 80% 30% at 50% 70%, rgb(0 0 0 / 1) 20%, rgb(0 0 0 / 0))',
       }}
     >
       <Lightbar
@@ -188,32 +202,20 @@ const About = ({ sectionTitle, toolsArray }) => {
 
         <div
           ref={triggerElRef}
-          className={`mx-auto my-12 place-items-center
+          className={`mx-auto my-12 place-items-center 
            text-slate-500 text-sm sm:text-base lg:text-xl text-justify relative
            z-[1000] p-5
            max-w-[950px] 
           `}
           // style={{
-          //   overflow: 'visible',
+          //   // overflow: 'visible',
           //   // '--number-cols': 8,
-          //   // WebkitMaskImage:
-          //   //   'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
+          //   WebkitMaskImage:
+          //     'radial-gradient(ellipse 100% 100% at 50% -20%, rgb(0 0 0 / 1), rgb(0 0 0 / 0))',
           // }}
         >
           {/* add to contentful */}
-          <div className="backdrop-blur-md bg-black/40 p-5 rounded-xl">
-            Hello, I’m Abshar, a 22-year-old fresh graduate with a deep love for
-            everything related to code (and cars, aircrafts, ships, that sort of
-            stuff). I have been writing code since 2018, with a deeper focus on
-            full-stack development in the past year, gaining hands-on experience
-            in taking impactful applications from conception to production. I
-            believe that the ability (and willingness) to learn is a major
-            factor in success in life. In the past year, I have taught myself
-            skills that have made me proficient in Laravel, Vue.js, MERN stack,
-            Docker, CI/CD. Skilled in data processing, visualization, and
-            creating stunning UI/UX with React, Three.js, and more. I am eager
-            to contribute expertise to innovative remote teams.
-          </div>
+          <div className=" p-5 rounded-xl">{aboutText}</div>
           {/* <div className="about-mask border-2 p-6 border-slate-500 rounded-xl ">
             <AboutSectionCanvas />
           </div> */}
