@@ -11,7 +11,7 @@ const Navbar = ({ contactRef, scrollEl, assetsLoading }) => {
   const navLinks = [
     {
       text: 'About',
-      color: '#a78bfa',
+      color: '#7c47eb',
       link: '#about',
     },
     {

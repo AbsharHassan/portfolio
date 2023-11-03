@@ -160,6 +160,10 @@ const Hero = ({ heroContent, assetsLoading }) => {
             <h2
               className={`sm:text-lg lg:text-lg mb-10 text-slate-400 h-44 sm:h-36 max-w-2xl`}
             >
+              Hello, I'm{' '}
+              <span className=" inline-block bg-clip-text font-semibold text-transparent bg-gradient-to-r from-customViolet to-customAqua">
+                Abshar Hassan.
+              </span>{' '}
               {heroContent.abstract}{' '}
               {heroContent.qualifications.length && displayAlternatingText && (
                 <AlternatingText
