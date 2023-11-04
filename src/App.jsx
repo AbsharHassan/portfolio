@@ -69,6 +69,7 @@ function App() {
     abstract: null,
     qualifications: [],
   })
+  const [lockScroll, setLockScroll] = useState(true)
 
   // useEffect(() => {
   //   let observerProjects
@@ -353,6 +354,40 @@ function App() {
 
   const [assetsLoading, setAssetsLoading] = useState(true)
 
+  useEffect(() => {
+    let timeout
+
+    if (!assetsLoading) {
+      timeout = setTimeout(() => {
+        setLockScroll(false)
+        console.log('scroll freeed')
+      }, 2000)
+    }
+  }, [assetsLoading])
+
+  useEffect(() => {
+    const disableScroll = (e) => {
+      e.preventDefault()
+    }
+
+    // Lock scrolling when the component mounts
+    if (lockScroll) {
+      document.body.style.overflow = 'hidden'
+      document.body.addEventListener('touchmove', disableScroll, {
+        passive: false,
+      })
+      document.body.addEventListener('mousewheel', disableScroll, {
+        passive: false,
+      })
+    }
+    // Unlock scrolling when the component unmounts
+    return () => {
+      document.body.style.overflow = 'visible'
+      document.body.removeEventListener('touchmove', disableScroll)
+      document.body.removeEventListener('mousewheel', disableScroll)
+    }
+  }, [lockScroll])
+
   let scrollElRef = useRef(null)
 
   return (
@@ -378,12 +413,12 @@ function App() {
           // ref={ref}
           // className={`main relative w-full min-h-screen h-[10000px] overflow-hidden`}
           // className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
-          className={`main relative overflow-x-hidden w-full h-full z-[2000]`}
+          className={`main relative overflow-x-hidden w-full h-full z-[2000] `}
         >
           <div
             id="main"
             ref={scrollContainerRef}
-            className="scroll "
+            className={`scroll `}
           >
             <div
               id="hero"
