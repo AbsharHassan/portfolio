@@ -138,7 +138,7 @@ const About = ({ sectionTitle, toolsArray }) => {
     lightbarRef.current?.classList.toggle('visible', triggerLight)
     sectionRef.current.classList.toggle('visible', triggerLight)
     headingTopRef.current?.classList.toggle('visible', triggerLight)
-    headingBottomRef.current?.classList.toggle('visible', triggerLight)
+    // headingBottomRef.current?.classList.toggle('visible', triggerLight)
 
     // if (triggerLight) {
     //   animationMask.current?.kill()
@@ -197,12 +197,12 @@ const About = ({ sectionTitle, toolsArray }) => {
               : 'translate-y-[200%]'
           } opacity-0 ${sectionTitle}-heading`}
         >
-          <code>&lt;about&gt;</code>
+          {/* <code>&lt;about&gt;</code> */}A little about me
         </h3>
 
         <div
           ref={triggerElRef}
-          className={`mx-auto my-8 place-items-center 
+          className={`mx-auto my-6 place-items-center 
            text-slate-500 text-sm sm:text-base lg:text-xl text-justify relative
            z-[1000] p-5
            max-w-[950px] 
@@ -240,12 +240,12 @@ const About = ({ sectionTitle, toolsArray }) => {
           </div> */}
         </div>
 
-        <h3
+        {/* <h3
           ref={headingBottomRef}
           className={`mx-auto font-semibold text-center text-4xl md:text-5xl relative opacity-0 ${sectionTitle}-heading -translate-y-[200%]`}
         >
           <code>&lt;/about&gt;</code>
-        </h3>
+        </h3> */}
       </div>
     </section>
   )
