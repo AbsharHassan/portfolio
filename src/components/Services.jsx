@@ -90,36 +90,28 @@ const Services = ({ sectionTitle, toolsArray }) => {
   }, [isScreenSmall, isScreenMedium])
 
   useEffect(() => {
-    // if (!isScreenSmall) {
-    //   if (isContainerVisibile) {
-    //     console.log('show annimation')
-    //     animationCards.current?.kill()
-    //     animationCards.current = gsap.fromTo(
-    //       `.${sectionTitle}-card`,
-    //       {
-    //         duration: 0,
-    //         opacity: 0,
-    //         translateY: 30,
-    //       },
-    //       {
-    //         duration: 0.3,
-    //         opacity: 1,
-    //         translateY: 0,
-    //         stagger: 0.1,
-    //       }
-    //     )
-    //   } else {
-    //     console.log('exitttttttttt annimation')
-    //     animationCards.current?.kill()
-    //     animationCards.current = gsap.to(`.${sectionTitle}-card`, {
-    //       duration: 0,
-    //       opacity: 0,
-    //       translateY: 30,
-    //       // stagger: 0.1,
-    //     })
-    //   }
-    // }
-  }, [isContainerVisibile, isScreenSmall])
+    if (!isScreenSmall) {
+      if (triggerLight) {
+        console.log('show annimation')
+        animationCards.current?.kill()
+        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+          duration: 0.6,
+          opacity: 1,
+          translateY: 0,
+          stagger: 0.1,
+        })
+      } else {
+        console.log('exitttttttttt annimation')
+        animationCards.current?.kill()
+        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+          duration: 0.6,
+          opacity: 0,
+          translateY: 30,
+          // stagger: 0.1,
+        })
+      }
+    }
+  }, [triggerLight, isScreenSmall])
 
   useEffect(() => {
     triggerElRef.current.classList.toggle('visible', triggerLight)
@@ -162,7 +154,7 @@ const Services = ({ sectionTitle, toolsArray }) => {
       >
         <h3
           ref={headingTopRef}
-          className={`font-semibold text-center text-4xl md:text-5xl relative  ${
+          className={`font-semibold text-center text-3xl sm:text-4xl md:text-5xl relative  ${
             sectionTitle === 'backend'
               ? 'translate-y-[160%]'
               : 'translate-y-[200%]'
