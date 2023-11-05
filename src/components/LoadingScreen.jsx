@@ -37,6 +37,7 @@ const LoadingScreen = ({ contentfulFetchingData, toggleAssetsLoading }) => {
 
   useEffect(() => {
     if (!active && isAnimationComplete && !contentfulFetchingData) {
+      window.scrollTo(0, 0)
       gsap.to(brandRef.current, {
         fillOpacity: 1,
         duration: 0.4,
