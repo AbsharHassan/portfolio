@@ -3,9 +3,10 @@ import { Color } from 'three'
 
 const bloomColorsArray = [
   // new Color(0.48, 0.33, 0.83),
-  new Color(0.76 / 1, 0.38 / 1, 1.0 / 1),
+  // new Color(0.76 / 1, 0.38 / 1, 1.0 / 1),
+  new Color(0.48 / 1, 0.28 / 1, 0.92 / 1),
   new Color(0.35 / 1, 0.51 / 1, 1 / 1),
-  new Color(0.04 / 1, 0.66 / 1, 0.72 / 1),
+  new Color(0.14 / 1, 0.5 / 1, 0.72 / 1),
 ]
 
 export const threeSlice = createSlice({
