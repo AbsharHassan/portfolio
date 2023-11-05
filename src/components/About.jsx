@@ -191,7 +191,7 @@ const About = ({ sectionTitle, toolsArray }) => {
       >
         <h3
           ref={headingTopRef}
-          className={`font-semibold text-center text-4xl md:text-5xl relative  ${
+          className={`font-semibold text-center text-3xl sm:text-4xl md:text-5xl relative  ${
             sectionTitle === 'backend'
               ? 'translate-y-[160%]'
               : 'translate-y-[200%]'
@@ -216,7 +216,7 @@ const About = ({ sectionTitle, toolsArray }) => {
         >
           {/* add to contentful */}
           <div
-            className={`about-text-gradient text-transparent transition-opacity duration-[1500ms] ${
+            className={`font-semibold sm:font-normal about-text-gradient text-transparent transition-opacity duration-[1500ms] ${
               triggerLight ? 'opacity-100' : 'opacity-25'
             }`}
           >

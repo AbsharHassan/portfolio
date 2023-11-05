@@ -84,44 +84,36 @@ const Toolset = ({ sectionTitle }) => {
     }
   }, [isScreenSmall, isScreenMedium])
 
-  // useEffect(() => {
-  //   if (!isScreenSmall) {
-  //     if (isContainerVisibile) {
-  //       console.log('show annimation')
-  //       animationCards.current?.kill()
-  //       animationCards.current = gsap.fromTo(
-  //         `.${sectionTitle}-card`,
-  //         {
-  //           duration: 0,
-  //           opacity: 0,
-  //           translateY: 30,
-  //         },
-  //         {
-  //           duration: 0.3,
-  //           opacity: 1,
-  //           translateY: 0,
-  //           stagger: 0.1,
-  //         }
-  //       )
-  //     } else {
-  //       console.log('exitttttttttt annimation')
-  //       animationCards.current?.kill()
-  //       animationCards.current = gsap.to(`.${sectionTitle}-card`, {
-  //         duration: 0,
-  //         opacity: 0,
-  //         translateY: 30,
-  //         // stagger: 0.1,
-  //       })
-  //     }
-  //   }
-  // }, [isContainerVisibile, isScreenSmall])
+  useEffect(() => {
+    if (!isScreenSmall) {
+      if (triggerLight) {
+        console.log('show annimation')
+        animationCards.current?.kill()
+        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+          duration: 0.3,
+          opacity: 1,
+          translateY: 0,
+          stagger: 0.1,
+        })
+      } else {
+        console.log('exitttttttttt annimation')
+        animationCards.current?.kill()
+        animationCards.current = gsap.to(`.${sectionTitle}-card`, {
+          duration: 0.3,
+          opacity: 0,
+          translateY: 30,
+          // stagger: 0.1,
+        })
+      }
+    }
+  }, [triggerLight, isScreenSmall])
 
   useEffect(() => {
     triggerElRef.current.classList.toggle('visible', triggerLight)
     lightbarRef.current?.classList.toggle('visible', triggerLight)
     sectionRef.current.classList.toggle('visible', triggerLight)
     headingTopRef.current?.classList.toggle('visible', triggerLight)
-    headingBottomRef.current?.classList.toggle('visible', triggerLight)
+    // headingBottomRef.current?.classList.toggle('visible', triggerLight)
 
     if (triggerLight) {
       animationMask.current?.kill()
@@ -157,19 +149,20 @@ const Toolset = ({ sectionTitle }) => {
       >
         <h3
           ref={headingTopRef}
-          className={`font-semibold text-center text-4xl md:text-5xl relative  ${
+          className={`font-semibold text-center text-3xl sm:text-4xl md:text-5xl relative  ${
             sectionTitle === 'backend'
               ? 'translate-y-[160%]'
               : 'translate-y-[200%]'
           } opacity-0 ${sectionTitle}-heading`}
         >
-          <code>&lt;toolset&gt;</code>
+          {/* <code>&lt;toolset&gt;</code> */}
+          Some of what I use
         </h3>
 
         <div
           ref={triggerElRef}
           className={`mx-auto my-12 transition-colors duration-1000 place-items-center ${sectionTitle}-tile-section 
-          max-w-[950px]  flex flex-col items-center justify-center lg:grid grid-cols-10 gap-5 overflow-visible 
+          max-w-[980px]  flex flex-col items-center justify-center lg:grid grid-cols-10 gap-7 overflow-visible 
           `}
         >
           {toolsArray.map((tool, index) => {
@@ -186,12 +179,12 @@ const Toolset = ({ sectionTitle }) => {
           })}
         </div>
 
-        <h3
+        {/* <h3
           ref={headingBottomRef}
           className={`mx-auto font-semibold text-center text-4xl lg:text-5xl relative opacity-0 ${sectionTitle}-heading -translate-y-[200%]`}
         >
           <code>&lt;/toolset&gt;</code>
-        </h3>
+        </h3> */}
       </div>
     </section>
   )
