@@ -202,7 +202,7 @@ const About = ({ sectionTitle, toolsArray }) => {
 
         <div
           ref={triggerElRef}
-          className={`mx-auto my-12 place-items-center 
+          className={`mx-auto my-8 place-items-center 
            text-slate-500 text-sm sm:text-base lg:text-xl text-justify relative
            z-[1000] p-5
            max-w-[950px] 
@@ -215,7 +215,13 @@ const About = ({ sectionTitle, toolsArray }) => {
           // }}
         >
           {/* add to contentful */}
-          <div className=" p-5 rounded-xl">{aboutText}</div>
+          <div
+            className={`about-text-gradient text-transparent transition-opacity duration-[1500ms] ${
+              triggerLight ? 'opacity-100' : 'opacity-25'
+            }`}
+          >
+            {aboutText}
+          </div>
           {/* <div className="about-mask border-2 p-6 border-slate-500 rounded-xl ">
             <AboutSectionCanvas />
           </div> */}
