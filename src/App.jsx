@@ -421,7 +421,7 @@ function App() {
             className={`scroll `}
           >
             <div
-              id="hero"
+              id="intro"
               ref={heroContainerRef}
               className="min-h-screen mb-[100vh] bg-red-700/0 "
             >
