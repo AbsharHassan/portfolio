@@ -486,7 +486,7 @@ function App() {
           contactRef={contactContainerRef}
           scrollEl={scrollElRef.current}
         />
-        <BackgroundCanvas
+        {/* <BackgroundCanvas
           assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
           isContactVisible={isContactVisible}
@@ -501,7 +501,7 @@ function App() {
           view1={projectsContainerRef}
           eventSource={mainRef}
           track1={heroContainerRef}
-        />
+        /> */}
 
         <DynamicCanvas
           eventSource={mainRef}

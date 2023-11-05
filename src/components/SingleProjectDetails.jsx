@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useInView } from 'react-intersection-observer'
 import gsap from 'gsap'
 
 import { ReactComponent as ArrowSVG } from '../assets/icons/arrow.svg'
@@ -12,6 +13,11 @@ const SingleProjectDetails = ({
   toggleFullView,
   project,
 }) => {
+  const [containerRef, inView] = useInView({
+    /* Optional options */
+    threshold: 0.2,
+  })
+
   const [delayedFullView, setDelayedFullView] = useState(false)
 
   let gradientRef = useRef(null)
@@ -52,9 +58,13 @@ const SingleProjectDetails = ({
     }
   }, [leftSide, fullView])
 
+  useEffect(() => {
+    gradientRef.current.style.setProperty('--opacity', inView ? 0.6 : 0.25)
+  }, [inView])
+
   return (
     <div
-      className={`w-screen pt-[500px] xl:pt-0 min-h-screen xl:absolute xl:h-full transition-all duration-1000 ease-in-out z-50 flex items-end xl:items-center  ${
+      className={`w-screen pt-[300px] xl:pt-0 sm:min-h-screen xl:absolute xl:h-full transition-all duration-1000 ease-in-out z-50 flex items-end xl:items-center   ${
         fullView ? 'xl:w-[10%]' : 'xl:w-[40%]'
       }
         ${leftSide ? 'xl:left-0 xl:top-0' : 'xl:right-0 xl:top-0'}
@@ -76,15 +86,19 @@ const SingleProjectDetails = ({
             `}
         >
           <div
-            className={` w-screen max-w-[640px] xl:w-[450px] xl:h-[675px] test-gradient rounded-xl backdrop-blur transition-all duration-1000 ease-in-out ${
+            className={` bg-blue w-screen max-w-[640px] xl:w-[450px] xl:h-[675px] test-gradient rounded-xl backdrop-blur transition-all duration-1000 ease-in-out ${
               fullView ? '' : ''
             }`}
             // test-gradient
             ref={gradientRef}
+            style={{
+              '--opacity': 0.0,
+            }}
           >
             <div
               // test-grad-child
-              className={`w-full h-full test-grad-child relative overflow-hidden rounded-xl  transition-all duration-200 delay-300 py-7 xl:py-12 ${
+              ref={containerRef}
+              className={` w-full h-full test-grad-child relative overflow-hidden rounded-xl transition-all duration-200 delay-300 py-7 xl:py-12 ${
                 fullView ? 'px-0' : 'px-7 xl:px-12'
               } `}
             >

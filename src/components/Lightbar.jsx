@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-const Lightbar = forwardRef(({ sectionTitle }, ref) => {
+const Lightbar = forwardRef(({ sectionTitle, extraClasses }, ref) => {
   return (
     <>
       {/* <div className="absolute inset-0  w-full h- overflow-y-visible overflow-x-hidden">
@@ -11,7 +11,7 @@ const Lightbar = forwardRef(({ sectionTitle }, ref) => {
       </div> */}
       <div
         ref={ref}
-        className={`${sectionTitle}-lightbar visible`}
+        className={`${sectionTitle}-lightbar visible ${extraClasses}`}
       ></div>
 
       {/* <section

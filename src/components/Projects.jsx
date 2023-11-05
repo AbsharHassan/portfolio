@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useContentful from '../utils/useContentful'
+import { useInView } from 'react-intersection-observer'
 import SingleProject from './SingleProject'
 import { Canvas } from '@react-three/fiber'
 import { View } from '@react-three/drei'
 import LaptopModel from './LaptopModel'
 import PhoneModel from './PhoneModel'
+import Lightbar from './Lightbar'
 
 const Projects = ({
   projectsArray,
@@ -14,71 +16,54 @@ const Projects = ({
   setIntersectiom,
   changeFullViewArray,
 }) => {
-  // const projectsArray = [
-  //   {
-  //     model: 'laptop',
-  //     url: 'https://flood-tracker.onrender.com/',
-  //     githubLink: 'https://github.com/',
-  //     title: (
-  //       <>
-  //         Flood <span className="flood-analyzer-text-gradient">Tracker</span>
-  //       </>
-  //     ),
-  //     descriptionIntro:
-  //       'Lorem ipsum dolor sit, amet consectetur adipisicing elit.Quis, asperiores. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, asperiores.',
-  //     descriptionMain:
-  //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, soluta voluptatum? Suscipit beatae nulla placeat fugit officiis aperiam. Consectetur, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, soluta voluptatum? Suscipit beatae nulla placeat fugit officiis aperiam. Consectetur, quod.',
-  //     techList: [
-  //       'Preact',
-  //       'WebSockets',
-  //       'WebTorrent',
-  //       'Express',
-  //       'Docker',
-  //       'DigitalOcean',
-  //     ],
-  //     //maybe add color scheme as well
-  //   },
-  //   // {
-  //   //   model: 'laptop',
-  //   //   url: 'http://simsdockerapp-env-1.eba-atjdtam3.ap-northeast-1.elasticbeanstalk.com/login',
-  //   // },
-  //   // { model: 'phone', url: null },
-  //   // { model: 'laptop', url: null },
-  // ]
+  const [containerRef, inView] = useInView({
+    /* Optional options */
+    threshold: 0.05,
+  })
 
-  // const { getProjects } = useContentful()
+  let lightbarRef = useRef(null)
 
-  // const [projectsArray, setProjectsArray] = useState([])
-
-  // useEffect(() => {
-  //   getProjects().then((response) => {
-  //     setProjectsArray(response.items)
-  //   })
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+  useEffect(() => {
+    lightbarRef.current?.classList.toggle('visible', inView)
+  }, [inView])
 
   return (
     <div
       className="w-full h-full z-[2000] relative pt-14"
       id="someProject"
     >
-      <h2 className=" mb-32 text-5xl text-center font-bold text-slate-300">
-        Flagship Projects
-      </h2>
-      {projectsArray.map((project, index) => (
-        <SingleProject
-          key={index}
-          leftSide={index % 2 === 0}
-          project={project.fields}
-          index={index}
-          refsArray={refsArray}
-          arrayOfRefs={arrayOfRefs}
-          addToRefs={addToRefs}
-          setIntersectiom={setIntersectiom}
-          changeFullViewArray={changeFullViewArray}
-          // project={project}
+      <div className="z-[-2000]">
+        <Lightbar
+          ref={lightbarRef}
+          sectionTitle="frontend"
+          extraClasses="z-[-2000]"
         />
-      ))}
+      </div>
+      <h2 className="mt-16 mb-32 text-3xl sm:text-5xl text-center font-bold text-slate-300 ">
+        <div
+          className={`transition-transform duration-1000 ${
+            inView ? 'translate-y-0' : 'translate-y-20'
+          }`}
+        >
+          Flagship Projects
+        </div>
+      </h2>
+      <div ref={containerRef}>
+        {projectsArray.map((project, index) => (
+          <SingleProject
+            key={index}
+            leftSide={index % 2 === 0}
+            project={project.fields}
+            index={index}
+            refsArray={refsArray}
+            arrayOfRefs={arrayOfRefs}
+            addToRefs={addToRefs}
+            setIntersectiom={setIntersectiom}
+            changeFullViewArray={changeFullViewArray}
+            // project={project}
+          />
+        ))}
+      </div>
       {/* <div className="absolute w-full h-full inset-0 z-[1000]">
           <Canvas
             className="bg-purple-400"

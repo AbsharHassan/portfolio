@@ -110,7 +110,7 @@ const LaptopModel = ({
     } else {
       gsap.to(laptopRef.current.position, {
         x: 0,
-        y: 0.3,
+        y: 0.45,
         z: -0.4,
         duration: 1,
         ease: 'power',

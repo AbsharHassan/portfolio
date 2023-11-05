@@ -35,7 +35,7 @@ const SingleProject = ({
   return (
     <div
       ref={addToRefs}
-      className="w-full min-h-screen mx-auto relative mb-40 z-[2000]"
+      className="w-full min-h-screen mx-auto relative mb-40 z-[2000] "
       style={{ position: 'relative' }}
     >
       <div

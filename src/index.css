@@ -209,9 +209,11 @@
   );
   filter: blur(160px);
 
-  /* opacity: var(--opacity); */
-  opacity: 0.6;
+  opacity: var(--opacity);
+  /* opacity: 0.6; */
   /* opacity: 0; */
+
+  transition: opacity 1s ease;
 }
 
 .letter-lines {
