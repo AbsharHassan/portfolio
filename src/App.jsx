@@ -425,10 +425,10 @@ function App() {
               ref={heroContainerRef}
               className="min-h-screen mb-[100vh] bg-red-700/0 "
             >
-              <Hero
+              {/* <Hero
                 assetsLoading={assetsLoading}
                 heroContent={heroContent}
-              />
+              /> */}
             </div>
 
             <div
@@ -513,11 +513,11 @@ function App() {
         />
 
         <div className="w-full h-screen absolute top-0 z-[-100000000000000000000]">
-          <HeroCanvas
+          {/* <HeroCanvas
             // mousePosition={mousePosition}
             assetsLoading={assetsLoading}
             bloomTheme={bloomTheme}
-          />
+          /> */}
         </div>
       </div>
     </div>

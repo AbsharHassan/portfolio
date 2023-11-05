@@ -116,7 +116,7 @@ export const vertexShader = glsl`
         // view_pos.xyz += position  * clamp(perlinNoise*5.0, 0.5, 5.0);
 
         view_pos.xyz += position  *  mix(
-            clamp(perlinNoise*5.0, mix(1.75, 0.5, uInterpolate), mix(3.0, 3.0, uInterpolate)), 
+            clamp(perlinNoise*5.0, mix(2.0, 0.5, uInterpolate), mix(3.0, 3.0, uInterpolate)), 
             uSizeScale, 
             clamp((uSizeScale - 1.0), 0.0, 1.0));
 
