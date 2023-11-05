@@ -24,14 +24,14 @@ const ContactForm = () => {
     //add these as env vars
     emailjs
       .send(
-        'service_c21hvfm',
-        'template_7w7o69q',
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
         {
           from_name: nameInputRef.current.value,
           message: textareaRef.current.value,
           email: emailInputRef.current.value,
         },
-        'icBXfj934eizyrT6o'
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
       )
       .then(
         (result) => {

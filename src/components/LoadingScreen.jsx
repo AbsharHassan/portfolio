@@ -3,10 +3,7 @@ import { useProgress } from '@react-three/drei'
 import { ReactComponent as Trademark } from '../assets/trademark/A_with_leg_missing_tall_with_stroke.svg'
 import gsap from 'gsap'
 
-const LoadingScreen = ({
-  contentfulFetchingData,
-  toggleAssetsLoading,
-}) => {
+const LoadingScreen = ({ contentfulFetchingData, toggleAssetsLoading }) => {
   const { active, progress } = useProgress()
 
   const [isAnimationComplete, setIsAnimationComplete] = useState(false)
@@ -80,6 +77,9 @@ const LoadingScreen = ({
       <div
         className="flex flex-col items-center justify-center scale-100 test-gradient w-full sm:w-[60%] max-w-7xl "
         ref={contentRef}
+        style={{
+          '--opacity': 0.3,
+        }}
       >
         <Trademark
           fill="white"
