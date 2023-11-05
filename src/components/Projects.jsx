@@ -35,11 +35,11 @@ const Projects = ({
       <div className="z-[-2000]">
         <Lightbar
           ref={lightbarRef}
-          sectionTitle="frontend"
+          sectionTitle="projects"
           extraClasses="z-[-2000]"
         />
       </div>
-      <h2 className="mt-16 mb-32 text-3xl sm:text-5xl text-center font-bold text-slate-300 ">
+      <h2 className="mt-16 mb-32 text-3xl sm:text-5xl text-center font-bold text-[#5a82f9] ">
         <div
           className={`transition-transform duration-1000 ${
             inView ? 'translate-y-0' : 'translate-y-20'

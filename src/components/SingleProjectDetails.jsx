@@ -15,7 +15,7 @@ const SingleProjectDetails = ({
 }) => {
   const [containerRef, inView] = useInView({
     /* Optional options */
-    threshold: 0.2,
+    threshold: 0.5,
   })
 
   const [delayedFullView, setDelayedFullView] = useState(false)
