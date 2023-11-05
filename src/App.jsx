@@ -475,7 +475,10 @@ function App() {
               ref={contactContainerRef}
               className="min-h-screen bg-red-700/0 "
             >
-              <Contact setDummyHeadingRef={handleDummyHeadingRef} />
+              <Contact
+                isContactVisible={isContactVisible}
+                setDummyHeadingRef={handleDummyHeadingRef}
+              />
             </div>
 
             <Footer />

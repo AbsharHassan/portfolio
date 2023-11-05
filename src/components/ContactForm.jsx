@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import { ReactComponent as ProcessingSVG } from '../assets/icons/processing.svg'
 import NeonButton from './NeonButton'
 
-const ContactForm = () => {
+const ContactForm = ({ isContactVisible }) => {
   const messageSuccess =
     'Thank you for your message, I will get back to you as soon as possible :)'
   const messageFailure = 'Something went wrong, please try again later :('
@@ -21,7 +21,6 @@ const ContactForm = () => {
     e.preventDefault()
     setIsProcessing(true)
 
-    //add these as env vars
     emailjs
       .send(
         process.env.REACT_APP_EMAILJS_SERVICE_ID,
@@ -73,7 +72,14 @@ const ContactForm = () => {
   }, [resultMessage])
   return (
     <div
-      className={`mb-20 lg:mb-0 relative w-full sm:w-[640px] mx-auto  lg:w-[500px] rounded-xl test-gradient backdrop-blur transition-all duration-1000 ease-in-out `}
+      className={`mb-20 lg:mb-0 relative w-full sm:w-[640px] mx-auto  lg:w-[500px] rounded-xl test-gradient backdrop-blur transition-all duration-1000 ease-in-out ${
+        isContactVisible
+          ? 'delay-[1500ms] opacity-100'
+          : 'delay-[0ms] opacity-0'
+      } `}
+      style={{
+        '--opacity': 0.6,
+      }}
       // test-gradient
     >
       <div className="w-full h-full test-grad-child absolute inset-0 bg-red-900/0 overflow-hidden rounded-xl border-slate-7000 p-12 text-slate-400 flex flex-col gap-y-4 z-[-10] ">
