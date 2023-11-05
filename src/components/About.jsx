@@ -177,7 +177,7 @@ const About = ({ sectionTitle, toolsArray }) => {
       }}
       style={{
         background:
-          'radial-gradient(ellipse 80% 30% at 50% 70%, rgb(0 0 0 / 1) 20%, rgb(0 0 0 / 0))',
+          'radial-gradient(ellipse 80% 30% at 50% 65%, rgb(0 0 0 / 1) 20%, rgb(0 0 0 / 0))',
       }}
     >
       <Lightbar
