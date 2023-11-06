@@ -395,7 +395,7 @@ function App() {
       ref={scrollElRef}
       id="main-container"
     >
-      <Stats />
+      {/* <Stats /> */}
 
       {assetsLoading && (
         <LoadingScreen
