@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 notes-for-portfolio.txt
+notes-for-new-lib.txt
 .env

@@ -451,7 +451,7 @@ body {
   /* scroll-behavior: smooth; */
 }
 
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   width: 0px;
   background: transparent;
 }
@@ -459,7 +459,7 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-thumb {
   background: rgb(63 63 70);
   border-radius: 4px;
-}
+} */
 
 .scroll-span {
   transform: translateY(-8px);

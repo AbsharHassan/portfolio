@@ -119,7 +119,7 @@ const BackgroundCanvas = ({
           aboutContainerRef={aboutContainerRef}
         />
 
-        <Hud renderPriority={1000}>
+        {/* <Hud renderPriority={1000}>
           <FloatingWordParticles
             isHeroVisible={isHeroVisible}
             isContactVisible={isContactVisible}
@@ -127,12 +127,12 @@ const BackgroundCanvas = ({
             contactContainerRef={contactContainerRef}
             dummyHeadingRef={dummyHeadingRef}
           />
-        </Hud>
+        </Hud> */}
 
-        <BloomCircle
+        {/* <BloomCircle
           assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
-        />
+        /> */}
 
         {/* {!refresh && (
           <BloomCircle

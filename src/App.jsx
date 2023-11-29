@@ -365,28 +365,28 @@ function App() {
     }
   }, [assetsLoading])
 
-  useEffect(() => {
-    const disableScroll = (e) => {
-      e.preventDefault()
-    }
+  // useEffect(() => {
+  //   const disableScroll = (e) => {
+  //     e.preventDefault()
+  //   }
 
-    // Lock scrolling when the component mounts
-    if (lockScroll) {
-      document.body.style.overflow = 'hidden'
-      document.body.addEventListener('touchmove', disableScroll, {
-        passive: false,
-      })
-      document.body.addEventListener('mousewheel', disableScroll, {
-        passive: false,
-      })
-    }
-    // Unlock scrolling when the component unmounts
-    return () => {
-      document.body.style.overflow = 'visible'
-      document.body.removeEventListener('touchmove', disableScroll)
-      document.body.removeEventListener('mousewheel', disableScroll)
-    }
-  }, [lockScroll])
+  //   // Lock scrolling when the component mounts
+  //   if (lockScroll) {
+  //     document.body.style.overflow = 'hidden'
+  //     document.body.addEventListener('touchmove', disableScroll, {
+  //       passive: false,
+  //     })
+  //     document.body.addEventListener('mousewheel', disableScroll, {
+  //       passive: false,
+  //     })
+  //   }
+  //   // Unlock scrolling when the component unmounts
+  //   return () => {
+  //     document.body.style.overflow = 'visible'
+  //     document.body.removeEventListener('touchmove', disableScroll)
+  //     document.body.removeEventListener('mousewheel', disableScroll)
+  //   }
+  // }, [lockScroll])
 
   let scrollElRef = useRef(null)
 
@@ -395,16 +395,16 @@ function App() {
       ref={scrollElRef}
       id="main-container"
     >
-      {/* <Stats /> */}
+      <Stats />
 
-      {assetsLoading && (
+      {/* {assetsLoading && (
         <LoadingScreen
           toggleAssetsLoading={() => {
             console.log(contentfulFetchingData)
             setAssetsLoading(false)
           }}
         />
-      )}
+      )} */}
 
       <div className="relative">
         <main
@@ -415,7 +415,15 @@ function App() {
           // className={`main fixed top-0 left-0 w-full h-full overflow-hidden z-[2000]`}
           className={`main relative overflow-x-hidden w-full h-full z-[2000] `}
         >
+          <div className="w-full h-screen bg-green-600/10 "></div>
           <div
+            id="services"
+            ref={serviceContainerRef}
+            className="min-h-screen my-[100vh] bg-red-700/0 "
+          >
+            <Services sectionTitle={'services'} />
+          </div>
+          {/* <div
             id="main"
             ref={scrollContainerRef}
             className={`scroll `}
@@ -482,13 +490,13 @@ function App() {
             </div>
 
             <Footer />
-          </div>
+          </div> */}
         </main>
-        <Navbar
+        {/* <Navbar
           assetsLoading={assetsLoading}
           contactRef={contactContainerRef}
           scrollEl={scrollElRef.current}
-        />
+        /> */}
         <BackgroundCanvas
           assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
@@ -506,7 +514,7 @@ function App() {
           track1={heroContainerRef}
         />
 
-        <DynamicCanvas
+        {/* <DynamicCanvas
           eventSource={mainRef}
           changeFullViewArray={changeFullViewArray}
           fullViewArray={fullViewArray}
@@ -521,7 +529,7 @@ function App() {
             assetsLoading={assetsLoading}
             bloomTheme={bloomTheme}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   )

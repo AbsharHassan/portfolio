@@ -191,12 +191,12 @@ export const fragmentShader = glsl`
 
 
         // gl_FragColor = vec4(vUv, 0.0,1.0);
-        // gl_FragColor = vec4(vUv, 0.0,1.0) * actualOpacity;
+        gl_FragColor = vec4(vUv, 0.0,1.0) * actualOpacity;
         // gl_FragColor = vec4(color,1.0 * gradient1 * gradient2);
         // gl_FragColor = vec4(vUv,0.0,1.0 *gradient1 * gradient2);
         // gl_FragColor = texture;
         // gl_FragColor = vec4(color, texture.a * alpha) * 1.0;
         // gl_FragColor = vec4(color, texture.a) * 1.0;
-        gl_FragColor = vec4(color, texture.a*gradient1 * gradient2 ) / max((uSizeScale * 0.5), 1.0) * actualOpacity;
+        // gl_FragColor = vec4(color, texture.a*gradient1 * gradient2 ) / max((uSizeScale * 0.5), 1.0) * actualOpacity;
     }
 `
