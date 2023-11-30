@@ -94,7 +94,7 @@ const BackgroundCanvas = ({
           dummyHeadingRef={dummyHeadingRef}
         /> */}
 
-        <Effect
+        {/* <Effect
           assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
           isServiceVisible={isServiceVisible}
@@ -105,7 +105,7 @@ const BackgroundCanvas = ({
           setRenderRipples={(value) => {
             setRenderRipples(value)
           }}
-        />
+        /> */}
 
         <ParticleModelMesh
           // modelShouldRotate={modelShouldRotate}
