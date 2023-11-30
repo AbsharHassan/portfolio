@@ -11,6 +11,7 @@ import {
   Mesh,
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
+import { Hud } from '@react-three/drei'
 
 const FastShaderPass = ({
   vertexShader = `precision highp float;
@@ -96,6 +97,10 @@ const FastShaderPass = ({
 
     gl.getDrawingBufferSize(resolution.current)
 
+    console.log(testRef.current)
+
+    testRef.current.parent = null
+
     testRef.current.children[0].material.uniforms.uScene.value =
       target.current.texture
     // material.current.uniforms.uScene.value = target.current.texture
@@ -104,52 +109,56 @@ const FastShaderPass = ({
 
     const triangle = new Mesh(geometry, material.current)
     triangle.frustumCulled = false
+
+    console.log(testRef)
+    console.log(extraScene)
+
+    // testRef.current.frustumCulled = false
     extraScene.current.add(triangle)
   }, [gl])
 
-  useEffect(() => {
-    window.addEventListener('resize', updateRenderTargetSize)
+  // useEffect(() => {
+  //   window.addEventListener('resize', updateRenderTargetSize)
 
-    return () => {
-      window.removeEventListener('resize', updateRenderTargetSize)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('resize', updateRenderTargetSize)
+  //   }
+  // }, [])
 
   // Run this on every frame
   useFrame((state) => {
     gl.setRenderTarget(target.current)
     gl.render(scene, camera)
     gl.setRenderTarget(null)
-    gl.render(testRef.current, dummyCamera.current)
-    // console.log(extraScene.current)
-    // console.log(testRef.current)
-    // material.current.uniforms.uTime.value = state.clock.getElapsedTime()
+    gl.render(extraScene.current, dummyCamera.current)
   }, 1)
 
-  // Triangle expressed in clip space coordinates
-  const positions = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0])
-
   return (
-    <scene ref={testRef}>
-      <mesh>
-        <bufferGeometry>
-          <bufferAttribute
-            // attachObject={['attributes', 'position']}
-            // args={[positions, 2, false]}
-            attach={'attributes-position'}
-            {...vertices}
-          />
-        </bufferGeometry>
-        <rawShaderMaterial
-          vertexShader={vertexShader}
-          fragmentShader={fragmentShader}
-          uniforms={{
-            uScene: { value: target.current.texture },
-            uResolution: { value: resolution.current },
-          }}
-        />
-      </mesh>
-    </scene>
+    // <scene ref={testRef}>
+
+    // </scene>
+    // null
+
+    // <Hud>
+    <scene ref={testRef}></scene>
+    // {/* </Hud> */}
+
+    // <mesh ref={testRef}>
+    //   <bufferGeometry>
+    //     <bufferAttribute
+    //       attach={'attributes-position'}
+    //       {...vertices}
+    //     />
+    //   </bufferGeometry>
+    //   <rawShaderMaterial
+    //     vertexShader={vertexShader}
+    //     fragmentShader={fragmentShader}
+    //     uniforms={{
+    //       uScene: { value: target.current.texture },
+    //       uResolution: { value: resolution.current },
+    //     }}
+    //   />
+    // </mesh>
   )
 }
 
