@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import {
   Scene,
   OrthographicCamera,
@@ -10,7 +11,6 @@ import {
   Mesh,
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useState } from 'react'
 
 class PostFX {
   constructor(renderer, vertexShader, fragmentShader, uniforms) {
@@ -104,10 +104,25 @@ class PostFX {
 }
 
 const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
-  const { gl } = useThree()
+  const { gl, scene, camera } = useThree()
 
-  const [scene] = useState(new Scene())
-  const [dummyCamera] = useState(new OrthographicCamera())
+  const extraScene = useRef(new Scene())
+  const dummyCamera = useRef(new OrthographicCamera())
+  const resolution = useRef(new Vector2())
+  const target = useRef(
+    new WebGLRenderTarget(resolution.current.x, resolution.current.y, {
+      format: RGBAFormat,
+      stencilBuffer: false,
+      depthBuffer: true,
+    })
+  )
+  const material = useRef(
+    new RawShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms,
+    })
+  )
 
   useEffect(() => {
     const geometry = new BufferGeometry()
@@ -120,29 +135,22 @@ const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
     const resolution = new Vector2()
     gl.getDrawingBufferSize(resolution)
 
-    const target = new WebGLRenderTarget(resolution.x, resolution.y, {
-      format: RGBAFormat,
-      stencilBuffer: false,
-      depthBuffer: true,
-    })
-
-    const material = new RawShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms,
-    })
-
-    this.material.uniforms.uScene.value = this.target.texture
+    material.current.uniforms.uScene.value = target.current.texture
 
     // TODO: handle the resize -> update uResolution uniform and this.target.setSize()
 
-    this.triangle = new Mesh(this.geometry, this.material)
+    const triangle = new Mesh(geometry, material.current)
     // Our triangle will be always on screen, so avoid frustum culling checking
-    this.triangle.frustumCulled = false
-    this.scene.add(this.triangle)
+    triangle.frustumCulled = false
+    extraScene.current.add(triangle)
   }, [gl])
 
-  useFrame(() => {})
+  useFrame(() => {
+    gl.setRenderTarget(target.current)
+    gl.render(scene, camera)
+    gl.setRenderTarget(null)
+    gl.render(extraScene.current, dummyCamera.current)
+  }, 1)
 
   return null
 }
