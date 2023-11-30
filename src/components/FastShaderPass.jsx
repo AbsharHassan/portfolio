@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, forwardRef, useMemo } from 'react'
 import {
   Scene,
   OrthographicCamera,
@@ -23,22 +23,28 @@ const FastShaderPass = ({
   fragmentShader = `precision highp float;
     uniform sampler2D uScene;
     uniform vec2 uResolution;
+    uniform float uTime;
+
     void main() {
       vec2 uv = gl_FragCoord.xy / uResolution.xy;
       vec3 color = vec3(uv, 1.0);
       color = texture2D(uScene, uv).rgb;
       // Do your cool postprocessing here
-      color.r += sin(uv.x * 50.0);
+      color.r += sin(uv.x * 50.0 * cos(uTime));
       gl_FragColor = vec4(color, 1.0);
     }`,
-  uniforms = {},
+  uniforms,
 }) => {
   const { gl, scene, camera } = useThree()
+
+  const vertices = useMemo(() => {
+    const positions = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0])
+    return new BufferAttribute(positions, 2, false)
+  }, [])
 
   const extraScene = useRef(new Scene())
   const dummyCamera = useRef(new OrthographicCamera())
   const resolution = useRef(new Vector2(window.innerWidth, window.innerHeight))
-  console.log(resolution.current)
   const target = useRef(
     new WebGLRenderTarget(resolution.current.x, resolution.current.y, {
       format: RGBAFormat,
@@ -57,6 +63,28 @@ const FastShaderPass = ({
     })
   )
 
+  let testRef = useRef(null)
+
+  // Method to update the size of the render target
+  const updateRenderTargetSize = () => {
+    // Get the new size of the renderer's drawing buffer
+    gl.getDrawingBufferSize(resolution.current)
+
+    // Update the size of the render target
+    target.current.setSize(resolution.current.x, resolution.current.y)
+
+    // Update any uniforms or properties that depend on the resolution
+    material.current.uniforms.uResolution.value = resolution.current
+
+    // Update the camera aspect ratio if needed
+    const aspect = resolution.current.x / resolution.current.y
+    dummyCamera.current.left = -aspect
+    dummyCamera.current.right = aspect
+    dummyCamera.current.updateProjectionMatrix()
+
+    // Update any other size-dependent properties or uniforms here
+  }
+
   // Set up the initial configurations (as soon as renderer becomes available)
   useEffect(() => {
     const geometry = new BufferGeometry()
@@ -68,25 +96,62 @@ const FastShaderPass = ({
 
     gl.getDrawingBufferSize(resolution.current)
 
-    material.current.uniforms.uScene.value = target.current.texture
+    testRef.current.children[0].material.uniforms.uScene.value =
+      target.current.texture
+    // material.current.uniforms.uScene.value = target.current.texture
 
     // TODO: handle the resize -> update uResolution uniform and this.target.setSize()
 
     const triangle = new Mesh(geometry, material.current)
-    // Our triangle will be always on screen, so avoid frustum culling checking
     triangle.frustumCulled = false
     extraScene.current.add(triangle)
   }, [gl])
 
+  useEffect(() => {
+    window.addEventListener('resize', updateRenderTargetSize)
+
+    return () => {
+      window.removeEventListener('resize', updateRenderTargetSize)
+    }
+  }, [])
+
   // Run this on every frame
-  useFrame(() => {
+  useFrame((state) => {
     gl.setRenderTarget(target.current)
     gl.render(scene, camera)
     gl.setRenderTarget(null)
-    gl.render(extraScene.current, dummyCamera.current)
+    gl.render(testRef.current, dummyCamera.current)
+    // console.log(extraScene.current)
+    // console.log(testRef.current)
+    // material.current.uniforms.uTime.value = state.clock.getElapsedTime()
   }, 1)
 
-  return null
+  // Triangle expressed in clip space coordinates
+  const positions = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0])
+
+  return (
+    <scene ref={testRef}>
+      <mesh>
+        <bufferGeometry>
+          <bufferAttribute
+            // attachObject={['attributes', 'position']}
+            // args={[positions, 2, false]}
+            attach={'attributes-position'}
+            {...vertices}
+          />
+        </bufferGeometry>
+        <rawShaderMaterial
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          uniforms={{
+            uScene: { value: target.current.texture },
+            uResolution: { value: resolution.current },
+          }}
+        />
+      </mesh>
+    </scene>
+  )
 }
 
 export default FastShaderPass
+// export default forwardRef(FastShaderPass)

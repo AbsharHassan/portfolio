@@ -170,6 +170,29 @@ const BackgroundCanvas = ({
 
 export default BackgroundCanvas
 
+const SimplyPain = ({
+  isHeroVisible,
+  isToolsetVisible,
+  isServiceVisible,
+  checkModelRotation,
+  isAboutVisible,
+  aboutContainerRef,
+}) => {
+  useFrame(() => {})
+
+  return (
+    <ParticleModelMesh
+      isHeroVisible={isHeroVisible}
+      modelShouldRotate={true}
+      isToolsetVisible={isToolsetVisible}
+      isServiceVisible={isServiceVisible}
+      checkModelRotation={checkModelRotation}
+      isAboutVisible={isAboutVisible}
+      aboutContainerRef={aboutContainerRef}
+    />
+  )
+}
+
 const Effect = ({
   isHeroVisible,
   isServiceVisible,
