@@ -38,6 +38,7 @@ import V18_8 from './V18_8'
 import FloatingWordParticlesTesting from './FloatingWordParticlesTesting'
 import useWindowResize from '../utils/useWindowResize'
 import BloomCircleTesting from './old_useless_backups/BloomCircleTesting'
+import FastShaderPass from './FastShaderPass'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -160,6 +161,8 @@ const BackgroundCanvas = ({
           />
           <BloomCircle />
         </RenderTexture> */}
+
+        <FastShaderPass />
       </Canvas>
     </div>
   )
