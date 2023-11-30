@@ -12,103 +12,33 @@ import {
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 
-class PostFX {
-  constructor(renderer, vertexShader, fragmentShader, uniforms) {
-    this.renderer = renderer
-    this.scene = new Scene()
-    // three.js for .render() wants a camera, even if we're not using it :(
-    this.dummyCamera = new OrthographicCamera()
-    this.geometry = new BufferGeometry()
-
-    // Triangle expressed in clip space coordinates
-    const vertices = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0])
-
-    this.geometry.setAttribute(
-      'position',
-      new BufferAttribute(vertices, 2, false)
-    )
-
-    this.resolution = new Vector2(window.innerWidth, window.innerHeight)
-    this.renderer.getDrawingBufferSize(this.resolution)
-
-    this.target = new WebGLRenderTarget(this.resolution.x, this.resolution.y, {
-      format: RGBAFormat,
-      stencilBuffer: false,
-      depthBuffer: true,
-    })
-
-    this.material = new RawShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms,
-    })
-
-    this.material.uniforms.uScene.value = this.target.texture
-
-    // TODO: handle the resize -> update uResolution uniform and this.target.setSize()
-
-    this.triangle = new Mesh(this.geometry, this.material)
-    // Our triangle will be always on screen, so avoid frustum culling checking
-    this.triangle.frustumCulled = false
-    this.scene.add(this.triangle)
-
-    // **************** code after this is for resizing ***************** //
-    // **************** code after this is for resizing ***************** //
-    // **************** code after this is for resizing ***************** //
-    // **************** code after this is for resizing ***************** //
-
-    // Add an event listener for window resize
-    window.addEventListener('resize', this.onWindowResize.bind(this), false)
-
-    // Initialize the size of the render target
-    this.updateRenderTargetSize()
-  }
-
-  // Method to handle window resize
-  onWindowResize() {
-    this.updateRenderTargetSize()
-    // Update any other size-dependent properties or uniforms here
-  }
-
-  // Method to update the size of the render target
-  updateRenderTargetSize() {
-    // Get the new size of the renderer's drawing buffer
-    this.renderer.getDrawingBufferSize(this.resolution)
-
-    // Update the size of the render target
-    this.target.setSize(this.resolution.x, this.resolution.y)
-
-    // Update any uniforms or properties that depend on the resolution
-    this.material.uniforms.uResolution.value = this.resolution
-
-    // Update the camera aspect ratio if needed
-    const aspect = this.resolution.x / this.resolution.y
-    this.dummyCamera.left = -aspect
-    this.dummyCamera.right = aspect
-    this.dummyCamera.updateProjectionMatrix()
-
-    // Update any other size-dependent properties or uniforms here
-  }
-
-  // Don't forget to remove the event listener when you're done with the class
-  dispose() {
-    window.removeEventListener('resize', this.onWindowResize.bind(this))
-  }
-
-  render(mainScene, camera) {
-    this.renderer.setRenderTarget(this.target)
-    this.renderer.render(mainScene, camera)
-    this.renderer.setRenderTarget(null)
-    this.renderer.render(this.scene, this.dummyCamera)
-  }
-}
-
-const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
+const FastShaderPass = ({
+  vertexShader = `precision highp float;
+    attribute vec2 position;
+    void main() {
+      // Look ma! no projection matrix multiplication,
+      // because we pass the values directly in clip space coordinates.
+      gl_Position = vec4(position, 1.0, 1.0);
+    }`,
+  fragmentShader = `precision highp float;
+    uniform sampler2D uScene;
+    uniform vec2 uResolution;
+    void main() {
+      vec2 uv = gl_FragCoord.xy / uResolution.xy;
+      vec3 color = vec3(uv, 1.0);
+      color = texture2D(uScene, uv).rgb;
+      // Do your cool postprocessing here
+      color.r += sin(uv.x * 50.0);
+      gl_FragColor = vec4(color, 1.0);
+    }`,
+  uniforms = {},
+}) => {
   const { gl, scene, camera } = useThree()
 
   const extraScene = useRef(new Scene())
   const dummyCamera = useRef(new OrthographicCamera())
-  const resolution = useRef(new Vector2())
+  const resolution = useRef(new Vector2(window.innerWidth, window.innerHeight))
+  console.log(resolution.current)
   const target = useRef(
     new WebGLRenderTarget(resolution.current.x, resolution.current.y, {
       format: RGBAFormat,
@@ -120,10 +50,14 @@ const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
     new RawShaderMaterial({
       vertexShader,
       fragmentShader,
-      uniforms,
+      uniforms: {
+        uScene: { value: target.current.texture },
+        uResolution: { value: resolution.current },
+      },
     })
   )
 
+  // Set up the initial configurations (as soon as renderer becomes available)
   useEffect(() => {
     const geometry = new BufferGeometry()
 
@@ -132,8 +66,7 @@ const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
 
     geometry.setAttribute('position', new BufferAttribute(vertices, 2, false))
 
-    const resolution = new Vector2()
-    gl.getDrawingBufferSize(resolution)
+    gl.getDrawingBufferSize(resolution.current)
 
     material.current.uniforms.uScene.value = target.current.texture
 
@@ -145,6 +78,7 @@ const FastShaderPass = ({ vertexShader, fragmentShader, uniforms }) => {
     extraScene.current.add(triangle)
   }, [gl])
 
+  // Run this on every frame
   useFrame(() => {
     gl.setRenderTarget(target.current)
     gl.render(scene, camera)

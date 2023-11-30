@@ -146,11 +146,11 @@ const BackgroundCanvas = ({
 
         <BloomCircleTesting /> */}
 
-        {isServiceVisible && renderRipples && (
+        {/* {isServiceVisible && renderRipples && (
           <RenderTexture ref={setRipplesTexture}>
             <RipplesTexture parentContainer={null} />
           </RenderTexture>
-        )}
+        )} */}
 
         {/* <RenderTexture ref={setFParticlesTexture}>
           <FloatingWordParticles
