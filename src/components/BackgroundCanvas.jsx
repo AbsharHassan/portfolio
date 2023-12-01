@@ -39,6 +39,7 @@ import FloatingWordParticlesTesting from './FloatingWordParticlesTesting'
 import useWindowResize from '../utils/useWindowResize'
 import BloomCircleTesting from './old_useless_backups/BloomCircleTesting'
 import FastShaderPass from './FastShaderPass'
+import useFastShaderPass from '../utils/useFastShaderPass'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -162,7 +163,7 @@ const BackgroundCanvas = ({
           <BloomCircle />
         </RenderTexture> */}
 
-        <FastShaderPass />
+        {/* <FastShaderPass /> */}
       </Canvas>
     </div>
   )
@@ -170,27 +171,10 @@ const BackgroundCanvas = ({
 
 export default BackgroundCanvas
 
-const SimplyPain = ({
-  isHeroVisible,
-  isToolsetVisible,
-  isServiceVisible,
-  checkModelRotation,
-  isAboutVisible,
-  aboutContainerRef,
-}) => {
-  useFrame(() => {})
+const TestEffect = () => {
+  const fastShader = useFastShaderPass()
 
-  return (
-    <ParticleModelMesh
-      isHeroVisible={isHeroVisible}
-      modelShouldRotate={true}
-      isToolsetVisible={isToolsetVisible}
-      isServiceVisible={isServiceVisible}
-      checkModelRotation={checkModelRotation}
-      isAboutVisible={isAboutVisible}
-      aboutContainerRef={aboutContainerRef}
-    />
-  )
+  return null
 }
 
 const Effect = ({
