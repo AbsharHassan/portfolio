@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, forwardRef, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   Scene,
   OrthographicCamera,
@@ -12,81 +12,38 @@ import {
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 
-// const resolution = new Vector2(window.innerWidth, window.innerHeight)
-// const target = new WebGLRenderTarget(resolution.x, resolution.y, {
-//   format: RGBAFormat,
-//   stencilBuffer: false,
-//   depthBuffer: true,
-// })
-
-const useFastShaderPass = (fragmentShader, order = 1) => {
+const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
   const { gl, scene, camera } = useThree()
 
-  console.log('the order is:' + order)
+  const dummyCamera = useMemo(() => {
+    return new OrthographicCamera()
+  }, [])
 
-  //   const dummyCamera = useMemo(() => {
-  //     return new OrthographicCamera()
-  //   }, [])
+  const resolution = useMemo(() => {
+    return new Vector2(window.innerWidth, window.innerHeight)
+  }, [])
 
-  //   const resolution = useMemo(() => {
-  //     return new Vector2(window.innerWidth, window.innerHeight)
-  //   }, [])
+  const extraScene = useMemo(() => {
+    return new Scene()
+  }, [])
 
-  //   const extraScene = useMemo(() => {
-  //     return new Scene()
-  //   }, [])
-
-  //   const target = useMemo(() => {
-  //     return new WebGLRenderTarget(resolution.x, resolution.y, {
-  //       format: RGBAFormat,
-  //       stencilBuffer: false,
-  //       depthBuffer: true,
-  //     })
-  //   }, [])
-
-  //   const material = useMemo(() => {
-  //     return new RawShaderMaterial({
-  //       vertexShader: `precision highp float;
-  //         attribute vec2 position;
-  //         void main() {
-  //           // Look ma! no projection matrix multiplication,
-  //           // because we pass the values directly in clip space coordinates.
-  //           gl_Position = vec4(position, 1.0, 1.0);
-  //         }`,
-  //       fragmentShader,
-  //       uniforms: {
-  //         uScene: { value: target.texture },
-  //         uResolution: { value: resolution },
-  //         uTime: { value: 0 },
-  //       },
-  //     })
-  //   }, [])
-
-  const [dummyCamera] = useState(new OrthographicCamera())
-
-  const [resolution] = useState(
-    new Vector2(window.innerWidth, window.innerHeight)
-  )
-
-  const [extraScene] = useState(new Scene())
-
-  const [target] = useState(
-    new WebGLRenderTarget(resolution.x, resolution.y, {
+  const target = useMemo(() => {
+    return new WebGLRenderTarget(resolution.x, resolution.y, {
       format: RGBAFormat,
       stencilBuffer: false,
       depthBuffer: true,
     })
-  )
+  }, [resolution])
 
-  const [material] = useState(
-    new RawShaderMaterial({
+  const material = useMemo(() => {
+    return new RawShaderMaterial({
       vertexShader: `precision highp float;
-      attribute vec2 position;
-      void main() {
-        // Look ma! no projection matrix multiplication,
-        // because we pass the values directly in clip space coordinates.
-        gl_Position = vec4(position, 1.0, 1.0);
-      }`,
+          attribute vec2 position;
+          void main() {
+            // Look ma! no projection matrix multiplication,
+            // because we pass the values directly in clip space coordinates.
+            gl_Position = vec4(position, 1.0, 1.0);
+          }`,
       fragmentShader,
       uniforms: {
         uScene: { value: target.texture },
@@ -94,7 +51,7 @@ const useFastShaderPass = (fragmentShader, order = 1) => {
         uTime: { value: 0 },
       },
     })
-  )
+  }, [])
 
   // Method to update the size of the render target
   const updateRenderTargetSize = () => {
@@ -132,25 +89,24 @@ const useFastShaderPass = (fragmentShader, order = 1) => {
     const triangle = new Mesh(geometry, material)
     triangle.frustumCulled = false
 
-    // testRef.frustumCulled = false
     extraScene.add(triangle)
   }, [gl])
 
-  // useEffect(() => {
-  //   window.addEventListener('resize', updateRenderTargetSize)
+  useEffect(() => {
+    window.addEventListener('resize', updateRenderTargetSize)
 
-  //   return () => {
-  //     window.removeEventListener('resize', updateRenderTargetSize)
-  //   }
-  // }, [])
+    return () => {
+      window.removeEventListener('resize', updateRenderTargetSize)
+    }
+  }, [])
 
   // Run this on every frame
-  useFrame((state) => {
+  useFrame(() => {
     gl.setRenderTarget(target)
     gl.render(scene, camera)
     gl.setRenderTarget(null)
     gl.render(extraScene, dummyCamera)
-  }, order)
+  }, 1)
 
   return extraScene
 }
