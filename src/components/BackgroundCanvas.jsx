@@ -123,6 +123,8 @@ const BackgroundCanvas = ({
 
         <TestEffect />
 
+        <TestEffect2 />
+
         {/* <Hud renderPriority={1000}>
           <FloatingWordParticles
             isHeroVisible={isHeroVisible}
@@ -174,13 +176,58 @@ const BackgroundCanvas = ({
 export default BackgroundCanvas
 
 const TestEffect = () => {
-  const fastShader = useFastShaderPass()
+  const fragmentShader = `precision highp float;
+  uniform sampler2D uScene;
+  uniform vec2 uResolution;
+  uniform float uTime;
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / uResolution.xy;
+    vec3 color = vec3(uv, 1.0);
+    color = texture2D(uScene, uv).rgb;
+    // Do your cool postprocessing here
+    color.r += sin(uv.x * 50.0 *cos(uTime));
+    gl_FragColor = vec4(color, 1.0);
+  }`
+
+  const fastShader = useFastShaderPass(fragmentShader, 1)
 
   console.log(fastShader)
 
   useFrame((state) => {
-    fastShader.children[0].material.uniforms.uTime.value =
-      state.clock.getElapsedTime()
+    if (fastShader.children[0]) {
+      fastShader.children[0].material.uniforms.uTime.value =
+        state.clock.getElapsedTime()
+    }
+  })
+
+  return null
+}
+
+const TestEffect2 = () => {
+  const fragmentShader = `precision highp float;
+  uniform sampler2D uScene;
+  uniform vec2 uResolution;
+  uniform float uTime;
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / uResolution.xy;
+    vec3 color = vec3(uv, 1.0);
+    color = texture2D(uScene, uv).rgb;
+    // Do your cool postprocessing here
+    color.g += sin(uv.y * 50.0 *cos(uTime));
+    gl_FragColor = vec4(color, 1.0);
+  }`
+
+  const fastShader = useFastShaderPass(fragmentShader, 2)
+
+  console.log(fastShader)
+
+  useFrame((state) => {
+    if (fastShader.children[0]) {
+      fastShader.children[0].material.uniforms.uTime.value =
+        state.clock.getElapsedTime()
+    }
   })
 
   return null

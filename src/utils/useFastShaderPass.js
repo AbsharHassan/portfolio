@@ -12,52 +12,89 @@ import {
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 
-const extraScene = new Scene()
-const dummyCamera = new OrthographicCamera()
-const resolution = new Vector2(window.innerWidth, window.innerHeight)
-const target = new WebGLRenderTarget(resolution.x, resolution.y, {
-  format: RGBAFormat,
-  stencilBuffer: false,
-  depthBuffer: true,
-})
+// const resolution = new Vector2(window.innerWidth, window.innerHeight)
+// const target = new WebGLRenderTarget(resolution.x, resolution.y, {
+//   format: RGBAFormat,
+//   stencilBuffer: false,
+//   depthBuffer: true,
+// })
 
-const useFastShaderPass = () => {
+const useFastShaderPass = (fragmentShader, order = 1) => {
   const { gl, scene, camera } = useThree()
 
-  const vertices = useMemo(() => {
-    const positions = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0])
-    return new BufferAttribute(positions, 2, false)
-  }, [])
+  console.log('the order is:' + order)
 
-  const material = useMemo(() => {
-    return new RawShaderMaterial({
+  //   const dummyCamera = useMemo(() => {
+  //     return new OrthographicCamera()
+  //   }, [])
+
+  //   const resolution = useMemo(() => {
+  //     return new Vector2(window.innerWidth, window.innerHeight)
+  //   }, [])
+
+  //   const extraScene = useMemo(() => {
+  //     return new Scene()
+  //   }, [])
+
+  //   const target = useMemo(() => {
+  //     return new WebGLRenderTarget(resolution.x, resolution.y, {
+  //       format: RGBAFormat,
+  //       stencilBuffer: false,
+  //       depthBuffer: true,
+  //     })
+  //   }, [])
+
+  //   const material = useMemo(() => {
+  //     return new RawShaderMaterial({
+  //       vertexShader: `precision highp float;
+  //         attribute vec2 position;
+  //         void main() {
+  //           // Look ma! no projection matrix multiplication,
+  //           // because we pass the values directly in clip space coordinates.
+  //           gl_Position = vec4(position, 1.0, 1.0);
+  //         }`,
+  //       fragmentShader,
+  //       uniforms: {
+  //         uScene: { value: target.texture },
+  //         uResolution: { value: resolution },
+  //         uTime: { value: 0 },
+  //       },
+  //     })
+  //   }, [])
+
+  const [dummyCamera] = useState(new OrthographicCamera())
+
+  const [resolution] = useState(
+    new Vector2(window.innerWidth, window.innerHeight)
+  )
+
+  const [extraScene] = useState(new Scene())
+
+  const [target] = useState(
+    new WebGLRenderTarget(resolution.x, resolution.y, {
+      format: RGBAFormat,
+      stencilBuffer: false,
+      depthBuffer: true,
+    })
+  )
+
+  const [material] = useState(
+    new RawShaderMaterial({
       vertexShader: `precision highp float;
-        attribute vec2 position;
-        void main() {
-          // Look ma! no projection matrix multiplication,
-          // because we pass the values directly in clip space coordinates.
-          gl_Position = vec4(position, 1.0, 1.0);
-        }`,
-      fragmentShader: `precision highp float;
-        uniform sampler2D uScene;
-        uniform vec2 uResolution;
-        uniform float uTime;
-    
-        void main() {
-          vec2 uv = gl_FragCoord.xy / uResolution.xy;
-          vec3 color = vec3(uv, 1.0);
-          color = texture2D(uScene, uv).rgb;
-          // Do your cool postprocessing here
-          color.r += sin(uv.x * 50.0 *cos(uTime));
-          gl_FragColor = vec4(color, 1.0);
-        }`,
+      attribute vec2 position;
+      void main() {
+        // Look ma! no projection matrix multiplication,
+        // because we pass the values directly in clip space coordinates.
+        gl_Position = vec4(position, 1.0, 1.0);
+      }`,
+      fragmentShader,
       uniforms: {
         uScene: { value: target.texture },
         uResolution: { value: resolution },
         uTime: { value: 0 },
       },
     })
-  }, [])
+  )
 
   // Method to update the size of the render target
   const updateRenderTargetSize = () => {
@@ -113,7 +150,7 @@ const useFastShaderPass = () => {
     gl.render(scene, camera)
     gl.setRenderTarget(null)
     gl.render(extraScene, dummyCamera)
-  }, 1)
+  }, order)
 
   return extraScene
 }
