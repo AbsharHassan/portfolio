@@ -121,6 +121,8 @@ const BackgroundCanvas = ({
           aboutContainerRef={aboutContainerRef}
         />
 
+        <TestEffect />
+
         {/* <Hud renderPriority={1000}>
           <FloatingWordParticles
             isHeroVisible={isHeroVisible}
@@ -173,6 +175,13 @@ export default BackgroundCanvas
 
 const TestEffect = () => {
   const fastShader = useFastShaderPass()
+
+  console.log(fastShader)
+
+  useFrame((state) => {
+    fastShader.children[0].material.uniforms.uTime.value =
+      state.clock.getElapsedTime()
+  })
 
   return null
 }

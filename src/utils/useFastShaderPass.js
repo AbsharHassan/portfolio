@@ -21,29 +21,7 @@ const target = new WebGLRenderTarget(resolution.x, resolution.y, {
   depthBuffer: true,
 })
 
-const useFastShaderPass = ({
-  vertexShader = `precision highp float;
-      attribute vec2 position;
-      void main() {
-        // Look ma! no projection matrix multiplication,
-        // because we pass the values directly in clip space coordinates.
-        gl_Position = vec4(position, 1.0, 1.0);
-      }`,
-  fragmentShader = `precision highp float;
-      uniform sampler2D uScene;
-      uniform vec2 uResolution;
-      uniform float uTime;
-  
-      void main() {
-        vec2 uv = gl_FragCoord.xy / uResolution.xy;
-        vec3 color = vec3(uv, 1.0);
-        color = texture2D(uScene, uv).rgb;
-        // Do your cool postprocessing here
-        color.r += sin(uv.x * 50.0 * cos(uTime));
-        gl_FragColor = vec4(color, 1.0);
-      }`,
-  uniforms,
-}) => {
+const useFastShaderPass = () => {
   const { gl, scene, camera } = useThree()
 
   const vertices = useMemo(() => {
@@ -52,12 +30,31 @@ const useFastShaderPass = ({
   }, [])
 
   const material = useMemo(() => {
-    new RawShaderMaterial({
-      vertexShader,
-      fragmentShader,
+    return new RawShaderMaterial({
+      vertexShader: `precision highp float;
+        attribute vec2 position;
+        void main() {
+          // Look ma! no projection matrix multiplication,
+          // because we pass the values directly in clip space coordinates.
+          gl_Position = vec4(position, 1.0, 1.0);
+        }`,
+      fragmentShader: `precision highp float;
+        uniform sampler2D uScene;
+        uniform vec2 uResolution;
+        uniform float uTime;
+    
+        void main() {
+          vec2 uv = gl_FragCoord.xy / uResolution.xy;
+          vec3 color = vec3(uv, 1.0);
+          color = texture2D(uScene, uv).rgb;
+          // Do your cool postprocessing here
+          color.r += sin(uv.x * 50.0 *cos(uTime));
+          gl_FragColor = vec4(color, 1.0);
+        }`,
       uniforms: {
         uScene: { value: target.texture },
         uResolution: { value: resolution },
+        uTime: { value: 0 },
       },
     })
   }, [])
@@ -93,7 +90,7 @@ const useFastShaderPass = ({
 
     gl.getDrawingBufferSize(resolution)
 
-    // material.uniforms.uScene.value = target.texture
+    material.uniforms.uScene.value = target.texture
 
     const triangle = new Mesh(geometry, material)
     triangle.frustumCulled = false
@@ -118,7 +115,7 @@ const useFastShaderPass = ({
     gl.render(extraScene, dummyCamera)
   }, 1)
 
-  return null
+  return extraScene
 }
 
 export default useFastShaderPass
