@@ -202,16 +202,9 @@ const TestEffect = () => {
     uTime: { value: 0 },
   }
 
-  const { useCustomFrame } = useFastShaderPass(
-    vertexShader,
-    fragmentShader,
-    uniforms
-  )
+  const result = useFastShaderPass(vertexShader, fragmentShader, uniforms)
 
-  useCustomFrame((something) => {
-    console.log('pain')
-    return
-  })
+  console.log(result)
 
   useFrame((state) => {
     // if (fastShader.children[0]) {

@@ -12,12 +12,6 @@ import {
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 
-const useCustomFrame = (uniforms, callback) => {
-  useFrame(() => {
-    callback(uniforms)
-  })
-}
-
 const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
   const { gl, scene, camera } = useThree()
 
@@ -109,23 +103,7 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
     gl.render(extraScene, dummyCamera)
   }, 1)
 
-  console.log('the main hook')
-
-  // Return a function that uses the useCustomFrame hook
-  const setupFrameHandler = (callback) => {
-    console.log('obv this will run')
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useCustomFrame(extraScene, callback)
-  }
-
-  return { useCustomFrame: setupFrameHandler }
+  return
 }
 
 export default useFastShaderPass
-
-// const { useCustomFrame } = useMyOriginalHook()
-
-// useCustomFrame((uniforms) => {
-//   console.log('these are the available uniforms:' + uniforms);
-// })
