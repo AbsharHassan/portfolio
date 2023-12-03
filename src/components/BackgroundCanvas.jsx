@@ -123,7 +123,7 @@ const BackgroundCanvas = ({
 
         <TestEffect />
 
-        <TestEffect2 />
+        {/* <TestEffect2 /> */}
 
         {/* <Hud renderPriority={1000}>
           <FloatingWordParticles
@@ -176,6 +176,14 @@ const BackgroundCanvas = ({
 export default BackgroundCanvas
 
 const TestEffect = () => {
+  const vertexShader = `precision highp float;
+  attribute vec2 position;
+  void main() {
+    // Look ma! no projection matrix multiplication,
+    // because we pass the values directly in clip space coordinates.
+    gl_Position = vec4(position, 1.0, 1.0);
+  }`
+
   const fragmentShader = `precision highp float;
   uniform sampler2D uScene;
   uniform vec2 uResolution;
@@ -190,15 +198,29 @@ const TestEffect = () => {
     gl_FragColor = vec4(color, 1.0);
   }`
 
-  const fastShader = useFastShaderPass(fragmentShader, 1)
+  const uniforms = {
+    uTime: { value: 0 },
+  }
 
-  console.log(fastShader)
+  const { useCustomFrame } = useFastShaderPass(
+    vertexShader,
+    fragmentShader,
+    uniforms
+  )
+
+  useCustomFrame((something) => {
+    console.log('pain')
+    return
+  })
 
   useFrame((state) => {
-    if (fastShader.children[0]) {
-      fastShader.children[0].material.uniforms.uTime.value =
-        state.clock.getElapsedTime()
-    }
+    // if (fastShader.children[0]) {
+    //   fastShader.children[0].material.uniforms.uTime.value =
+    //     state.clock.getElapsedTime()
+    // }
+    // if (fastShader) {
+    //   console.log(fastShader)
+    // }
   })
 
   return null

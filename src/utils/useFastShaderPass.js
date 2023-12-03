@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Scene,
   OrthographicCamera,
@@ -11,6 +11,12 @@ import {
   Mesh,
 } from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
+
+const useCustomFrame = (uniforms, callback) => {
+  useFrame(() => {
+    callback(uniforms)
+  })
+}
 
 const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
   const { gl, scene, camera } = useThree()
@@ -37,21 +43,15 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
 
   const material = useMemo(() => {
     return new RawShaderMaterial({
-      vertexShader: `precision highp float;
-          attribute vec2 position;
-          void main() {
-            // Look ma! no projection matrix multiplication,
-            // because we pass the values directly in clip space coordinates.
-            gl_Position = vec4(position, 1.0, 1.0);
-          }`,
+      vertexShader,
       fragmentShader,
       uniforms: {
         uScene: { value: target.texture },
         uResolution: { value: resolution },
-        uTime: { value: 0 },
+        ...uniforms,
       },
     })
-  }, [])
+  }, [vertexShader, fragmentShader, uniforms, target, resolution])
 
   // Method to update the size of the render target
   const updateRenderTargetSize = () => {
@@ -90,6 +90,7 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
     triangle.frustumCulled = false
 
     extraScene.add(triangle)
+    console.log(extraScene)
   }, [gl])
 
   useEffect(() => {
@@ -108,7 +109,23 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
     gl.render(extraScene, dummyCamera)
   }, 1)
 
-  return extraScene
+  console.log('the main hook')
+
+  // Return a function that uses the useCustomFrame hook
+  const setupFrameHandler = (callback) => {
+    console.log('obv this will run')
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useCustomFrame(extraScene, callback)
+  }
+
+  return { useCustomFrame: setupFrameHandler }
 }
 
 export default useFastShaderPass
+
+// const { useCustomFrame } = useMyOriginalHook()
+
+// useCustomFrame((uniforms) => {
+//   console.log('these are the available uniforms:' + uniforms);
+// })
