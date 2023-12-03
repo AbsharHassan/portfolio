@@ -214,6 +214,9 @@ const TestEffect = () => {
     // if (fastShader) {
     //   console.log(fastShader)
     // }
+
+    result.uTime.value = state.clock.getElapsedTime()
+    // console.log(result.uTime)
   })
 
   return null

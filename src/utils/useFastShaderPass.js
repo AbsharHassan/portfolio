@@ -15,6 +15,8 @@ import { useFrame, useThree } from '@react-three/fiber'
 const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
   const { gl, scene, camera } = useThree()
 
+  const [uniformsObject, setUniformsObject] = useState(uniforms)
+
   const dummyCamera = useMemo(() => {
     return new OrthographicCamera()
   }, [])
@@ -84,7 +86,8 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
     triangle.frustumCulled = false
 
     extraScene.add(triangle)
-    console.log(extraScene)
+    console.log(extraScene.children[0].material.uniforms)
+    setUniformsObject(extraScene.children[0].material.uniforms)
   }, [gl])
 
   useEffect(() => {
@@ -103,7 +106,7 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
     gl.render(extraScene, dummyCamera)
   }, 1)
 
-  return
+  return uniformsObject
 }
 
 export default useFastShaderPass
