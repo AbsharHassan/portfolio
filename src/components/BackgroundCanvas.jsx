@@ -74,7 +74,7 @@ const BackgroundCanvas = ({
 
   return (
     <div
-      className="w-full h-screen fixed inset-0 z-[-50]
+      className="w-full h-screen fixed inset-0 z-[500000000000]
         "
       ref={containerRef}
     >
@@ -96,7 +96,7 @@ const BackgroundCanvas = ({
           dummyHeadingRef={dummyHeadingRef}
         /> */}
 
-        {/* <Effect
+        <Effect
           assetsLoading={assetsLoading}
           isHeroVisible={isHeroVisible}
           isServiceVisible={isServiceVisible}
@@ -107,7 +107,7 @@ const BackgroundCanvas = ({
           setRenderRipples={(value) => {
             setRenderRipples(value)
           }}
-        /> */}
+        />
 
         <ParticleModelMesh
           // modelShouldRotate={modelShouldRotate}
@@ -121,7 +121,9 @@ const BackgroundCanvas = ({
           aboutContainerRef={aboutContainerRef}
         />
 
-        <TestEffect />
+        {/* <TestEffect isServiceVisible={isServiceVisible} /> */}
+
+        {/* <OrbitControls /> */}
 
         {/* <TestEffect2 /> */}
 
@@ -175,36 +177,49 @@ const BackgroundCanvas = ({
 
 export default BackgroundCanvas
 
-const TestEffect = () => {
-  const vertexShader = `precision highp float;
-  attribute vec2 position;
-  void main() {
-    // Look ma! no projection matrix multiplication,
-    // because we pass the values directly in clip space coordinates.
-    gl_Position = vec4(position, 1.0, 1.0);
-  }`
+const TestEffect = ({ isServiceVisible }) => {
+  const result = useFastShaderPass(
+    pixelRiverVextexShader,
+    pixelRiverFragmentShader,
+    pixelRiverUniforms
+  )
 
-  const fragmentShader = `precision highp float;
-  uniform sampler2D uScene;
-  uniform vec2 uResolution;
-  uniform float uTime;
+  let scale = useRef(null)
+  let mixX = useRef(null)
+  let animationProgress = useRef(0)
+  let modelBrightness = useRef(1)
+  let particleBrightness = useRef(1)
+  let modelRipplesMix = useRef(1)
+  let particleRipplesMix = useRef(1)
+  let dimmingMix = useRef(0)
 
-  void main() {
-    vec2 uv = gl_FragCoord.xy / uResolution.xy;
-    vec3 color = vec3(uv, 1.0);
-    color = texture2D(uScene, uv).rgb;
-    // Do your cool postprocessing here
-    color.r += sin(uv.x * 50.0 *cos(uTime));
-    gl_FragColor = vec4(color, 1.0);
-  }`
+  useEffect(() => {
+    gsap.to(scale, {
+      current: 2.0,
+      duration: 10,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    })
 
-  const uniforms = {
-    uTime: { value: 0 },
-  }
+    gsap.to(mixX, {
+      current: 0.45,
+      duration: 7.4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    })
+  }, [])
 
-  const result = useFastShaderPass(vertexShader, fragmentShader, uniforms)
-
-  console.log(result)
+  useEffect(() => {
+    if (isServiceVisible) {
+      console.log('service is visible')
+    }
+    gsap.to(animationProgress, {
+      current: isServiceVisible ? 1 : 0,
+      duration: 2,
+    })
+  }, [isServiceVisible])
 
   useFrame((state) => {
     // if (fastShader.children[0]) {
@@ -215,7 +230,22 @@ const TestEffect = () => {
     //   console.log(fastShader)
     // }
 
+    // result.uTime.value = state.clock.getElapsedTime()
+
+    // renderer.material.uniforms.uDisplacement.value = ripplesTexture
+
+    console.log(result)
+
     result.uTime.value = state.clock.getElapsedTime()
+    result.uScale.value = scale.current
+    result.uMixX.value = mixX.current
+    result.uAnimationProgress.value = animationProgress.current
+    result.uModelBrightness.value = modelBrightness.current
+    result.uParticleBrightness.value = particleBrightness.current
+    result.uModelRipplesMix.value = modelRipplesMix.current
+    result.uParticleRipplesMix.value = particleRipplesMix.current
+    result.uDimmingMix.value = dimmingMix.current
+
     // console.log(result.uTime)
   })
 

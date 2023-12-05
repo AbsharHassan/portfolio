@@ -38,6 +38,8 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
   }, [resolution])
 
   const material = useMemo(() => {
+    console.log('created')
+    console.log(resolution)
     return new RawShaderMaterial({
       vertexShader,
       fragmentShader,
@@ -47,7 +49,7 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
         ...uniforms,
       },
     })
-  }, [vertexShader, fragmentShader, uniforms, target, resolution])
+  }, [vertexShader, fragmentShader, uniforms])
 
   // Method to update the size of the render target
   const updateRenderTargetSize = () => {
@@ -80,13 +82,14 @@ const useFastShaderPass = (vertexShader, fragmentShader, uniforms) => {
 
     gl.getDrawingBufferSize(resolution)
 
+    material.uniforms.uResolution.value = resolution
+
     material.uniforms.uScene.value = target.texture
 
     const triangle = new Mesh(geometry, material)
     triangle.frustumCulled = false
 
     extraScene.add(triangle)
-    console.log(extraScene.children[0].material.uniforms)
     setUniformsObject(extraScene.children[0].material.uniforms)
   }, [gl])
 

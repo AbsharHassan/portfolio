@@ -5,7 +5,7 @@ export const uniforms = {
   uTime: { value: 0 },
   uScene: { value: null },
   uFloatingParticles: { value: null },
-  uResolution: { value: new Vector2() },
+  uResolution: { value: new Vector2(window.innerWidth, window.innerHeight) },
   uDisplacement: { value: null },
   uScale: { value: 0 },
   uCosFuncScale1: { value: 0.1 },
@@ -137,7 +137,8 @@ export const fragmentShader = glsl`
 
       // gl_FragColor = color;
       // gl_FragColor = vec4(color.rgb, color.a  ) * gradient1;
-      gl_FragColor = vec4(color.rgb, color.a  ) * dimmingGradient;
+      gl_FragColor = vec4(color.rgb, color.a) * dimmingGradient;
+      // gl_FragColor = vec4(uv.x, uv.y, 0, 1.0);
       // gl_FragColor = vec4(abs(uv.x - 0.5), 0.0,0.0,1.0);
       // gl_FragColor = vec4(color.rgb, color.a  ) ;
       // gl_FragColor = vec4(gradient1, 0.0, 0.0, 1.0);
